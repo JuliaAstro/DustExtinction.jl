@@ -1,4 +1,3 @@
-include("DustExtinction.jl")
 using DustExtinction
 using Base.Test
 
