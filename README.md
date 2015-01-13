@@ -1,14 +1,20 @@
-# DustExtinction
+DustExtinction.jl
+=================
+
+[![Build Status](https://img.shields.io/travis/JuliaAstro/DustExtinction.jl.svg?style=flat-square)](https://travis-ci.org/JuliaAstro/DustExtinction.jl)
+
 
 Tools for interstellar dust extinction in astronomy
 
-## Install
+Install
+-------
 
 ```julia
-julia> Pkg.add("git://github.com/JuliaAstro/DustExtinction.jl.git")
+julia> Pkg.add("DustExtinction")
 ```
 
-## Usage
+Usage
+-----
 
 Color laws:
 
@@ -27,13 +33,13 @@ julia> ccm89([4000., 5000.], 3.1)
 Dust maps:
 
 ```julia
-julia> ENV["SFD98_DIR"] = "/home/kyle/data/dust"
+julia> ENV["SFD98_DIR"] = "/home/user/data/dust"
 
 # download maps (once)
 julia> download_sfd98()
 
 julia> dustmap = SFD98Map()
-SFD98Map("/home/kyle/data/dust")
+SFD98Map("/home/user/data/dust")
 
 julia> ebv_galactic(dustmap, 0.1, 0.1)
 0.793093095733043
@@ -45,7 +51,8 @@ julia> ebv_galactic(dustmap, [0.1, 0.2], [0.1, 0.2])
 ```
 
 
-## Reference/API
+Reference/API
+-------------
 
 * `ccm89(wave, r_v)`
 
