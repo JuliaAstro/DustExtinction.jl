@@ -2,3 +2,6 @@ language: julia
 julia:
   - release
   - nightly
+before_install:
+  - sudo apt-get update -qq -y
+  - sudo apt-get install lbcfitsio3 -y

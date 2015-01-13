@@ -118,7 +118,7 @@ if haskey(ENV, "SFD98_DIR")
         @test_approx_eq_eps ebv_gal(dustmap, l, b) refebv[i] 0.02*refebv[i]
     end
 else
-    println("Skipping SFD98Map test because $SFD98_DIR not defined.")
+    println("Skipping SFD98Map test because \$SFD98_DIR not defined.")
 end
 
 println("Tests passed.")
