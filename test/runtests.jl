@@ -115,7 +115,7 @@ if haskey(ENV, "SFD98_DIR")
     dustmap = SFD98Map()
     for i=1:length(refcoords)
         l, b = refcoords[i]
-        @test_approx_eq_eps ebv_gal(dustmap, l, b) refebv[i] 0.02*refebv[i]
+        @test_approx_eq_eps ebv_galactic(dustmap, l, b) refebv[i] 0.02*refebv[i]
     end
 else
     println("Skipping SFD98Map test because \$SFD98_DIR not defined.")

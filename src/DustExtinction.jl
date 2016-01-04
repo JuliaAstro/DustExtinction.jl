@@ -24,7 +24,7 @@ const od94_ca = [1., 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647,
 const od94_cb = [0., 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805,
                  3.347]
 
-function ccm89like(w::FloatingPoint, r_v, c_a, c_b)
+function ccm89like(w::Real, r_v, c_a, c_b)
     x = 1.e4 / w
     a = 0.
     b = 0.
@@ -67,17 +67,40 @@ function ccm89like(w::FloatingPoint, r_v, c_a, c_b)
     a + b/r_v
 end
 
-ccm89(w::FloatingPoint, r_v) = ccm89like(w, r_v, ccm89_ca, ccm89_cb)
-od94(w::FloatingPoint, r_v) = ccm89like(w, r_v, od94_ca, od94_cb)
+"""
+`ccm89(wave, r_v)`
+
+Clayton, Cardelli and Mathis (1989) dust law. Returns the extinction
+in magnitudes at the given wavelength(s) `wave` (in Angstroms),
+relative to the extinction at 5494.5 Angstroms. The parameter `r_v`
+changes the shape of the function.  A typical value for the Milky Way
+is 3.1. An error is raised for wavelength values outside the range of
+support, 1000. to 33333.33 Angstroms.
+"""
+ccm89(w::Real, r_v) = ccm89like(w, r_v, ccm89_ca, ccm89_cb)
+
+"""
+`od94(wave, r_v)`
+
+O'Donnell (1994) dust law, which is identical to the Clayton, Cardelli
+and Mathis (1989) dust law, except that different coefficients are
+used in the optical (3030.3 to 9090.9 Angstroms). Returns the
+extinction in magnitudes at the given wavelength(s) `wave` (in
+Angstroms), relative to the extinction at 5494.5 Angstroms. The
+parameter `r_v` changes the shape of the function.  A typical value
+for the Milky Way is 3.1.  An error is raised for wavelength values
+outside the range of support, 1000. to 33333.33 Angstroms.
+"""
+od94(w::Real, r_v) = ccm89like(w, r_v, od94_ca, od94_cb)
 
 # Vectorized versions (vectorized on wavelength only)
 for f = (:ccm89, :od94)
     @eval begin
-        ($f){T<:FloatingPoint}(w::AbstractArray{T,1}, r_v) =
+        ($f){T<:Real}(w::AbstractArray{T,1}, r_v) =
             [ ($f)(w[i], r_v) for i=1:length(w) ]
-        ($f){T<:FloatingPoint}(w::AbstractArray{T,2}, r_v) =
+        ($f){T<:Real}(w::AbstractArray{T,2}, r_v) =
             [ ($f)(w[i,j], r_v) for i=1:size(w,1), j=1:size(w,2) ]
-        ($f){T<:FloatingPoint}(w::AbstractArray{T}, r_v) =
+        ($f){T<:Real}(w::AbstractArray{T}, r_v) =
             reshape([ ($f)(w[i], r_v) for i=1:length(w) ], size(w))
     end
 end
@@ -86,11 +109,19 @@ end
 # -----------------------------------------------------------------------------
 # SFD98 Dust Maps
 
-const SFD98_BASEURL = ("http://www.astro.princeton.edu/~schlegel/dust/" *
-                       "dustpub/maps/")
+# It would be good to find a more permanent remote location of these maps,
+# but they're here for the time being.
+const SFD98_BASEURL = "http://sncosmo.github.io/data/dust/"
 
 # Download 4096x4096 E(B-V) maps to $SFD98_DIR directory.
-function download_sfd98(destdir::String)
+"""
+`download_sfd98([destdir])`
+
+Download the Schlegel, Finkbeiner and Davis (1998) dust maps to the given
+directory. If the directory is ommitted, the `SFD98_DIR` environment variable
+is used as the destination directory.
+"""
+function download_sfd98(destdir::AbstractString)
     for fname in ["SFD_dust_4096_ngp.fits", "SFD_dust_4096_sgp.fits"]
         dest = joinpath(destdir, fname)
         if isfile(dest)
@@ -107,32 +138,41 @@ function download_sfd98()
     download_sfd98(destdir)
 end
 
-# SFD98Map: opens both North and South FITS files, reads a few header
-# values from each, and keeps them open for future data reads.
+
+"""
+`SFD98Map([mapdir])`
+
+Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
+directory containing the two FITS files defining the map,
+`SFD_dust_4096_[ngp,sgp].fits`. If `mapdir` is omitted, the
+`SFD98_DIR` environment variable is used. Internally, this type keeps
+the FITS files defining the map open, speeding up repeated queries
+for E(B-V) values.
+"""
 type SFD98Map
-    mapdir::String
+    mapdir::UTF8String
     ngp::ImageHDU
-    ngp_size::(Int, Int)
+    ngp_size::Tuple{Int, Int}
     ngp_crpix1::Float64
     ngp_crpix2::Float64
     ngp_lam_scal::Float64
     sgp::ImageHDU
-    sgp_size::(Int, Int)
+    sgp_size::Tuple{Int, Int}
     sgp_crpix1::Float64
     sgp_crpix2::Float64
     sgp_lam_scal::Float64
 
-    function SFD98Map(mapdir::String)
+    function SFD98Map(mapdir::AbstractString)
         ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
         ngp_size = size(ngp)
-        ngp_crpix1 = readkey(ngp, "CRPIX1")[1]
-        ngp_crpix2 = readkey(ngp, "CRPIX2")[1]
-        ngp_lam_scal = readkey(ngp, "LAM_SCAL")[1]
+        ngp_crpix1 = read_key(ngp, "CRPIX1")[1]
+        ngp_crpix2 = read_key(ngp, "CRPIX2")[1]
+        ngp_lam_scal = read_key(ngp, "LAM_SCAL")[1]
         sgp = FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
         sgp_size = size(sgp)
-        sgp_crpix1 = readkey(sgp, "CRPIX1")[1]
-        sgp_crpix2 = readkey(sgp, "CRPIX2")[1]
-        sgp_lam_scal = readkey(sgp, "LAM_SCAL")[1]
+        sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
+        sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
+        sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
         new(mapdir,
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
             sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
@@ -159,6 +199,13 @@ end
 # l, b: galactic coordinates in radians
 #
 # uses bilinear interpolation
+"""
+`ebv_galactic(dustmap, l, b)`
+
+Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
+(`l`, `b`), given in radians. `l` and `b` may be Vectors. Uses linear
+interpolation between pixel values.
+"""
 function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
     if b >= 0.
         hdu = dustmap.ngp
@@ -181,29 +228,29 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
     # determine interger pixel locations and weights for bilinear interpolation
     xfloor = floor(x)
     xw = x - xfloor
-    x0 = int(xfloor)
+    x0 = round(Int, xfloor)
     yfloor = floor(y)
     yw = y - yfloor
-    y0 = int(yfloor)
+    y0 = round(Int, yfloor)
 
     # handle cases near l = [0, pi/2. pi, 3pi/2] where two pixels
     # are out of bounds. This is made simpler because we know from the
     # galactic_to_lambert() transform that only x or y will be near
     # the image bounds, but not both.
     if x0 == 0
-        data = hdu[1, y0:y0+1]
+        data = read(hdu, 1, y0:y0+1)
         val = (1. - yw) * data[1] + yw * data[2]
     elseif x0 == xsize
-        data = hdu[xsize, y0:y0+1]
+        data = read(hdu, xsize, y0:y0+1)
         val = (1. - yw) * data[1] + yw * data[2]
     elseif y0 == 0
-        data = hdu[x0:x0+1, 1]
+        data = read(hdu, x0:x0+1, 1)
         val = (1. - xw) * data[1] + xw * data[2]
     elseif y0 == ysize
-        data = hdu[x0:x0+1, xsize]
+        data = read(hdu, x0:x0+1, xsize)
         val = (1. - xw) * data[1] + xw * data[2]
     else
-        data = hdu[x0:x0+1, y0:y0+1]
+        data = read(hdu, x0:x0+1, y0:y0+1)
         val = ((1.-xw) * (1.-yw) * data[1, 1] +
                xw      * (1.-yw) * data[2, 1] + 
                (1.-xw) * yw      * data[1, 2] +
