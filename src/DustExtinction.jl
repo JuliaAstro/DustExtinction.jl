@@ -1,6 +1,7 @@
 module DustExtinction
 
 using FITSIO  # for SFD98 dust maps
+using Compat
 
 import Base: show
 
@@ -150,7 +151,7 @@ the FITS files defining the map open, speeding up repeated queries
 for E(B-V) values.
 """
 type SFD98Map
-    mapdir::UTF8String
+    mapdir::Compat.UTF8String
     ngp::ImageHDU
     ngp_size::Tuple{Int, Int}
     ngp_crpix1::Float64
