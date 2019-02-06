@@ -1,6 +1,6 @@
 module DustExtinction
 
-#using FITSIO  # for SFD98 dust maps
+using FITSIO  # for SFD98 dust maps
 
 import Base: show
 
