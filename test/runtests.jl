@@ -23,7 +23,7 @@ wave = 1.e4 ./ x_inv_microns
 ref_values = [1.569, 1.337, 1.000, 0.751, 0.479, 0.282, 0.190, 0.114]
 
 for i=1:length(wave)
-    @test ccm89(wave[i], 3.1) ≈ ref_values[i] atol=0.016*ref_values[i]
+    @test ccm89(wave[i], 3.1) ≈ ref_values[i] rtol=0.016
 end
 
 # =============================================================================
@@ -74,7 +74,7 @@ ref_values = [1.664, 1.321, 1.015, 0.819, 0.594,
               1.197, 0.811, 0.580]
 
 for i=1:length(wave)
-    @test od94(wave[i], 3.1) ≈ ref_values[i] atol=0.0051*ref_values[i]
+    @test od94(wave[i], 3.1) ≈ ref_values[i] rtol=0.0051
 end
 
 
@@ -115,7 +115,7 @@ if haskey(ENV, "SFD98_DIR")
     dustmap = SFD98Map()
     for i=1:length(refcoords)
         l, b = refcoords[i]
-        @test ebv_galactic(dustmap, l, b) ≈ refebv[i] atol=0.02*refebv[i]
+        @test ebv_galactic(dustmap, l, b) ≈ refebv[i] rtol=0.02
     end
 else
     println("Skipping SFD98Map test because \$SFD98_DIR not defined.")

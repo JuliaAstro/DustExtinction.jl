@@ -150,8 +150,7 @@ the FITS files defining the map open, speeding up repeated queries
 for E(B-V) values.
 """
 mutable struct SFD98Map
-    #mapdir::Compat.UTF8String depreciated
-    mapdir::Core.String
+    mapdir::String
     ngp::ImageHDU
     ngp_size::Tuple{Int, Int}
     ngp_crpix1::Float64
