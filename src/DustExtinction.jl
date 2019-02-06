@@ -1,7 +1,6 @@
 module DustExtinction
 
-using FITSIO  # for SFD98 dust maps
-using Compat
+#using FITSIO  # for SFD98 dust maps
 
 import Base: show
 
@@ -241,21 +240,21 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
     # the image bounds, but not both.
     if x0 == 0
         data = read(hdu, 1, y0:y0+1)
-        val = (1. - yw) * data[1] + yw * data[2]
+        val = (1 - yw) * data[1] + yw * data[2]
     elseif x0 == xsize
         data = read(hdu, xsize, y0:y0+1)
-        val = (1. - yw) * data[1] + yw * data[2]
+        val = (1 - yw) * data[1] + yw * data[2]
     elseif y0 == 0
         data = read(hdu, x0:x0+1, 1)
-        val = (1. - xw) * data[1] + xw * data[2]
+        val = (1 - xw) * data[1] + xw * data[2]
     elseif y0 == ysize
         data = read(hdu, x0:x0+1, xsize)
-        val = (1. - xw) * data[1] + xw * data[2]
+        val = (1 - xw) * data[1] + xw * data[2]
     else
         data = read(hdu, x0:x0+1, y0:y0+1)
-        val = ((1. -xw) * (1. -yw) * data[1, 1] +
-               xw      * (1. -yw) * data[2, 1] +
-               (1. -xw) * yw      * data[1, 2] +
+        val = ((1 -xw) * (1 -yw) * data[1, 1] +
+               xw      * (1 -yw) * data[2, 1] +
+               (1 -xw) * yw      * data[1, 2] +
                xw      * yw      * data[2, 2])
     end
 

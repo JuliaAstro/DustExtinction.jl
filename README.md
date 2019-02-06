@@ -5,16 +5,6 @@
 
 Tools for interstellar dust extinction in astronomy
 
-## Requirements
-
-As of Feb 5, 2018, Julia 0.7+ is required.
-
-From a fresh Julia 0.7+ installation use the package manager (``` ]``` key) then do:
-
-``` add FITSIO```
-
-``` add Compat ```
-
 ## Install
 
 From package manager (``` ]``` key)
