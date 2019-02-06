@@ -11,7 +11,7 @@ using Base.Test
 # Note that a and b can be obtained with:
 # b = ccm89(wave, 0.)
 # a = ccm89(wave, 1.) - b
-# 
+#
 # These differ from the values tablulated in the original paper.
 # Could be due to floating point errors in the original paper?
 
@@ -23,7 +23,8 @@ wave = 1.e4 ./ x_inv_microns
 ref_values = [1.569, 1.337, 1.000, 0.751, 0.479, 0.282, 0.190, 0.114]
 
 for i=1:length(wave)
-    @test_approx_eq_eps ccm89(wave[i], 3.1) ref_values[i] 0.016*ref_values[i]
+    #@test_approx_eq_eps ccm89(wave[i], 3.1) ref_values[i] 0.016*ref_values[i]
+    @test ccm89(wave[i], 3.1) ≈ ref_values[i] atol=0.016*ref_values[i]
 end
 
 # =============================================================================
@@ -39,12 +40,12 @@ end
 
 # This is tested by evaluating the extinction curve at a (given)
 # effective wavelength, since these effective wavelengths:
-# "... represent(s) that wavelength on the extinction curve 
+# "... represent(s) that wavelength on the extinction curve
 # with the same extinction as the full passband."
 
-# The test does not include UKIRT L' (which, at 3.8 microns) is 
+# The test does not include UKIRT L' (which, at 3.8 microns) is
 # beyond the range of wavelengths allowed by the function
-# or the APM b_J filter which is defined in a non-standard way. 
+# or the APM b_J filter which is defined in a non-standard way.
 
 # The SFD98 tabulated values go to 1e-3, so we should be able to match at
 # that level.
@@ -74,7 +75,8 @@ ref_values = [1.664, 1.321, 1.015, 0.819, 0.594,
               1.197, 0.811, 0.580]
 
 for i=1:length(wave)
-    @test_approx_eq_eps od94(wave[i], 3.1) ref_values[i] 0.0051*ref_values[i]
+    #@test_approx_eq_eps od94(wave[i], 3.1) ref_values[i] 0.0051*ref_values[i]
+    @test od94(wave[i], 3.1) ≈ ref_values[i] atol=0.0051*ref_values[i]
 end
 
 
@@ -115,7 +117,8 @@ if haskey(ENV, "SFD98_DIR")
     dustmap = SFD98Map()
     for i=1:length(refcoords)
         l, b = refcoords[i]
-        @test_approx_eq_eps ebv_galactic(dustmap, l, b) refebv[i] 0.02*refebv[i]
+        #@test_approx_eq_eps ebv_galactic(dustmap, l, b) refebv[i] 0.02*refebv[i]
+        @test ebv_galactic(dustmap, l, b) ≈ refebv[i] atol=0.02*refebv[i]
     end
 else
     println("Skipping SFD98Map test because \$SFD98_DIR not defined.")

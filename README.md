@@ -1,4 +1,4 @@
-DustExtinction.jl
+# DustExtinction.jl
 =================
 
 [![Build Status](https://img.shields.io/travis/JuliaAstro/DustExtinction.jl.svg?style=flat-square)](https://travis-ci.org/JuliaAstro/DustExtinction.jl)
@@ -6,12 +6,20 @@ DustExtinction.jl
 
 Tools for interstellar dust extinction in astronomy
 
-Install
--------
+## Requirements
+------------
+As of Feb 5, 2018, Julia 0.7+ is required.
 
-```julia
-julia> Pkg.add("DustExtinction")
-```
+From a fresh Julia 0.7+ installation use the package manager (``` ]``` key) then do:
+
+``` add FITSIO```
+``` add Compat ```
+
+# Install
+-------
+From package manager (``` ]``` key) )
+
+``` add DustExtinction```
 
 Usage
 -----

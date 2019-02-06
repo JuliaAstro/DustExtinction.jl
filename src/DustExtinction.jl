@@ -97,11 +97,11 @@ od94(w::Real, r_v) = ccm89like(w, r_v, od94_ca, od94_cb)
 # Vectorized versions (vectorized on wavelength only)
 for f = (:ccm89, :od94)
     @eval begin
-        ($f){T<:Real}(w::AbstractArray{T,1}, r_v) =
+        ($f)(w::AbstractArray{T,1}, r_v) where T<:Real =
             [ ($f)(w[i], r_v) for i=1:length(w) ]
-        ($f){T<:Real}(w::AbstractArray{T,2}, r_v) =
+        ($f)(w::AbstractArray{T,2}, r_v) where T<:Real =
             [ ($f)(w[i,j], r_v) for i=1:size(w,1), j=1:size(w,2) ]
-        ($f){T<:Real}(w::AbstractArray{T}, r_v) =
+        ($f)(w::AbstractArray{T}, r_v) where T<:Real  =
             reshape([ ($f)(w[i], r_v) for i=1:length(w) ], size(w))
     end
 end
@@ -150,8 +150,9 @@ directory containing the two FITS files defining the map,
 the FITS files defining the map open, speeding up repeated queries
 for E(B-V) values.
 """
-type SFD98Map
-    mapdir::Compat.UTF8String
+mutable struct SFD98Map
+    #mapdir::Compat.UTF8String depreciated
+    mapdir::Core.String
     ngp::ImageHDU
     ngp_size::Tuple{Int, Int}
     ngp_crpix1::Float64
@@ -252,9 +253,9 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
         val = (1. - xw) * data[1] + xw * data[2]
     else
         data = read(hdu, x0:x0+1, y0:y0+1)
-        val = ((1.-xw) * (1.-yw) * data[1, 1] +
-               xw      * (1.-yw) * data[2, 1] + 
-               (1.-xw) * yw      * data[1, 2] +
+        val = ((1. -xw) * (1. -yw) * data[1, 1] +
+               xw      * (1. -yw) * data[2, 1] +
+               (1. -xw) * yw      * data[1, 2] +
                xw      * yw      * data[2, 2])
     end
 
@@ -262,7 +263,7 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
 end
 
 # array version
-function ebv_galactic{T <: Real}(dustmap::SFD98Map, l::Vector{T}, b::Vector{T})
+function ebv_galactic(dustmap::SFD98Map, l::Vector{T}, b::Vector{T}) where T <: Real
     m = length(l)
     length(b) == m || error("length of l and b must match")
     result = Array(Float64, m)
