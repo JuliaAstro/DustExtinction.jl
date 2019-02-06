@@ -1,5 +1,5 @@
 using DustExtinction
-using Base.Test
+using Test
 
 # =============================================================================
 # ccm89
