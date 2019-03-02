@@ -1,17 +1,15 @@
-DustExtinction.jl
-=================
+# DustExtinction.jl
 
 [![Build Status](https://img.shields.io/travis/JuliaAstro/DustExtinction.jl.svg?style=flat-square)](https://travis-ci.org/JuliaAstro/DustExtinction.jl)
 
 
 Tools for interstellar dust extinction in astronomy
 
-Install
--------
+## Install
 
-```julia
-julia> Pkg.add("DustExtinction")
-```
+From package manager (``` ]``` key)
+
+``` add DustExtinction```
 
 Usage
 -----
