@@ -27,6 +27,15 @@ using Test
 
     # Now test for dot operation
     @test ccm89.(wave, 3.1) ≈ ref_values rtol=0.016
+
+    # Test errors
+    bad_waves = [
+        100.:13000.,
+        33400.:40000.
+    ]
+    for bad_wave in bad_waves
+        @test_throws ErrorException ccm89.(bad_wave, 3.1)
+    end
 end
 
 @testset "od94" begin
@@ -80,6 +89,15 @@ end
 
     # Now test for dot operation
     @test od94.(wave, 3.1) ≈ ref_values rtol=0.0051
+
+    # Test errors
+    bad_waves = [
+        100.:13000.,
+        33400.:40000.
+    ]
+    for bad_wave in bad_waves
+        @test_throws ErrorException od94.(bad_wave, 3.1)
+    end
 end
 
 @testset "SFD98 dust maps" begin
