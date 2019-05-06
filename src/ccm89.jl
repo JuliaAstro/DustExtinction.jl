@@ -1,5 +1,4 @@
-export ccm89,
-    od94
+export ccm89, od94
 
 # Optical coefficients
 const ccm89_ca = [1., 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.77530,
@@ -54,7 +53,7 @@ function ccm89_invum(x::Real, r_v::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real
 end
 
 """
-    `ccm89(wave::Real, r_v::Real=3.1)`
+    ccm89(wave::Real, r_v::Real=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law. 
 
@@ -70,7 +69,7 @@ function ccm89(wave::Real, r_v::Real = 3.1)
 end
 
 """
-    `od94(wave::Real, r_v::Real=3.1)`
+    od94(wave::Real, r_v::Real=3.1)
 
 O'Donnell (1994) dust law.
 
