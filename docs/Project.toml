@@ -3,5 +3,4 @@ DustExtinction = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [compat]
-DustExtinction = ">=0.3.1-DEV"
 Documenter = "~0.20"
