@@ -24,6 +24,9 @@ using Test
     for i = 1:length(wave)
         @test ccm89(wave[i], 3.1) ≈ ref_values[i] rtol = 0.016
     end
+
+    # Now test for dot operation
+    @test ccm89.(wave, 3.1) ≈ ref_values rtol=0.016
 end
 
 @testset "od94" begin
@@ -74,6 +77,9 @@ end
     for i = 1:length(wave)
         @test od94(wave[i], 3.1) ≈ ref_values[i] rtol = 0.0051
     end
+
+    # Now test for dot operation
+    @test od94.(wave, 3.1) ≈ ref_values rtol=0.0051
 end
 
 @testset "SFD98 dust maps" begin
@@ -114,6 +120,7 @@ end
             l, b = refcoords[i]
             @test ebv_galactic(dustmap, l, b) ≈ refebv[i] rtol = 0.02
         end
+
     else
         println("Skipping SFD98Map test because \$SFD98_DIR not defined.")
     end
