@@ -62,6 +62,10 @@ relative to the extinction at 5494.5 Angstroms. The parameter `r_v`
 changes the shape of the function.  A typical value for the Milky Way
 is 3.1. An error is raised for wavelength values outside the range of
 support, 1000. to 33333.33 Angstroms.
+
+# References
+[[1]]
+    (http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Cardelli, Clayton and Mathis (1989)
 """
 function ccm89(wave::Real, r_v::Real = 3.1)
     x = aa_to_invum.(wave)
@@ -81,6 +85,9 @@ Angstroms), relative to the extinction at 5494.5 Angstroms. The
 parameter `r_v` changes the shape of the function.  A typical value
 for the Milky Way is 3.1.  An error is raised for wavelength values
 outside the range of support, 1000. to 33333.33 Angstroms.
+
+# References
+[[1]](http://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
 """
 function od94(wave::Real, r_v::Real = 3.1)
     x = aa_to_invum.(wave)

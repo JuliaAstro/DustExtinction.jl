@@ -22,6 +22,10 @@ end
 Calzetti et al. (2000) Dust law.
 
 Calculate the magnitudes for given wavelengths `wave` in Angstrom. Wavelength support is 0.12 to 2.2 microns (error will be thrown if out of this range). Accepts selective extinction `r_v` parameter with default set to Milky Way average of 3.1.
+
+# References
+[[1]](http://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
+
 """
 function cal00(wave::Real, r_v::Real = 3.1)
     # Convert to inverse-um

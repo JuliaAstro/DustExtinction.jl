@@ -12,7 +12,7 @@ const SFD98_BASEURL = "http://sncosmo.github.io/data/dust/"
 
 # Download 4096x4096 E(B-V) maps to $SFD98_DIR directory.
 """
-    `download_sfd98([destdir])`
+    download_sfd98([destdir])
 
 Download the Schlegel, Finkbeiner and Davis (1998) dust maps to the given
 directory. If the directory is ommitted, the `SFD98_DIR` environment variable

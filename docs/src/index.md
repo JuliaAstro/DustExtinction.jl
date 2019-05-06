@@ -9,35 +9,42 @@ From the REPL, press `]` to enter Pkg mode
 ```
 (v 1.1) pkg> add DustExtinction
 [...]
+
+julia> using DustExtinction
 ```
 
 ## Usage
 
-###Color laws
-
-```julia
+```jldoctest setup
 julia> using DustExtinction
+```
 
+### Color laws
+
+```jldoctest setup
 julia> ccm89(4000., 3.1)
 1.4645557029425842
 ```
 
 These laws can be applied across higher dimension arrays using the `.` operator
-```julia
+
+```jldoctest setup
 julia> ccm89.([4000., 5000.], 3.1)
 2-element Array{Float64,1}:
- 1.46456
- 1.12225
+ 1.4645557029425842
+ 1.122246878899302
+
 ```
 
 If you want to apply total extinction $A_V$ it's as simple as multiplcation
-```julia
+```jldoctest setup
 julia> a_v=0.3
 0.3
 
 julia> a_v * ccm89(4000., 3.1)
 0.43936671088277524
 ```
+
 
 ### Dust maps
 
@@ -59,6 +66,7 @@ julia> ebv_galactic(dustmap, [0.1, 0.2], [0.1, 0.2])
  0.539507
 ```
 
+
 ## Reference/API
 
 ### Extinction Laws
@@ -72,6 +80,6 @@ cal00
 
 ```@docs
 download_sfd98
-SF98Map
+SFD98Map
 ebv_galactic
 ```
