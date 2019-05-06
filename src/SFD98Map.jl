@@ -13,7 +13,7 @@ const SFD98_BASEURL = "http://sncosmo.github.io/data/dust/"
 
 # Download 4096x4096 E(B-V) maps to $SFD98_DIR directory.
 """
-`download_sfd98([destdir])`
+    `download_sfd98([destdir])`
 
 Download the Schlegel, Finkbeiner and Davis (1998) dust maps to the given
 directory. If the directory is ommitted, the `SFD98_DIR` environment variable
@@ -38,7 +38,7 @@ end
 
 
 """
-`SFD98Map([mapdir])`
+    `SFD98Map([mapdir])`
 
 Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
 directory containing the two FITS files defining the map,
@@ -94,8 +94,8 @@ function galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
 end
 
 """
-`ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)`
-`ebv_galactic(dustmap::SFD98Map, l::Vector{<:Real}, b::Vector{<:Real})`
+    `ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)`
+    `ebv_galactic(dustmap::SFD98Map, l::Vector{<:Real}, b::Vector{<:Real})`
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
 (`l`, `b`), given in radians. `l` and `b` may be Vectors. Uses bilinear
@@ -163,6 +163,7 @@ function ebv_galactic(dustmap::SFD98Map, l::Vector{T}, b::Vector{T}) where T <: 
     for i = 1:m
         result[i] = ebv_galactic(dustmap, l[i], b[i])
     end
+    
     return result
 end
 

@@ -11,8 +11,7 @@ const od94_ca = [1., 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647,
 const od94_cb = [0., 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805,
                  3.347]
 
-function ccm89like(w::Real, r_v, c_a, c_b)
-    x = 1.e4 / w
+function ccm89_invum(x::Real, r_v::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     a = 0.
     b = 0.
     if x < 0.3
@@ -55,21 +54,27 @@ function ccm89like(w::Real, r_v, c_a, c_b)
 end
 
 """
-`ccm89(wave, r_v)`
+    `ccm89(wave::Real, r_v::Real=3.1)`
 
-Clayton, Cardelli and Mathis (1989) dust law. Returns the extinction
-in magnitudes at the given wavelength(s) `wave` (in Angstroms),
+Clayton, Cardelli and Mathis (1989) dust law. 
+
+Returns the extinction in magnitudes at the given wavelength(s) `wave` (in Angstroms),
 relative to the extinction at 5494.5 Angstroms. The parameter `r_v`
 changes the shape of the function.  A typical value for the Milky Way
 is 3.1. An error is raised for wavelength values outside the range of
 support, 1000. to 33333.33 Angstroms.
 """
-ccm89(w::Real, r_v) = ccm89like(w, r_v, ccm89_ca, ccm89_cb)
+function ccm89(wave::Real, r_v::Real = 3.1)
+    x = aa_to_invum.(wave)
+    return ccm89_invum(x, r_v, ccm89_ca, ccm89_cb)
+end
 
 """
-`od94(wave, r_v)`
+    `od94(wave::Real, r_v::Real=3.1)`
 
-O'Donnell (1994) dust law, which is identical to the Clayton, Cardelli
+O'Donnell (1994) dust law.
+
+This is identical to the Clayton, Cardelli
 and Mathis (1989) dust law, except that different coefficients are
 used in the optical (3030.3 to 9090.9 Angstroms). Returns the
 extinction in magnitudes at the given wavelength(s) `wave` (in
@@ -78,4 +83,7 @@ parameter `r_v` changes the shape of the function.  A typical value
 for the Milky Way is 3.1.  An error is raised for wavelength values
 outside the range of support, 1000. to 33333.33 Angstroms.
 """
-od94(w::Real, r_v) = ccm89like(w, r_v, od94_ca, od94_cb)
+function od94(wave::Real, r_v::Real = 3.1)
+    x = aa_to_invum.(wave)
+    return ccm89_invum(x, r_v, od94_ca, od94_cb)
+end
