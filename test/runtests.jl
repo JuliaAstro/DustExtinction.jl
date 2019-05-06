@@ -21,8 +21,8 @@ using Test
     # A(lambda)/A(V) for R_V = 3.1 from Table 3 of CCM '89
     ref_values = [1.569, 1.337, 1.000, 0.751, 0.479, 0.282, 0.190, 0.114]
 
-    for i=1:length(wave)
-        @test ccm89(wave[i], 3.1) ≈ ref_values[i] rtol=0.016
+    for i = 1:length(wave)
+        @test ccm89(wave[i], 3.1) ≈ ref_values[i] rtol = 0.016
     end
 
     # Now test for dot operation
@@ -74,8 +74,8 @@ end
                 0.885, 0.746, 0.597,
                 1.197, 0.811, 0.580]
 
-    for i=1:length(wave)
-        @test od94(wave[i], 3.1) ≈ ref_values[i] rtol=0.0051
+    for i = 1:length(wave)
+        @test od94(wave[i], 3.1) ≈ ref_values[i] rtol = 0.0051
     end
 
     # Now test for dot operation
@@ -101,9 +101,9 @@ end
     # pixel values in original maps).
 
     refcoords = [(0., 0.),
-                (pi/2., 0.),
+                (pi / 2., 0.),
                 (pi, 0.),
-                (3pi/2., 0.),
+                (3pi / 2., 0.),
                 (0.1, 0.1),
                 (0.1, -0.1)]
 
@@ -116,9 +116,9 @@ end
 
     if haskey(ENV, "SFD98_DIR")
         dustmap = SFD98Map()
-        for i=1:length(refcoords)
+        for i = 1:length(refcoords)
             l, b = refcoords[i]
-            @test ebv_galactic(dustmap, l, b) ≈ refebv[i] rtol=0.02
+            @test ebv_galactic(dustmap, l, b) ≈ refebv[i] rtol = 0.02
         end
 
     else
