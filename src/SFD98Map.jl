@@ -1,5 +1,9 @@
 using FITSIO
+import Base: show
 
+export download_sfd98,
+        SFD98Map,
+        ebv_galactic
 
 # SFD98 Dust Maps
 
