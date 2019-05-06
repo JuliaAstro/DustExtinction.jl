@@ -1,0 +1,17 @@
+name = "DustExtinction"
+uuid = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
+license = "MIT"
+version = "0.3.1-DEV"
+
+[deps]
+FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
+
+[compat]
+julia = "≥ 1.0.0"
+FITSIO = "≥ 0.13.0"

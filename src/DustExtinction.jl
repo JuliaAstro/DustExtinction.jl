@@ -45,8 +45,8 @@ function ccm89like(w::Real, r_v, c_a, c_b)
             b += c_b[i] * yn
         end
     elseif x < 8.  # UV
-        a =  1.752 - 0.316x - (0.104 / ((x-4.67)^2 + 0.341))
-        b = -3.090 + 1.825x + (1.206 / ((x-4.62)^2 + 0.263))
+        a =  1.752 - 0.316x - (0.104 / ((x - 4.67)^2 + 0.341))
+        b = -3.090 + 1.825x + (1.206 / ((x - 4.62)^2 + 0.263))
         if x > 5.9
             y = x - 5.9
             y2 = y * y
@@ -64,7 +64,7 @@ function ccm89like(w::Real, r_v, c_a, c_b)
         error("wavelength out of range")
     end
 
-    a + b/r_v
+    a + b / r_v
 end
 
 """
@@ -96,12 +96,12 @@ od94(w::Real, r_v) = ccm89like(w, r_v, od94_ca, od94_cb)
 # Vectorized versions (vectorized on wavelength only)
 for f = (:ccm89, :od94)
     @eval begin
-        ($f)(w::AbstractArray{T,1}, r_v) where T<:Real =
-            [ ($f)(w[i], r_v) for i=1:length(w) ]
-        ($f)(w::AbstractArray{T,2}, r_v) where T<:Real =
-            [ ($f)(w[i,j], r_v) for i=1:size(w,1), j=1:size(w,2) ]
-        ($f)(w::AbstractArray{T}, r_v) where T<:Real  =
-            reshape([ ($f)(w[i], r_v) for i=1:length(w) ], size(w))
+        ($f)(w::AbstractArray{T,1}, r_v) where T <: Real =
+            [ ($f)(w[i], r_v) for i = 1:length(w) ]
+        ($f)(w::AbstractArray{T,2}, r_v) where T <: Real =
+            [ ($f)(w[i,j], r_v) for i = 1:size(w, 1), j = 1:size(w, 2) ]
+        ($f)(w::AbstractArray{T}, r_v) where T <: Real  =
+            reshape([ ($f)(w[i], r_v) for i = 1:length(w) ], size(w))
     end
 end
 
@@ -152,12 +152,12 @@ for E(B-V) values.
 mutable struct SFD98Map
     mapdir::String
     ngp::ImageHDU
-    ngp_size::Tuple{Int, Int}
+    ngp_size::Tuple{Int,Int}
     ngp_crpix1::Float64
     ngp_crpix2::Float64
     ngp_lam_scal::Float64
     sgp::ImageHDU
-    sgp_size::Tuple{Int, Int}
+    sgp_size::Tuple{Int,Int}
     sgp_crpix1::Float64
     sgp_crpix2::Float64
     sgp_lam_scal::Float64
@@ -190,8 +190,8 @@ show(io::IO, map::SFD98Map) = print(io, "SFD98Map(\"$(map.mapdir)\")")
 # See SFD 98 Appendix C. For the 4096x4096 maps, lam_scal = 2048,
 # crpix1 = 2048.5, crpix2 = 2048.5.
 function galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
-    x = lam_scal * sqrt(1. - n*sin(b)) * cos(l) + crpix1
-    y = -lam_scal * n * sqrt(1. - n*sin(b)) * sin(l) + crpix2
+    x = lam_scal * sqrt(1. - n * sin(b)) * cos(l) + crpix1
+    y = -lam_scal * n * sqrt(1. - n * sin(b)) * sin(l) + crpix2
     return x, y
 end
 
@@ -238,22 +238,22 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
     # galactic_to_lambert() transform that only x or y will be near
     # the image bounds, but not both.
     if x0 == 0
-        data = read(hdu, 1, y0:y0+1)
+        data = read(hdu, 1, y0:y0 + 1)
         val = (1 - yw) * data[1] + yw * data[2]
     elseif x0 == xsize
-        data = read(hdu, xsize, y0:y0+1)
+        data = read(hdu, xsize, y0:y0 + 1)
         val = (1 - yw) * data[1] + yw * data[2]
     elseif y0 == 0
-        data = read(hdu, x0:x0+1, 1)
+        data = read(hdu, x0:x0 + 1, 1)
         val = (1 - xw) * data[1] + xw * data[2]
     elseif y0 == ysize
-        data = read(hdu, x0:x0+1, xsize)
+        data = read(hdu, x0:x0 + 1, xsize)
         val = (1 - xw) * data[1] + xw * data[2]
     else
-        data = read(hdu, x0:x0+1, y0:y0+1)
-        val = ((1 -xw) * (1 -yw) * data[1, 1] +
-               xw      * (1 -yw) * data[2, 1] +
-               (1 -xw) * yw      * data[1, 2] +
+        data = read(hdu, x0:x0 + 1, y0:y0 + 1)
+        val = ((1 - xw) * (1 - yw) * data[1, 1] +
+               xw      * (1 - yw) * data[2, 1] +
+               (1 - xw) * yw      * data[1, 2] +
                xw      * yw      * data[2, 2])
     end
 
@@ -265,7 +265,7 @@ function ebv_galactic(dustmap::SFD98Map, l::Vector{T}, b::Vector{T}) where T <: 
     m = length(l)
     length(b) == m || error("length of l and b must match")
     result = Array(Float64, m)
-    for i=1:m
+    for i = 1:m
         result[i] = ebv_galactic(dustmap, l[i], b[i])
     end
     return result
