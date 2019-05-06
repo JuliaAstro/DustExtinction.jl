@@ -164,4 +164,3 @@ function ebv_galactic(dustmap::SFD98Map, l::Vector{T}, b::Vector{T}) where T <: 
     
     return result
 end
-
