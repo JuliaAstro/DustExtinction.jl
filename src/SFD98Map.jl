@@ -1,9 +1,8 @@
 using FITSIO
+
 import Base: show
 
-export download_sfd98,
-        SFD98Map,
-        ebv_galactic
+export download_sfd98, SFD98Map, ebv_galactic
 
 # SFD98 Dust Maps
 
@@ -36,17 +35,6 @@ function download_sfd98()
     download_sfd98(destdir)
 end
 
-
-"""
-    `SFD98Map([mapdir])`
-
-Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
-directory containing the two FITS files defining the map,
-`SFD_dust_4096_[ngp,sgp].fits`. If `mapdir` is omitted, the
-`SFD98_DIR` environment variable is used. Internally, this type keeps
-the FITS files defining the map open, speeding up repeated queries
-for E(B-V) values.
-"""
 mutable struct SFD98Map
     mapdir::String
     ngp::ImageHDU
@@ -61,6 +49,16 @@ mutable struct SFD98Map
     sgp_lam_scal::Float64
 end
 
+"""
+    SFD98Map([mapdir])
+
+Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
+directory containing the two FITS files defining the map,
+`SFD_dust_4096_[ngp,sgp].fits`. If `mapdir` is omitted, the
+`SFD98_DIR` environment variable is used. Internally, this type keeps
+the FITS files defining the map open, speeding up repeated queries
+for E(B-V) values.
+"""
 function SFD98Map(mapdir::AbstractString)
     ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
     ngp_size = size(ngp)
@@ -94,8 +92,8 @@ function galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
 end
 
 """
-    `ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)`
-    `ebv_galactic(dustmap::SFD98Map, l::Vector{<:Real}, b::Vector{<:Real})`
+    ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
+    ebv_galactic(dustmap::SFD98Map, l::Vector{<:Real}, b::Vector{<:Real})
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
 (`l`, `b`), given in radians. `l` and `b` may be Vectors. Uses bilinear
