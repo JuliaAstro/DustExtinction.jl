@@ -1,5 +1,3 @@
-using Measurements
-
 @testset "cal00" begin
 
     refwave = [3090.90909091,  4561.61616162,  6872.72727273,  9604.04040404,
@@ -32,4 +30,11 @@ using Measurements
         @test Measurements.value.(reddening_31) ≈ refmag_31
         @test Measurements.value.(reddening_24) ≈ refmag_24
     end
-end
+
+    @testset "unitful" begin
+        wave_u = refwave * u"angstrom"
+        reddening_31 = cal00.(wave_u)
+        @test unit(eltype(reddening_31)) == u"mag"
+        @test ustrip.(reddening_31) ≈ refmag_31    
+    end
+end 

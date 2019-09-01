@@ -41,6 +41,13 @@ using Measurements
         reddening = ccm89.(wave_unc, 3.1)
         @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
     end
+
+    @testset "unitful" begin
+        wave_u = wave * u"angstrom"
+        reddening = ccm89.(wave_u, 3.1)
+        @test unit(eltype(reddening)) == u"mag"
+        @test ustrip.(reddening) ≈ ref_values rtol = 0.016
+    end
 end
 
 @testset "od94" begin
@@ -108,5 +115,11 @@ end
         wave_unc = wave .± noise
         reddening = od94.(wave_unc, 3.1)
         @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
+    end
+    @testset "unitful" begin
+        wave_u = wave * u"angstrom"
+        reddening = od94.(wave_u, 3.1)
+        @test unit(eltype(reddening)) == u"mag"
+        @test ustrip.(reddening) ≈ ref_values rtol = 0.016
     end
 end
