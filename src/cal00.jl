@@ -18,6 +18,7 @@ end
 
 """
     cal00(wave::Real, r_v::Real=3.1)
+    cal00(wave::Quantity, r_v::Real=3.1)
 
 Calzetti et al. (2000) Dust law.
 
