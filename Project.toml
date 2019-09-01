@@ -12,6 +12,7 @@ julia = "≥ 1.0.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Measurements"]

@@ -1,3 +1,5 @@
+using Measurements
+
 @testset "ccm89" begin
 
     # NOTE: Test is only to precision of 0.015 because there is a discrepancy
@@ -31,6 +33,13 @@
     ]
     for bad_wave in bad_waves
         @test_throws ErrorException ccm89.(bad_wave, 3.1)
+    end
+
+    @testset "uncertainties" begin        
+        noise = randn(length(wave)) .* 0.01
+        wave_unc = wave .± noise
+        reddening = ccm89.(wave_unc, 3.1)
+        @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
     end
 end
 
@@ -92,5 +101,12 @@ end
                 ]
     for bad_wave in bad_waves
         @test_throws ErrorException od94.(bad_wave, 3.1)
+    end
+
+    @testset "uncertainties" begin        
+        noise = randn(length(wave)) .* 10
+        wave_unc = wave .± noise
+        reddening = od94.(wave_unc, 3.1)
+        @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
     end
 end

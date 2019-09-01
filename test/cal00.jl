@@ -1,3 +1,4 @@
+using Measurements
 
 @testset "cal00" begin
 
@@ -21,5 +22,14 @@
     ]
     for bad_wave in bad_waves
         @test_throws ErrorException cal00.(bad_wave)
+    end
+
+    @testset "uncertainties" begin        
+        noise = randn(length(refwave)) .* 10
+        wave_unc = refwave .± noise
+        reddening_31 = cal00.(refwave)
+        reddening_24 = cal00.(refwave, 2.4)
+        @test Measurements.value.(reddening_31) ≈ refmag_31
+        @test Measurements.value.(reddening_24) ≈ refmag_24
     end
 end
