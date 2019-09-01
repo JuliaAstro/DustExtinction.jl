@@ -34,7 +34,7 @@
     @testset "unitful" begin
         wave_u = refwave * u"angstrom"
         reddening_31 = cal00.(wave_u)
-        @test unit(eltype(reddening_31)) == u"mag"
+        @test eltype(reddening_31) <: Gain
         @test ustrip.(reddening_31) ≈ refmag_31    
     end
 end 

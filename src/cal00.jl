@@ -32,3 +32,4 @@ function cal00(wave::Real, r_v::Real = 3.1)
     x = aa_to_invum.(wave)
     return cal00_invum(x, r_v)
 end
+cal00(wave::Quantity, r_v::Real = 3.1) = cal00(ustrip(u"angstrom", wave), r_v) * u"mag"
