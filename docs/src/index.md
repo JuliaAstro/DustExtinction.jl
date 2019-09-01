@@ -45,9 +45,11 @@ julia> a_v * ccm89(4000., 3.1)
 0.43936671088277524
 ```
 
-The color laws also have built-in support for uncertainties using [Measurements.jl](https://github.com/juliaphysics/measurements.jl)
+The color laws also have built-in support for uncertainties using [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
 
 ```jldoctest setup
+julia> using Measurements
+
 julia> ccm89.([4000. ± 10.5, 5000. ± 10.2], 3.1)
 2-element Array{Measurement{Float64},1}:
  1.4646 ± 0.0033
