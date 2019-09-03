@@ -3,7 +3,7 @@ module DustExtinction
 using Unitful, UnitfulAstro
 
 # Convenience function for wavelength conversion
-aa_to_invum(wave::Real) = 1e4 / wave
+aa_to_invum(wave::Real) = 10000 / wave
 aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
 
