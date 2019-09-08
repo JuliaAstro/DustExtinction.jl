@@ -1,4 +1,3 @@
-
 @testset "cal00" begin
 
     refwave = [3090.90909091,  4561.61616162,  6872.72727273,  9604.04040404,
@@ -22,4 +21,20 @@
     for bad_wave in bad_waves
         @test_throws ErrorException cal00.(bad_wave)
     end
-end
+
+    @testset "uncertainties" begin        
+        noise = randn(length(refwave)) .* 10
+        wave_unc = refwave .± noise
+        reddening_31 = cal00.(refwave)
+        reddening_24 = cal00.(refwave, 2.4)
+        @test Measurements.value.(reddening_31) ≈ refmag_31
+        @test Measurements.value.(reddening_24) ≈ refmag_24
+    end
+
+    @testset "unitful" begin
+        wave_u = refwave * u"angstrom"
+        reddening_31 = cal00.(wave_u)
+        @test eltype(reddening_31) <: Gain
+        @test ustrip.(reddening_31) ≈ refmag_31    
+    end
+end 

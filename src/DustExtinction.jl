@@ -1,9 +1,11 @@
 module DustExtinction
 
+using Unitful, UnitfulAstro
+
 # Convenience function for wavelength conversion
-function aa_to_invum(wave::Real)
-    return 1e4 / wave
-end
+aa_to_invum(wave::Real) = 10000 / wave
+aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
+
 
 # Extinction Laws
 include("ccm89.jl") # Also includes od94

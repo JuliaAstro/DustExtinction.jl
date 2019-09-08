@@ -3,7 +3,7 @@ using DustExtinction
 
 makedocs(
     modules = [DustExtinction],
-    sitename = "DustExtinction.jl"
+    sitename = "DustExtinction.jl",
 )
 
 deploydocs(

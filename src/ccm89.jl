@@ -54,6 +54,7 @@ end
 
 """
     ccm89(wave::Real, r_v::Real=3.1)
+    ccm89(wave::Quantity, r_v::Real=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law. 
 
@@ -68,12 +69,15 @@ support, 1000. to 33333.33 Angstroms.
     (http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Cardelli, Clayton and Mathis (1989)
 """
 function ccm89(wave::Real, r_v::Real = 3.1)
-    x = aa_to_invum.(wave)
+    x = aa_to_invum(wave)
     return ccm89_invum(x, r_v, ccm89_ca, ccm89_cb)
 end
 
+ccm89(wave::Quantity, r_v::Real = 3.1) = ccm89(ustrip(u"angstrom", wave), r_v) * u"mag"
+
 """
     od94(wave::Real, r_v::Real=3.1)
+    od94(wave::Quantity, r_v::Real=3.1)
 
 O'Donnell (1994) dust law.
 
@@ -90,6 +94,7 @@ outside the range of support, 1000. to 33333.33 Angstroms.
 [[1]](http://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
 """
 function od94(wave::Real, r_v::Real = 3.1)
-    x = aa_to_invum.(wave)
+    x = aa_to_invum(wave)
     return ccm89_invum(x, r_v, od94_ca, od94_cb)
 end
+od94(wave::Quantity, r_v::Real = 3.1) = ccm89(ustrip(u"angstrom", wave), r_v) * u"mag"
