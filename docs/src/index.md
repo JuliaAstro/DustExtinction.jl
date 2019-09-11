@@ -92,7 +92,7 @@ could redden some OIR observational data with uncertainties in the flux density.
 julia> using Random, Measurements, Unitful, UnitfulAstro
 
 julia> wave = range(0.3, 1.0, length=5)u"μm"
-0.3 μm:0.175 μm:1.0 μm
+(0.3:0.175:1.0) μm
 
 julia> err = randn(MersenneTwister(0), length(wave))u"erg/s/cm^2"
 5-element Array{Quantity{Float64,𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
@@ -128,40 +128,8 @@ julia> flux .* λ_m
 
 ```
 
-### Dust maps
-
-```julia
-julia> ENV["SFD98_DIR"] = "/home/user/data/dust"
-
-# download maps (once)
-julia> download_sfd98()
-
-julia> dustmap = SFD98Map()
-SFD98Map("/home/user/data/dust")
-
-julia> ebv_galactic(dustmap, 0.1, 0.1)
-0.793093095733043
-
-julia> ebv_galactic(dustmap, [0.1, 0.2], [0.1, 0.2])
-2-element Array{Float64,1}:
- 0.793093
- 0.539507
-```
-
-
 ## Reference/API
 
-### Extinction Laws
-```@docs
-ccm89
-od94
-cal00
-```
-
-### Dust Maps
-
-```@docs
-download_sfd98
-SFD98Map
-ebv_galactic
+```@autodocs
+Modules = [DustExtinction]
 ```

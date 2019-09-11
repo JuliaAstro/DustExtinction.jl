@@ -4,6 +4,7 @@ using DustExtinction
 makedocs(
     modules = [DustExtinction],
     sitename = "DustExtinction.jl",
+    strict = true
 )
 
 deploydocs(
