@@ -2,38 +2,9 @@ using FITSIO
 
 import Base: show
 
-export download_sfd98, SFD98Map, ebv_galactic
+export SFD98Map, ebv_galactic
 
 # SFD98 Dust Maps
-
-# It would be good to find a more permanent remote location of these maps,
-# but they're here for the time being.
-const SFD98_BASEURL = "http://sncosmo.github.io/data/dust/"
-
-# Download 4096x4096 E(B-V) maps to $SFD98_DIR directory.
-"""
-    download_sfd98([destdir])
-
-Download the Schlegel, Finkbeiner and Davis (1998) dust maps to the given
-directory. If the directory is ommitted, the `SFD98_DIR` environment variable
-is used as the destination directory.
-"""
-function download_sfd98(destdir::AbstractString)
-    for fname in ["SFD_dust_4096_ngp.fits", "SFD_dust_4096_sgp.fits"]
-        dest = joinpath(destdir, fname)
-        if isfile(dest)
-            info("$dest already exists, skipping download.")
-        else
-            download(SFD98_BASEURL * fname, dest)
-        end
-    end
-end
-
-function download_sfd98()
-    haskey(ENV, "SFD98_DIR") || error("SFD98_DIR environment variable not set")
-    destdir = ENV["SFD98_DIR"]
-    download_sfd98(destdir)
-end
 
 mutable struct SFD98Map
     mapdir::String
@@ -53,31 +24,35 @@ end
     SFD98Map([mapdir])
 
 Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
-directory containing the two FITS files defining the map,
-`SFD_dust_4096_[ngp,sgp].fits`. If `mapdir` is omitted, the
-`SFD98_DIR` environment variable is used. Internally, this type keeps
+directory containing the two FITS files defining the map, which are downloaded during the build step automatically,
+`SFD_dust_4096_[ngp,sgp].fits`. `mapdir` should only be given if you've downloaded a custom map, otherwise it will use the default fits files. Internally, this type keeps
 the FITS files defining the map open, speeding up repeated queries
 for E(B-V) values.
 """
 function SFD98Map(mapdir::AbstractString)
-    ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
-    ngp_size = size(ngp)
-    ngp_crpix1 = read_key(ngp, "CRPIX1")[1]
-    ngp_crpix2 = read_key(ngp, "CRPIX2")[1]
-    ngp_lam_scal = read_key(ngp, "LAM_SCAL")[1]
-    sgp = FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
-    sgp_size = size(sgp)
-    sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
-    sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
-    sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
-    SFD98Map(mapdir,
-        ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
-        sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
+    try
+        ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
+        ngp_size = size(ngp)
+        ngp_crpix1 = read_key(ngp, "CRPIX1")[1]
+        ngp_crpix2 = read_key(ngp, "CRPIX2")[1]
+        ngp_lam_scal = read_key(ngp, "LAM_SCAL")[1]
+        sgp = FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
+        sgp_size = size(sgp)
+        sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
+        sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
+        sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
+        SFD98Map(mapdir,
+            ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
+            sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
+    catch
+        error("Could not open dust map FITS files from $mapdir. Either re-build DustExtinction or download the files directly and set the SF98_DIR environment variable")
+    end
+    
 end
 
 function SFD98Map()
-    haskey(ENV, "SFD98_DIR") || error("SFD98_DIR environment variable not set")
-    SFD98Map(ENV["SFD98_DIR"])
+    mapdir = get(ENV, "SF98_DIR", abspath(joinpath(@__DIR__, "..", "deps")))
+    SFD98Map(mapdir) 
 end
 
 show(io::IO, map::SFD98Map) = print(io, "SFD98Map(\"$(map.mapdir)\")")
@@ -92,14 +67,36 @@ function galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
 end
 
 """
-    ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
-    ebv_galactic(dustmap::SFD98Map, l::Vector{<:Real}, b::Vector{<:Real})
+    (dustmap::SFD98Map)(l::Real, b::Real)
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
-(`l`, `b`), given in radians. `l` and `b` may be Vectors. Uses bilinear
+(`l`, `b`), given in radians. Uses bilinear
 interpolation between pixel values.
+
+# Example
+
+```jldoctest
+julia> using DustExtinction
+
+julia> m = SFD98Map();
+
+julia> m(1, 2)
+0.013439524544325624
+
+julia> l = 0:0.2:2; b = 0:0.2:2;
+
+julia> m.(l, b)
+11-element Array{Float64,1}:
+ 99.69757461547852    
+  0.5395069628570422  
+  0.20800230208348652 
+  ⋮                   
+  0.013720918817564005
+  0.01862100327420125 
+
+```
 """
-function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
+function (dustmap::SFD98Map)(l::Real, b::Real)
     if b >= 0.
         hdu = dustmap.ngp
         crpix1 = dustmap.ngp_crpix1
@@ -145,22 +142,13 @@ function ebv_galactic(dustmap::SFD98Map, l::Real, b::Real)
     else
         data = read(hdu, x0:x0 + 1, y0:y0 + 1)
         val = ((1 - xw) * (1 - yw) * data[1, 1] +
-               xw      * (1 - yw) * data[2, 1] +
-               (1 - xw) * yw      * data[1, 2] +
-               xw      * yw      * data[2, 2])
+               xw       * (1 - yw) * data[2, 1] +
+               (1 - xw) * yw       * data[1, 2] +
+               xw       * yw       * data[2, 2])
     end
-
     return convert(Float64, val)
 end
 
-# Vectorized version
-function ebv_galactic(dustmap::SFD98Map, l::Vector{T}, b::Vector{T}) where T <: Real
-    m = length(l)
-    length(b) == m || error("length of l and b must match")
-    result = Array(Float64, m)
-    for i = 1:m
-        result[i] = ebv_galactic(dustmap, l[i], b[i])
-    end
-    
-    return result
-end
+# Deprecations
+@deprecate ebv_galactic(dustmap::SFD98Map, l::Real, b::Real) dustmap(l, b)
+@deprecate ebv_galactic(dustmap::SFD98Map, l::AbstractVector, b::AbstractVector) dustmap.(l, b)
