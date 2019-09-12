@@ -1,5 +1,3 @@
-export cal00
-
 function cal00_invum(x::Real, r_v::Real)
 
     if x > 1 / 0.12

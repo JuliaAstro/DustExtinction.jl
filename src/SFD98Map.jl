@@ -2,8 +2,6 @@ using FITSIO
 
 import Base: show
 
-export SFD98Map, ebv_galactic
-
 # SFD98 Dust Maps
 
 mutable struct SFD98Map

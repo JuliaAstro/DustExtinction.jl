@@ -1,5 +1,3 @@
-export ccm89, od94
-
 # Optical coefficients
 const ccm89_ca = [1., 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.77530,
                   0.32999]
