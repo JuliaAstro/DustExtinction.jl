@@ -43,4 +43,17 @@
     # deprecations
     @test_deprecated ebv_galactic(dustmap, l[1], b[1])
     @test_deprecated ebv_galactic(dustmap, l, b)
+
+    @testset "Measurements" begin
+        refcoords .± 0.01
+        output = dustmap.(eachcol(refcoords)...)
+        @test Measurements.values.(output) ≈ refebv rtol = 0.02
+    end
+
+    @testset "Unitful" begin
+        l, b = eachcol(refcoords * u"rad")
+        output = dustmap.(l, b)
+        @test eltype(output) <: Gain
+        @test ustrip.(output) ≈ refebv rtol = 0.02
+    end
 end

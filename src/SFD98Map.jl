@@ -68,10 +68,12 @@ end
 
 """
     (dustmap::SFD98Map)(l::Real, b::Real)
+    (dustmap::SFD98Map)(l::Quantity, b::Quantity)
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
 (`l`, `b`), given in radians. Uses bilinear
-interpolation between pixel values.
+interpolation between pixel values. If `l` and `b` are Quantities they will be converted 
+to radians and the output will be given as `UnitfulAstro.mag`.
 
 # Example
 
@@ -147,6 +149,12 @@ function (dustmap::SFD98Map)(l::Real, b::Real)
                xw       * yw       * data[2, 2])
     end
     return convert(Float64, val)
+end
+
+function (dustmap::SFD98Map)(l::Quantity, b::Quantity)
+    l_ = ustrip(u"rad", l)
+    b_ = ustrip(u"rad", b)
+    return dustmap(l_, b_) * u"mag"
 end
 
 # Deprecations
