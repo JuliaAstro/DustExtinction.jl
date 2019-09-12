@@ -1,7 +1,7 @@
 @testset "SFD98 dust maps" begin
 
     # TODO remove this after finding travis error
-    println(read(joinpath("deps", "build.log"), String))
+    println(read(joinpath(@__DIR__, "..", "deps", "build.log"), String))
 
     # refebv obtained using http://irsa.ipac.caltech.edu/applications/DUST/
     # and manually inserting the following lines and reading off the values for
