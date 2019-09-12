@@ -25,26 +25,21 @@ include("SFD98Map.jl")
 
 # Extinct function
 """
-    extinct(f::Real, λ::Real, Av::Real; Rv::Real=3.1, law=ccm89)
-    extinct(f::Quantity, λ::Quantity, Av::Real; Rv=3.1, law=ccm89)
+    extinct(f::Number, λ::Number, Av::Number; Rv=3.1, law=ccm89)
 
 Extinct the value `f` by the value calculated via the given law and total extinction value `Av`. By 
 default we use `Rv=3.1` which is the Milky Way average selective attenuation.
 """
-extinct(f::Real, λ::Real, Av::Real; Rv::Real = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
+extinct(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
 extinct(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
 
 """
-    extinct!(f::AbstractArray{Real}, λ::AbstractArray{Real}, Av::Real; Rv::Real=3.1, law=ccm89)
-    extinct!(f::AbstractArray{Quantity}, λ::AbstractArray{Quantity}, Av::Real; Rv=3.1, law=ccm89)
+    extinct!(f::AbstractArray, λ, Av; Rv=3.1, law=ccm89)
 
 In-place version of [`extinct`](@ref) that only works with arrays.
 """
-function extinct!(f::AbstractArray{<:Real}, λ::AbstractArray{<:Real}, Av::Real; Rv::Real = 3.1, law = ccm89) 
-    @. f = f * 10^(-0.4 * Av * law(λ, Rv))
-end
-function extinct!(f::AbstractArray{<:Quantity}, λ::AbstractArray{<:Quantity}, Av::Real; Rv = 3.1, law = ccm89)
-    @. f = f * (Av * law(λ, Rv))
+function extinct!(f::AbstractArray, λ, Av; Rv::Real = 3.1, law = ccm89) 
+    f .= extinct.(f, λ, Av, Rv=Rv, law=law)
 end
 
 end # module

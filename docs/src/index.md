@@ -128,6 +128,45 @@ julia> flux .* λ_m
 
 ```
 
+## Convenience functions
+
+For convenience, we provide the [`extinct`](@ref) and [`extinct!`](@ref) functions.
+
+```jldoctest setup
+julia> wave = range(4000, 5000, length=4)
+4000.0:333.3333333333333:5000.0
+
+julia> flux = 1e-8 .* wave .+ 1e-2
+0.01004:3.3333333333333333e-6:0.01005
+
+julia> extinct.(flux, wave, 0.3)
+4-element Array{Float64,1}:
+ 0.006698646015454752 
+ 0.006918253926353551 
+ 0.007154659823737299 
+ 0.0073704912727315395
+
+julia> using Unitful, UnitfulAstro
+
+julia> wave *= u"angstrom"
+(4000.0:333.3333333333333:5000.0) Å
+
+julia> flux = collect(flux * u"Jy") # need to collect to allocate
+4-element Array{Quantity{Float64,𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
+              0.01004 Jy
+ 0.010043333333333333 Jy
+ 0.010046666666666667 Jy
+              0.01005 Jy
+
+julia> extinct!(flux, wave, 0.3) # Notice we do not use broadcasting-syntax here
+4-element Array{Quantity{Float64,𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
+  0.006698646015454752 Jy
+  0.006918253926353551 Jy
+  0.007154659823737299 Jy
+ 0.0073704912727315395 Jy
+
+```
+
 ## Reference/API
 
 ```@autodocs
