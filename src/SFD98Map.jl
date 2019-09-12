@@ -146,7 +146,7 @@ function (dustmap::SFD98Map)(l::Real, b::Real)
                (1 - xw) * yw       * data[1, 2] +
                xw       * yw       * data[2, 2])
     end
-    return convert(Float64, val)
+    return val
 end
 
 function (dustmap::SFD98Map)(l::Quantity, b::Quantity)
