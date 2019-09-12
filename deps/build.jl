@@ -7,11 +7,12 @@ try
     for fname in ["SFD_dust_4096_ngp.fits", "SFD_dust_4096_sgp.fits"]
         dest = joinpath(destdir, fname)
         if isfile(dest)
-            info("$dest already exists, skipping download.")
+            @info "$dest already exists, skipping download."
         else
             download(SFD98_BASEURL * fname, dest)
+            @info "downloaded $dest successfully."
         end
     end
 catch
-    @warn "There was an error downloading the SFD98 Dust Maps. Please re-build or manually download the maps and set the \"SFD98_DIR\" environment variable."
+    @error "There was an error downloading the SFD98 Dust Maps. Please re-build or manually download the maps and set the \"SFD98_DIR\" environment variable."
 end
