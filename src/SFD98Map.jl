@@ -23,9 +23,12 @@ end
 
 Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
 directory containing the two FITS files defining the map, which are downloaded during the build step automatically,
-`SFD_dust_4096_[ngp,sgp].fits`. `mapdir` should only be given if you've downloaded a custom map, otherwise it will use the default fits files. Internally, this type keeps
+`SFD_dust_4096_[ngp,sgp].fits`. If not provided, will automatically provide this package's build folder unless the `SFD98_DIR` environement variable is set. Internally, this type keeps
 the FITS files defining the map open, speeding up repeated queries
 for E(B-V) values.
+
+# References
+[[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel et al. (1998)
 """
 function SFD98Map(mapdir::AbstractString)
     try
@@ -59,8 +62,8 @@ show(io::IO, map::SFD98Map) = print(io, "SFD98Map(\"$(map.mapdir)\")")
 # See SFD 98 Appendix C. For the 4096x4096 maps, lam_scal = 2048,
 # crpix1 = 2048.5, crpix2 = 2048.5.
 function galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
-    x = lam_scal * sqrt(1. - n * sin(b)) * cos(l) + crpix1
-    y = -lam_scal * n * sqrt(1. - n * sin(b)) * sin(l) + crpix2
+    x = lam_scal * sqrt(1 - n * sin(b)) * cos(l) + crpix1
+    y = -lam_scal * n * sqrt(1 - n * sin(b)) * sin(l) + crpix2
     return x, y
 end
 
@@ -70,7 +73,7 @@ end
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
 (`l`, `b`), given in radians. Uses bilinear
-interpolation between pixel values. If `l` and `b` are Quantities they will be converted 
+interpolation between pixel values. If `l` and `b` are `Unitful.Quantity` they will be converted 
 to radians and the output will be given as `UnitfulAstro.mag`.
 
 # Example
@@ -87,30 +90,35 @@ julia> l = 0:0.2:2; b = 0:0.2:2;
 
 julia> m.(l, b)
 11-element Array{Float64,1}:
- 99.69757461547852    
-  0.5395069628570422  
-  0.20800230208348652 
-  ⋮                   
+ 99.69757461547852
+  0.5395069628570422
+  0.20800230208348652
+  0.06887057865191418
+  0.04890491167004587
+  0.019595484241066132
+  0.010995002463447149
+  0.007835950023239207
+  0.011048806604967648
   0.013720918817564005
   0.01862100327420125 
-
 ```
+
 """
 function (dustmap::SFD98Map)(l::Real, b::Real)
-    if b >= 0.
+    if b >= 0
         hdu = dustmap.ngp
         crpix1 = dustmap.ngp_crpix1
         crpix2 = dustmap.ngp_crpix2
         lam_scal = dustmap.ngp_lam_scal
         xsize, ysize = dustmap.ngp_size
-        n = 1.
+        n = 1
     else
         hdu = dustmap.sgp
         crpix1 = dustmap.sgp_crpix1
         crpix2 = dustmap.sgp_crpix2
         lam_scal = dustmap.sgp_lam_scal
         xsize, ysize = dustmap.sgp_size
-        n = -1.
+        n = -1
     end
 
     x, y = galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)

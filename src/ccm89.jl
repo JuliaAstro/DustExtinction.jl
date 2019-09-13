@@ -51,22 +51,22 @@ function ccm89_invum(x::Real, r_v::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real
 end
 
 """
-    ccm89(wave::Real, r_v::Real=3.1)
-    ccm89(wave::Quantity, r_v::Real=3.1)
+    ccm89(wave::Real, r_v=3.1)
+    ccm89(wave::Quantity, r_v=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law. 
 
-Returns the extinction in magnitudes at the given wavelength(s) `wave` (in Angstroms),
-relative to the extinction at 5494.5 Angstroms. The parameter `r_v`
+Returns the extinction in magnitudes at the given wavelength(s) `wave` (in Å),
+relative to the extinction at 5494.5 Å. The parameter `r_v`
 changes the shape of the function.  A typical value for the Milky Way
 is 3.1. An error is raised for wavelength values outside the range of
-support, 1000. to 33333.33 Angstroms.
+support, 1000. to 33333.33 Å.
 
 # References
 [[1]]
     (http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Cardelli, Clayton and Mathis (1989)
 """
-function ccm89(wave::Real, r_v::Real = 3.1)
+function ccm89(wave::Real, r_v = 3.1)
     x = aa_to_invum(wave)
     return ccm89_invum(x, r_v, ccm89_ca, ccm89_cb)
 end
@@ -74,25 +74,25 @@ end
 ccm89(wave::Quantity, r_v::Real = 3.1) = ccm89(ustrip(u"angstrom", wave), r_v) * u"mag"
 
 """
-    od94(wave::Real, r_v::Real=3.1)
-    od94(wave::Quantity, r_v::Real=3.1)
+    od94(wave::Real, r_v=3.1)
+    od94(wave::Quantity, r_v=3.1)
 
 O'Donnell (1994) dust law.
 
 This is identical to the Clayton, Cardelli
 and Mathis (1989) dust law, except that different coefficients are
-used in the optical (3030.3 to 9090.9 Angstroms). Returns the
+used in the optical (3030.3 to 9090.9 Å). Returns the
 extinction in magnitudes at the given wavelength(s) `wave` (in
-Angstroms), relative to the extinction at 5494.5 Angstroms. The
+Å), relative to the extinction at 5494.5 Å. The
 parameter `r_v` changes the shape of the function.  A typical value
 for the Milky Way is 3.1.  An error is raised for wavelength values
-outside the range of support, 1000. to 33333.33 Angstroms.
+outside the range of support, 1000. to 33333.33 Å.
 
 # References
 [[1]](http://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
 """
-function od94(wave::Real, r_v::Real = 3.1)
+function od94(wave::Real, r_v = 3.1)
     x = aa_to_invum(wave)
     return ccm89_invum(x, r_v, od94_ca, od94_cb)
 end
-od94(wave::Quantity, r_v::Real = 3.1) = ccm89(ustrip(u"angstrom", wave), r_v) * u"mag"
+od94(wave::Quantity, r_v = 3.1) = ccm89(ustrip(u"angstrom", wave), r_v) * u"mag"

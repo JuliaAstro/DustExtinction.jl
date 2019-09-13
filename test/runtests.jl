@@ -25,13 +25,14 @@ include("sfd98.jl")
     flux = ones(length(wave))
     output = extinct.(flux, wave, 0.3)
     @test output ≈ ref_values
-    extinct!(flux, wave, 0.3)
+    map!((f, w)->extinct(f, w, 0.3), flux, flux, wave)
     @test flux ≈ ref_values
 
     # Unitful
     flux = ones(length(wave))u"Jy"
-    output = extinct.(flux, wave*u"angstrom", 0.3)
+    wave = wave * u"angstrom"
+    output = extinct.(flux, wave, 0.3)
     @test ustrip.(output) ≈ ref_values
-    extinct!(flux, wave*u"angstrom", 0.3)
+    map!((f, w)->extinct(f, w, 0.3), flux, flux, wave)
     @test flux ≈ output
 end

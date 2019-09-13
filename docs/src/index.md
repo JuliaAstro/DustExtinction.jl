@@ -1,12 +1,12 @@
 # DustExtinction.jl
 
-```@contents
-```
+This package implements different empirical dust measurements for use in astronomy. This package is written in pure Julia and is built with first-class support with [`Unitful.jl`](https://github.com/painterqubits/unitful.jl) and [`Measurements.jl`](https://github.com/juliaphysics/measurements.jl).
 
 ## Installation
 
 From the REPL, press `]` to enter Pkg mode
-```
+
+```julia
 (v 1.1) pkg> add DustExtinction
 [...]
 
@@ -15,160 +15,106 @@ julia> using DustExtinction
 
 ## Usage
 
-```jldoctest setup
+```jldoctest
 julia> using DustExtinction
 
-```
-
-### Color laws
-
-```jldoctest setup
 julia> ccm89(4000., 3.1)
 1.4645557029425842
-```
-
-These laws can be applied across higher dimension arrays using the `.` operator
-
-```jldoctest setup
-julia> ccm89.([4000., 5000.], 3.1)
-2-element Array{Float64,1}:
- 1.4645557029425842
- 1.122246878899302
 
 ```
 
-If you want to apply total extinction $A_V$ it's as simple as multiplcation
-```jldoctest setup
-julia> a_v=0.3
-0.3
+For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) sections. 
 
-julia> a_v * ccm89(4000., 3.1)
-0.43936671088277524
-```
+## API/Reference
 
-### Advanced Examples
-
-The color laws also have built-in support for uncertainties using [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
-
-```jldoctest setup
-julia> using Measurements
-
-julia> ccm89.([4000. ± 10.5, 5000. ± 10.2], 3.1)
-2-element Array{Measurement{Float64},1}:
- 1.4646 ± 0.0033
- 1.1222 ± 0.003
-
-```
-
-and also support units via [Unitful.jl](https://github.com/painterqubits/unitful.jl) and its subsidiaries. 
-
-```jldoctest setup
-julia> using Unitful, UnitfulAstro
-
-julia> mags = ccm89.([4000u"angstrom", 0.5u"μm"], 3.1)
-2-element Array{Gain{Unitful.LogInfo{:Magnitude,10,-2.5},:?,Float64},1}:
- 1.4645557029425837 mag
-  1.122246878899302 mag
-
-julia> fluxes = ones(2)u"erg/s/cm^2"
-2-element Array{Quantity{Float64,𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
- 1.0 erg cm^-2 s^-1
- 1.0 erg cm^-2 s^-1
-
-julia> reddened = fluxes .* mags
-2-element Array{Quantity{Float64,𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
-  0.2595241150526157 erg cm^-2 s^-1
- 0.35571423768348603 erg cm^-2 s^-1
-
-julia> reddened ≈ @. fluxes * 10 ^ (-0.4 * ustrip(mags))
-true
-
-```
-
-You can even combine the two above to get some really nice workflows exploiting all Julia has to offer! This example would shows how you 
-could redden some OIR observational data with uncertainties in the flux density.
-
-```jldoctest setup
-julia> using Random, Measurements, Unitful, UnitfulAstro
-
-julia> wave = range(0.3, 1.0, length=5)u"μm"
-(0.3:0.175:1.0) μm
-
-julia> err = randn(MersenneTwister(0), length(wave))u"erg/s/cm^2"
-5-element Array{Quantity{Float64,𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
-   0.6791074260357777 erg cm^-2 s^-1
-   0.8284134829000359 erg cm^-2 s^-1
-  -0.3530074003005963 erg cm^-2 s^-1
- -0.13485387193052173 erg cm^-2 s^-1
-   0.5866170746331097 erg cm^-2 s^-1
-
-julia> flux = @.(ustrip(u"erg/s/cm^2", 300u"erg/s*cm^2" / wave^4) ± ustrip(err))u"erg/s/cm^2"
-5-element Array{Quantity{Measurement{Float64},𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
-  3.7037037037037034e20 ± 0.68 erg cm^-2 s^-1
-   5.893140783143162e19 ± 0.83 erg cm^-2 s^-1
- 1.6806134238997232e19 ± -0.35 erg cm^-2 s^-1
-  6.475979428646598e18 ± -0.13 erg cm^-2 s^-1
-                 3.0e18 ± 0.59 erg cm^-2 s^-1
-
-julia> λ_m = @. 0.25 * ccm89(wave, 3.1)
-5-element Array{Gain{Unitful.LogInfo{:Magnitude,10,-2.5},:?,Float64},1}:
-  0.4545391743613166 mag
-  0.3000686820198816 mag
-  0.2068677378008488 mag
- 0.14069431885378056 mag
- 0.10099999999999998 mag
-
-julia> flux .* λ_m
-5-element Array{Quantity{Measurement{Float64},𝐌*𝐓^-3,Unitful.FreeUnits{(erg, cm^-2, s^-1),𝐌*𝐓^-3,nothing}},1}:
- 2.4368038160281967e20 ± 0.45 erg cm^-2 s^-1
-  4.470121662545148e19 ± 0.63 erg cm^-2 s^-1
-  1.389059128986988e19 ± 0.29 erg cm^-2 s^-1
-  5.688892575540536e18 ± 0.12 erg cm^-2 s^-1
-  2.733513699128758e18 ± 0.53 erg cm^-2 s^-1
-
-```
-
-## Convenience functions
-
-For convenience, we provide the [`extinct`](@ref) and [`extinct!`](@ref) functions.
-
-```jldoctest setup
-julia> wave = range(4000, 5000, length=4)
-4000.0:333.3333333333333:5000.0
-
-julia> flux = 1e-8 .* wave .+ 1e-2
-0.01004:3.3333333333333333e-6:0.01005
-
-julia> extinct.(flux, wave, 0.3)
-4-element Array{Float64,1}:
- 0.006698646015454752 
- 0.006918253926353551 
- 0.007154659823737299 
- 0.0073704912727315395
-
-julia> using Unitful, UnitfulAstro
-
-julia> wave *= u"angstrom"
-(4000.0:333.3333333333333:5000.0) Å
-
-julia> flux = collect(flux * u"Jy") # need to collect to allocate
-4-element Array{Quantity{Float64,𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
-              0.01004 Jy
- 0.010043333333333333 Jy
- 0.010046666666666667 Jy
-              0.01005 Jy
-
-julia> extinct!(flux, wave, 0.3) # Notice we do not use broadcasting-syntax here
-4-element Array{Quantity{Float64,𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
-  0.006698646015454752 Jy
-  0.006918253926353551 Jy
-  0.007154659823737299 Jy
- 0.0073704912727315395 Jy
-
-```
-
-## Reference/API
-
-```@autodocs
+```@index
 Modules = [DustExtinction]
+Order = [:function, :type]
 ```
+
+## Citations
+
+There are various citations relevant to this work. Please be considerate when using this work or any derivate of it by adding the appropriate citations.
+
+[`ccm89`](@ref) - 
+[Cardelli, Clayton and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract)
+
+```
+@ARTICLE{1989ApJ...345..245C,
+       author = {{Cardelli}, Jason A. and {Clayton}, Geoffrey C. and {Mathis}, John S.},
+        title = "{The Relationship between Infrared, Optical, and Ultraviolet Extinction}",
+      journal = {\apj},
+     keywords = {Infrared Spectra, Interstellar Extinction, Ultraviolet Spectra, Visible Spectrum, Computational Astrophysics, Interstellar Matter, Iue, Astrophysics, INTERSTELLAR: MATTER, ULTRAVIOLET: SPECTRA},
+         year = "1989",
+        month = "Oct",
+       volume = {345},
+        pages = {245},
+          doi = {10.1086/167900},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
+
+[`od94`](@ref) - [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O/abstract)
+```
+@ARTICLE{1994ApJ...422..158O,
+       author = {{O'Donnell}, James E.},
+        title = "{R v-dependent Optical and Near-Ultraviolet Extinction}",
+      journal = {\apj},
+     keywords = {Interstellar Extinction, Light (Visible Radiation), Near Infrared Radiation, Ultraviolet Radiation, Astronomical Photometry, Iue, Astrophysics, ISM: DUST, EXTINCTION},
+         year = "1994",
+        month = "Feb",
+       volume = {422},
+        pages = {158},
+          doi = {10.1086/173713},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
+
+[`cal00`](@ref) - [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C/abstract)
+```
+@ARTICLE{2000ApJ...533..682C,
+       author = {{Calzetti}, Daniela and {Armus}, Lee and {Bohlin}, Ralph C. and
+         {Kinney}, Anne L. and {Koornneef}, Jan and {Storchi-Bergmann}, Thaisa},
+        title = "{The Dust Content and Opacity of Actively Star-forming Galaxies}",
+      journal = {\apj},
+     keywords = {GALAXIES: STARBURST, INFRARED: GALAXIES, INFRARED: ISM: CONTINUUM, ISM: DUST, EXTINCTION, Astrophysics},
+         year = "2000",
+        month = "Apr",
+       volume = {533},
+       number = {2},
+        pages = {682-695},
+          doi = {10.1086/308692},
+archivePrefix = {arXiv},
+       eprint = {astro-ph/9911459},
+ primaryClass = {astro-ph},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
+
+[`SFD98Map`](@ref) - [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract)
+```
+@ARTICLE{1998ApJ...500..525S,
+       author = {{Schlegel}, David J. and {Finkbeiner}, Douglas P. and {Davis}, Marc},
+        title = "{Maps of Dust Infrared Emission for Use in Estimation of Reddening and Cosmic Microwave Background Radiation Foregrounds}",
+      journal = {\apj},
+     keywords = {COSMOLOGY: DIFFUSE RADIATION, COSMOLOGY: COSMIC MICROWAVE BACKGROUND, ISM: DUST, EXTINCTION, INTERPLANETARY MEDIUM, INFRARED: ISM: CONTINUUM, Cosmology: Cosmic Microwave Background, Cosmology: Diffuse Radiation, ISM: Dust, Extinction, Infrared: ISM: Continuum, Interplanetary Medium, Astrophysics},
+         year = "1998",
+        month = "Jun",
+       volume = {500},
+       number = {2},
+        pages = {525-553},
+          doi = {10.1086/305772},
+archivePrefix = {arXiv},
+       eprint = {astro-ph/9710327},
+ primaryClass = {astro-ph},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
+
+## Contributing
+
+If you are interested in contributing, feel free to make a pull request or open an issue for discussion. 
