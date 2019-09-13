@@ -9,14 +9,13 @@ Tools for interstellar dust extinction in astronomy
 
 Documentation: [DustExtinction](https://JuliaAstro.github.io/DustExtinction.jl/stable)
 
-## Install
+## Installation
 
 From package manager (``` ]``` key)
 
 ``` add DustExtinction```
 
-Usage
------
+## Usage
 
 Color laws:
 
@@ -36,7 +35,7 @@ Dust maps:
 
 ```julia
 julia> dustmap = SFD98Map()
-SFD98Map("/home/user/data/dust")
+SFD98Map("[...]")
 
 julia> dustmap(0.1, 0.1)
 0.793093095733043
@@ -47,7 +46,7 @@ julia> dustmap.([0.1, 0.2], [0.1, 0.2])
  0.539507
 ```
 
-Exinction:
+Extinction:
 
 ```julia
 julia> wave = [4000., 5000.]
@@ -68,3 +67,7 @@ julia> extinct.(flux, wave, 0.3)
 ```
 
 We provide first-class support for `Unitful.jl` and `Measurements.jl` types, too! Check out the documentation for more examples.
+
+## Contributing
+
+Feel free to open an issue or a pull-request for any discussion, suggestions, new features, or patches!
