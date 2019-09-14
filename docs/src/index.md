@@ -22,7 +22,12 @@ julia> using DustExtinction
 julia> using DustExtinction
 
 julia> ccm89(4000., 3.1)
-1.4645557029425842
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] top-level scope at none:4
 
 ```
 

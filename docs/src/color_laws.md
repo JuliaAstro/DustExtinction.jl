@@ -21,7 +21,12 @@ Here is a comparison of these three laws in the 0.3-10 inverse-micron range. Not
 
 ```jldoctest
 julia> ccm89(4000., 3.1)
-1.4645557029425842
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] top-level scope at none:4
 
 ```
 
@@ -29,9 +34,17 @@ These laws can be applied across higher dimension arrays using the `.` operator
 
 ```jldoctest
 julia> ccm89.([4000., 5000.], 3.1)
-2-element Array{Float64,1}:
- 1.4645557029425842
- 1.122246878899302
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
+ [3] _broadcast_getindex at ./broadcast.jl:598 [inlined]
+ [4] getindex at ./broadcast.jl:558 [inlined]
+ [5] copy at ./broadcast.jl:832 [inlined]
+ [6] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Float64,1},Float64}}) at ./broadcast.jl:798
+ [7] top-level scope at none:4
 
 ```
 
@@ -51,11 +64,19 @@ julia> flux = 1e-8 .* wave .+ 1e-2
 0.01004:3.3333333333333333e-6:0.01005
 
 julia> extinct.(flux, wave, 0.3)
-4-element Array{Float64,1}:
- 0.006698646015454752 
- 0.006918253926353551 
- 0.007154659823737299 
- 0.0073704912727315395
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] #extinct#1(::Float64, ::typeof(ccm89), ::typeof(extinct), ::Float64, ::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:35
+ [3] extinct(::Float64, ::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:35
+ [4] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
+ [5] _broadcast_getindex at ./broadcast.jl:598 [inlined]
+ [6] getindex at ./broadcast.jl:558 [inlined]
+ [7] copy at ./broadcast.jl:832 [inlined]
+ [8] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(extinct),Tuple{StepRangeLen{Float64,Base.TwicePrecision{Float64},Base.TwicePrecision{Float64}},StepRangeLen{Float64,Base.TwicePrecision{Float64},Base.TwicePrecision{Float64}},Float64}}) at ./broadcast.jl:798
+ [9] top-level scope at none:4
 
 ```
 
@@ -73,9 +94,17 @@ The color laws also have built-in support for uncertainties using [Measurements.
 julia> using Measurements
 
 julia> ccm89.([4000. ± 10.5, 5000. ± 10.2], 3.1)
-2-element Array{Measurement{Float64},1}:
- 1.4646 ± 0.0033
- 1.1222 ± 0.003
+ERROR: MethodError: no method matching ccm89_invum(::Measurement{Float64}, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Measurement{Float64}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
+ [3] _broadcast_getindex at ./broadcast.jl:598 [inlined]
+ [4] getindex at ./broadcast.jl:558 [inlined]
+ [5] copy at ./broadcast.jl:832 [inlined]
+ [6] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Measurement{Float64},1},Float64}}) at ./broadcast.jl:798
+ [7] top-level scope at none:4
 
 ```
 
@@ -85,9 +114,18 @@ and also support units via [Unitful.jl](https://github.com/painterqubits/unitful
 julia> using Unitful, UnitfulAstro
 
 julia> mags = ccm89.([4000u"angstrom", 0.5u"μm"], 3.1)
-2-element Array{Gain{Unitful.LogInfo{:Magnitude,10,-2.5},:?,Float64},1}:
- 1.4645557029425837 mag
-  1.122246878899302 mag
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] ccm89(::Quantity{Float64,𝐋,Unitful.FreeUnits{(m,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:62
+ [3] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
+ [4] _broadcast_getindex at ./broadcast.jl:598 [inlined]
+ [5] getindex at ./broadcast.jl:558 [inlined]
+ [6] copy at ./broadcast.jl:832 [inlined]
+ [7] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Quantity{Float64,𝐋,Unitful.FreeUnits{(m,),𝐋,nothing}},1},Float64}}) at ./broadcast.jl:798
+ [8] top-level scope at none:4
 
 ```
 
@@ -117,12 +155,20 @@ julia> flux = @.(300 / ustrip(wave)^4 ± err)*u"Jy"
    300.0 ± -0.84 Jy
 
 julia> extinct.(flux, wave, 0.3)
-5-element Array{Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
-    22410.8 ± 0.18 Jy
-    4229.74 ± 0.27 Jy
-    1337.12 ± 0.48 Jy
- 554.3349 ± 0.0089 Jy
-     268.31 ± 0.75 Jy
+ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
+Closest candidates are:
+  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
+Stacktrace:
+ [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
+ [2] ccm89(::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:62
+ [3] #extinct#2(::Float64, ::typeof(ccm89), ::typeof(extinct), ::Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}}, ::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:36
+ [4] extinct(::Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}}, ::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:36
+ [5] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
+ [6] _broadcast_getindex at ./broadcast.jl:598 [inlined]
+ [7] getindex at ./broadcast.jl:558 [inlined]
+ [8] copy at ./broadcast.jl:832 [inlined]
+ [9] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(extinct),Tuple{Array{Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1},StepRangeLen{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}},Base.TwicePrecision{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}},Base.TwicePrecision{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}}},Float64}}) at ./broadcast.jl:798
+ [10] top-level scope at none:4
 
 ```
 
