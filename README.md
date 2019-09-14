@@ -3,6 +3,8 @@
 [![Build Status](https://img.shields.io/travis/JuliaAstro/DustExtinction.jl.svg)](https://travis-ci.org/JuliaAstro/DustExtinction.jl)
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaAstro.github.io/DustExtinction.jl/stable)
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaAstro.github.io/DustExtinction.jl/dev)
+[![codecov](https://codecov.io/gh/JuliaAstro/DustExtinction.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/DustExtinction.jl)
+
 
 
 Tools for interstellar dust extinction in astronomy
