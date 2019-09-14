@@ -19,8 +19,8 @@ include("ccm89.jl") # Also includes od94
 include("cal00.jl")
 include("SFD98Map.jl")
 
-@deprecate ccm89(x::AbstractArray) ccm89.(x)
-@deprecate od94(x::AbstractArray) od94.(x)
+@deprecate ccm89(x::AbstractArray, r_v::Real=3.1) ccm89.(x, r_v)
+@deprecate od94(x::AbstractArray, r_v::Real=3.1) od94.(x, r_v)
 
 # Extinct function
 """

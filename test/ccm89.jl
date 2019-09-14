@@ -14,39 +14,42 @@ using Measurements
     # Could be due to floating point errors in the original paper?
 
     # U, B, V, R, I, J, H, K band effective wavelengths from CCM '89 table 3
-    x_inv_microns = [2.78; 2.27; 1.82; 1.43; 1.11; 0.80; 0.63; 0.46]
-    wave = 1.e4 ./ x_inv_microns
+    x_inv_microns = [10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.6, 4.0, 3.0, 2.78, 2.27, 1.82, 1.43, 1.11, 0.8, 0.63, 0.46]
+    wave = 1e4 ./ x_inv_microns
 
-    # A(lambda)/A(V) for R_V = 3.1 from Table 3 of CCM '89
-    ref_values = [1.569, 1.337, 1.000, 0.751, 0.479, 0.282, 0.190, 0.114]
+    # A(lambda)/A(V) for different R_V from Table 3 of CCM '89
+    ref_values = Dict(3.1 => [5.23835484, 4.13406452, 3.33685933, 2.77962453, 2.52195399, 2.84252644, 3.18598916, 2.31531711, 1.64254927, 1.56880904, 1.32257836, 1.0, 0.75125994, 0.4780346, 0.28206957, 0.19200814, 0.11572348],
+        2.0 => [9.407, 7.3065, 5.76223881, 4.60825807, 4.01559036, 4.43845534, 4.93952892, 3.39275574, 2.068771, 1.9075018, 1.49999733, 1.0, 0.68650255, 0.36750326, 0.21678862, 0.14757062, 0.08894094],
+        3.0 => [5.491, 4.32633333, 3.48385202, 2.8904508, 2.6124774, 2.9392494, 3.2922643, 2.38061642, 1.66838089, 1.58933588, 1.33333103, 1.0, 0.74733525, 0.47133573, 0.27811315, 0.18931496, 0.11410029],
+        4.0 => [3.533, 2.83625, 2.34465863, 2.03154717, 1.91092092, 2.18964643, 2.46863199, 1.87454675, 1.46818583, 1.43025292, 1.24999788, 1.0, 0.7777516, 0.52325196, 0.30877542, 0.21018713, 0.12667997],
+        5.0 => [2.3582, 1.9422, 1.66114259, 1.51620499, 1.48998704, 1.73988465, 1.97445261, 1.57090496, 1.3480688, 1.33480314, 1.19999799, 1.0, 0.79600141, 0.5544017, 0.32717278, 0.22271044, 0.13422778],
+        6.0 => [1.575, 1.34616667, 1.20546523, 1.17264354, 1.20936444, 1.44004346, 1.64499968, 1.36847709, 1.26799077, 1.27116996, 1.16666472, 1.0, 0.80816794, 0.5751682, 0.33943769, 0.23105931, 0.13925965])
 
-    # Now test for dot operation
-    @test ccm89.(wave, 3.1) ≈ ref_values rtol = 0.016
-
-    # Test deprecated array syntax
+    # Test defaults
+    @test @inferred(broadcast(ccm89, wave)) ≈ ref_values[3.1] rtol = 0.016
     @test_deprecated ccm89(wave)
 
-    # Test errors
-    bad_waves = [
-        100.:13000.,
-        33400.:40000.
-    ]
-    for bad_wave in bad_waves
-        @test_throws ErrorException ccm89.(bad_wave, 3.1)
-    end
+    for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
+        output = @inferred broadcast(ccm89, wave, rv)
+        @test output ≈ ref_values[rv] rtol = 0.016
 
-    @testset "uncertainties" begin        
+        # Test deprecated array syntax
+        @test_deprecated ccm89(wave, rv)
+
+        bad_waves = [100, 4e4]
+        @test @inferred(broadcast(ccm89, bad_waves, rv)) == zeros(length(bad_waves))
+
+        # uncertainties 
         noise = randn(length(wave)) .* 0.01
         wave_unc = wave .± noise
-        reddening = ccm89.(wave_unc, 3.1)
-        @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
-    end 
+        reddening = @inferred broadcast(ccm89, wave_unc, rv)
+        @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
 
-    @testset "unitful" begin
+        # Unitful
         wave_u = wave * u"angstrom"
-        reddening = ccm89.(wave_u, 3.1)
+        reddening = @inferred broadcast(ccm89, wave_u, rv)
         @test eltype(reddening) <: Gain
-        @test ustrip.(reddening) ≈ ref_values rtol = 0.016
+        @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end
 end
 
@@ -95,30 +98,25 @@ end
                 0.885, 0.746, 0.597,
                 1.197, 0.811, 0.580]
             
-                # Now test for dot operation
-    @test od94.(wave, 3.1) ≈ ref_values rtol = 0.016
+    reddening = @inferred broadcast(od94, wave, 3.1)
+    @test reddening ≈ ref_values rtol = 0.016
             
-                # Test deprecated array syntax
+    # Test deprecated array syntax
     @test_deprecated od94(wave)
             
-                # Test errors
-    bad_waves = [
-                    100.:13000.,
-                    33400.:40000.
-                ]
-    for bad_wave in bad_waves
-        @test_throws ErrorException od94.(bad_wave, 3.1)
-    end
+    # Test out of bounds
+    bad_waves = [100, 4e4]
+    @test @inferred(broadcast(od94, bad_waves, 3.1)) == zeros(length(bad_waves))
 
     @testset "uncertainties" begin        
         noise = randn(length(wave)) .* 10
         wave_unc = wave .± noise
-        reddening = od94.(wave_unc, 3.1)
+        reddening = @inferred broadcast(od94, wave_unc, 3.1)
         @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
     end
     @testset "unitful" begin
         wave_u = wave * u"angstrom"
-        reddening = od94.(wave_u, 3.1)
+        reddening = @inferred broadcast(od94, wave_u, 3.1)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values rtol = 0.016
     end
