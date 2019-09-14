@@ -20,10 +20,14 @@ end
 
 Calzetti et al. (2000) Dust law.
 
-Calculate the magnitudes for given wavelengths `wave` in Å. Wavelength support is 0.12 to 2.2 microns. Accepts selective extinction `r_v` parameter with default set to Milky Way average of 3.1.
+Calculate the magnitudes for given wavelengths `wave` in Å. Wavelength support 
+is 0.12 to 2.2 microns. Outside of this range the returned value is 0. Accepts 
+selective extinction `r_v` parameter with default set to Milky Way average of 
+3.1.
 
 # References
-[[1]](http://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
+[[1]]
+    (http://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
 
 """
 function cal00(wave::Real, r_v = 3.1)

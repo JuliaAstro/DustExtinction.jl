@@ -21,14 +21,17 @@ end
 """
     SFD98Map([mapdir])
 
-Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a
-directory containing the two FITS files defining the map, which are downloaded during the build step automatically,
-`SFD_dust_4096_[ngp,sgp].fits`. If not provided, will automatically provide this package's build folder unless the `SFD98_DIR` environement variable is set. Internally, this type keeps
-the FITS files defining the map open, speeding up repeated queries
-for E(B-V) values.
+Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a directory 
+containing the two FITS files defining the map, which are downloaded during the 
+build step automatically, `SFD_dust_4096_[ngp,sgp].fits`. If not provided, will 
+automatically provide this package's build folder unless the `SFD98_DIR` 
+environement variable is set. Internally, this type keeps the FITS files defining 
+the map open, speeding up repeated queries for E(B-V) values.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel et al. (1998)
+[[1]]
+    (https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel 
+    et al. (1998)
 """
 function SFD98Map(mapdir::AbstractString)
     try
@@ -71,10 +74,10 @@ end
     (dustmap::SFD98Map)(l::Real, b::Real)
     (dustmap::SFD98Map)(l::Quantity, b::Quantity)
 
-Get E(B-V) value from a `SFD98Map` instance at galactic coordinates
-(`l`, `b`), given in radians. Uses bilinear
-interpolation between pixel values. If `l` and `b` are `Unitful.Quantity` they will be converted 
-to radians and the output will be given as `UnitfulAstro.mag`.
+Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`), 
+given in radians. Uses bilinear interpolation between pixel values. If `l` and 
+`b` are `Unitful.Quantity` they will be converted to radians and the output 
+will be given as `UnitfulAstro.mag`.
 
 # Example
 
@@ -86,20 +89,14 @@ julia> m = SFD98Map();
 julia> m(1, 2)
 0.013439524544325624
 
-julia> l = 0:0.2:2; b = 0:0.2:2;
+julia> l = 0:0.5:2; b = 0:0.5:2;
 
 julia> m.(l, b)
-11-element Array{Float64,1}:
- 99.69757461547852
-  0.5395069628570422
-  0.20800230208348652
-  0.06887057865191418
-  0.04890491167004587
+5-element Array{Float64,1}:
+ 99.69757461547852    
+  0.10180447359074371 
   0.019595484241066132
-  0.010995002463447149
-  0.007835950023239207
-  0.011048806604967648
-  0.013720918817564005
+  0.010238757633890877
   0.01862100327420125 
 ```
 

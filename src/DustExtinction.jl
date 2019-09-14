@@ -27,8 +27,10 @@ include("SFD98Map.jl")
     extinct(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
     extinct(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
 
-Extinct the value `f` by the value calculated via the given law and total extinction value `Av`. By 
-default we use `Rv=3.1` which is the Milky Way average selective attenuation. Note that λ should be in Angstrom if it is not a `Quantity`.
+Extinct the value `f` by the value calculated via the given law and total 
+extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way 
+average selective attenuation. Note that λ should be in Angstrom if it is not 
+a `Quantity`.
 """
 extinct(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
 extinct(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
