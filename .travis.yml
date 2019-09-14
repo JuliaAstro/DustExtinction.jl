@@ -1,19 +1,23 @@
 language: julia
+
 os:
   - linux
   - osx
+
 julia:
   - 1.0
   - 1.1
+  - 1.2
   - nightly
+
 matrix:
   allow_failures:
     - julia: nightly
-git:
-  depth: 999999
+
 notifications:
   email: false
 
+codecov: true
 
 jobs:
   include:
