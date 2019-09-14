@@ -79,7 +79,7 @@ julia> ccm89.([4000. ± 10.5, 5000. ± 10.2], 3.1)
 
 ```
 
-and also support units via [Unitful.jl](https://github.com/painterqubits/unitful.jl) and its subsidiaries. Notice how the output type is now a `Unitful.Gain`.
+and also support units via [Unitful.jl](https://github.com/painterqubits/unitful.jl) and its subsidiaries. Notice how the output type is now `Unitful.Gain`.
 
 ```jldoctest
 julia> using Unitful, UnitfulAstro
