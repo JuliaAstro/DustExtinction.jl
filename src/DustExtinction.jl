@@ -2,7 +2,8 @@ module DustExtinction
 
 using Unitful, UnitfulAstro
 
-export extinct,
+export redden,
+       deredden,
        ccm89,
        cal00,
        od94,
@@ -15,24 +16,35 @@ aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
 
 # Extinction Laws
-include("ccm89.jl") # Also includes od94
-include("cal00.jl")
-include("SFD98Map.jl")
+include("color_laws.jl")
+include("dust_maps.jl")
 
 @deprecate ccm89(x::AbstractArray, r_v::Real=3.1) ccm89.(x, r_v)
 @deprecate od94(x::AbstractArray, r_v::Real=3.1) od94.(x, r_v)
 
-# Extinct function
+# reddening functions
 """
-    extinct(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
-    extinct(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
+    redden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
+    redden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
 
-Extinct the value `f` by the value calculated via the given law and total 
+Redden the value `f` by the value calculated via the given law and total 
 extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way 
 average selective attenuation. Note that λ should be in Angstrom if it is not 
 a `Quantity`.
 """
-extinct(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
-extinct(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
+redden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
+redden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
+
+"""
+    deredden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
+    deredden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
+
+Deredden the value `f` by the value calculated via the given law and total 
+extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way 
+average selective attenuation. Note that λ should be in Angstrom if it is not 
+a `Quantity`.
+"""
+deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
+deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
 
 end # module
