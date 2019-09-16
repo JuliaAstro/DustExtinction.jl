@@ -30,8 +30,8 @@ julia> ccm89.([4000., 5000.], 3.1)
 
 these laws return magnitudes, which we can apply directly to flux by mulitplication with a base-2.5 logarithmic system (because astronomers are fun):
 
-```julia
-f = f * 10 ^ (-0.4 * Av * mag)
+```math
+f = f \cdot 10 ^ {-0.4A_v\cdot mag}
 ```
 
 To make this easier, we provide a convenient [`redden`](@ref) function for applying these color laws to flux measurements.
@@ -55,7 +55,7 @@ julia> redden.(flux, wave, 0.3)
 !!! note
     If you are concerned with memory and would like an in-place broadcasted version of [`redden`](@ref) use it with [`Base.map!`](https://docs.julialang.org/en/v1/base/collections/#Base.map!)
     ```julia
-    julia> map!((f,w)->redden(f, w, 0.3), flux, flux, wave)
+    map!((f,w)->redden(f, w, 0.3), flux, flux, wave)
     ```
 
 ## Advanced Usage
@@ -152,10 +152,9 @@ xlabel!(L"\mu m ^{-1}")
 ylabel!(L"E(B-V)")
 savefig("ccm89_plot.svg")
 ```
+
 ```@raw html
-<div style="">
 <img src="ccm89_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-</div>
 ```
 
 ```@docs
@@ -177,10 +176,9 @@ xlabel!(L"\mu m ^{-1}")
 ylabel!(L"E(B-V)")
 savefig("od94_plot.svg")
 ```
+
 ```@raw html
-<div style="">
 <img src="od94_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-</div>
 ```
 
 ```@docs
@@ -202,11 +200,11 @@ xlabel!(L"\mu m ^{-1}")
 ylabel!(L"E(B-V)")
 savefig("cal00_plot.svg")
 ```
+
 ```@raw html
-<div style="">
 <img src="cal00_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-</div>
 ```
+
 ```@docs
 cal00
 ```

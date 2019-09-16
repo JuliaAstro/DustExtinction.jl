@@ -67,12 +67,10 @@ xlabel!("l (rad)")
 ylabel!("b (rad)")
 savefig("sfd98_plot.svg")
 ```
-```@raw html
-<div style="">
-<img src="sfd98_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-</div>
-```
 
+```@raw html
+<img src="sfd98_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
+```
 
 ```@docs
 SFD98Map
