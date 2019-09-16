@@ -1,7 +1,7 @@
 
 # [Color laws](@id laws)
 
-The following empirical laws allow us to model the reddening of light as it travels to us. If you aren't quite sure which law to use, [`ccm89`](@ref) is a decent default.
+The following empirical laws allow us to model the reddening of light as it travels to us. The law you use should depend on the type of data you have and the goal of its use. [`ccm89`](@ref) is very common for use in removing extinction from stellar observations, but [`cal00`](@ref), for instance, is suited for galaxies with massive stars. Look through the citations and documentation for each law to get a better idea of what sort of physics it targets. 
 
 ```@meta
 DocTestSetup = quote
@@ -10,23 +10,11 @@ DocTestSetup = quote
 end
 ```
 
-```@raw html
-<div style="">
-<img src="assets/laws.png" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-</div>
-```
-Here is a comparison of these three laws in the 0.3-10 inverse-micron range. Notice the slight difference in `od94` and `ccm89` around the optical (2.5-3 inverse-micron) while they are equal everywhere else.
-
 ## Usage
 
 ```jldoctest
 julia> ccm89(4000., 3.1)
-ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] top-level scope at none:4
+1.464555702942584
 
 ```
 
@@ -34,17 +22,9 @@ These laws can be applied across higher dimension arrays using the `.` operator
 
 ```jldoctest
 julia> ccm89.([4000., 5000.], 3.1)
-ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
- [3] _broadcast_getindex at ./broadcast.jl:598 [inlined]
- [4] getindex at ./broadcast.jl:558 [inlined]
- [5] copy at ./broadcast.jl:832 [inlined]
- [6] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Float64,1},Float64}}) at ./broadcast.jl:798
- [7] top-level scope at none:4
+2-element Array{Float64,1}:
+ 1.464555702942584
+ 1.1222468788993019
 
 ```
 
@@ -54,7 +34,7 @@ these laws return magnitudes, which we can apply directly to flux by mulitplicat
 f = f * 10 ^ (-0.4 * Av * mag)
 ```
 
-To make this easier, we provide a convenient [`extinct`](@ref) function for applying these color laws to flux measurements.
+To make this easier, we provide a convenient [`redden`](@ref) function for applying these color laws to flux measurements.
 
 ```jldoctest
 julia> wave = range(4000, 5000, length=4)
@@ -63,48 +43,32 @@ julia> wave = range(4000, 5000, length=4)
 julia> flux = 1e-8 .* wave .+ 1e-2
 0.01004:3.3333333333333333e-6:0.01005
 
-julia> extinct.(flux, wave, 0.3)
-ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] #extinct#1(::Float64, ::typeof(ccm89), ::typeof(extinct), ::Float64, ::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:35
- [3] extinct(::Float64, ::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:35
- [4] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
- [5] _broadcast_getindex at ./broadcast.jl:598 [inlined]
- [6] getindex at ./broadcast.jl:558 [inlined]
- [7] copy at ./broadcast.jl:832 [inlined]
- [8] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(extinct),Tuple{StepRangeLen{Float64,Base.TwicePrecision{Float64},Base.TwicePrecision{Float64}},StepRangeLen{Float64,Base.TwicePrecision{Float64},Base.TwicePrecision{Float64}},Float64}}) at ./broadcast.jl:798
- [9] top-level scope at none:4
+julia> redden.(flux, wave, 0.3)
+4-element Array{Float64,1}:
+ 0.006698646015454752
+ 0.006918253926353551
+ 0.007154659823737299
+ 0.007370491272731541
 
 ```
 
 !!! note
-    If you are concerned with memory and would like an in-place broadcasted version of [`extinct`](@ref) use it with [`Base.map!`](https://docs.julialang.org/en/v1/base/collections/#Base.map!)
+    If you are concerned with memory and would like an in-place broadcasted version of [`redden`](@ref) use it with [`Base.map!`](https://docs.julialang.org/en/v1/base/collections/#Base.map!)
     ```julia
-    julia> map!((f,w)->extinct(f, w, 0.3), flux, flux, wave)
+    julia> map!((f,w)->redden(f, w, 0.3), flux, flux, wave)
     ```
 
 ## Advanced Usage
 
 The color laws also have built-in support for uncertainties using [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
 
-```jldoctest setup
+```jldoctest
 julia> using Measurements
 
 julia> ccm89.([4000. ± 10.5, 5000. ± 10.2], 3.1)
-ERROR: MethodError: no method matching ccm89_invum(::Measurement{Float64}, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Measurement{Float64}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
- [3] _broadcast_getindex at ./broadcast.jl:598 [inlined]
- [4] getindex at ./broadcast.jl:558 [inlined]
- [5] copy at ./broadcast.jl:832 [inlined]
- [6] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Measurement{Float64},1},Float64}}) at ./broadcast.jl:798
- [7] top-level scope at none:4
+2-element Array{Measurement{Float64},1}:
+ 1.4646 ± 0.0033
+ 1.1222 ± 0.003
 
 ```
 
@@ -114,25 +78,15 @@ and also support units via [Unitful.jl](https://github.com/painterqubits/unitful
 julia> using Unitful, UnitfulAstro
 
 julia> mags = ccm89.([4000u"angstrom", 0.5u"μm"], 3.1)
-ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] ccm89(::Quantity{Float64,𝐋,Unitful.FreeUnits{(m,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:62
- [3] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
- [4] _broadcast_getindex at ./broadcast.jl:598 [inlined]
- [5] getindex at ./broadcast.jl:558 [inlined]
- [6] copy at ./broadcast.jl:832 [inlined]
- [7] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(ccm89),Tuple{Array{Quantity{Float64,𝐋,Unitful.FreeUnits{(m,),𝐋,nothing}},1},Float64}}) at ./broadcast.jl:798
- [8] top-level scope at none:4
+2-element Array{Gain{Unitful.LogInfo{:Magnitude,10,-2.5},:?,Float64},1}:
+ 1.4645557029425837 mag
+ 1.1222468788993019 mag
 
 ```
 
-You can even combine the two above to get some really nice workflows exploiting all Julia has to offer! This example shows how you 
-could redden some OIR observational data with uncertainties in the flux density.
+You can even combine the two above to get some really nice workflows exploiting all Julia has to offer! This example shows how you could redden some OIR observational data with uncertainties in the flux density.
 
-```jldoctest setup
+```jldoctest
 julia> using Measurements, Unitful, UnitfulAstro
 
 julia> wave = range(0.3, 1.0, length=5)u"μm"
@@ -154,29 +108,105 @@ julia> flux = @.(300 / ustrip(wave)^4 ± err)*u"Jy"
  647.598 ± -0.01 Jy
    300.0 ± -0.84 Jy
 
-julia> extinct.(flux, wave, 0.3)
-ERROR: MethodError: no method matching ccm89_invum(::Float64, ::Float64, ::Array{Float64,1}, ::Array{Float64,1})
-Closest candidates are:
-  ccm89_invum(::Real, ::Real, !Matched::Polynomials.Poly{#s17} where #s17<:Real, !Matched::Polynomials.Poly{#s16} where #s16<:Real) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:10
-Stacktrace:
- [1] ccm89(::Float64, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:59
- [2] ccm89(::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/ccm89.jl:62
- [3] #extinct#2(::Float64, ::typeof(ccm89), ::typeof(extinct), ::Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}}, ::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:36
- [4] extinct(::Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}}, ::Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}, ::Float64) at /Users/miles/dev/julia/DustExtinction.jl/src/DustExtinction.jl:36
- [5] _broadcast_getindex_evalf at ./broadcast.jl:625 [inlined]
- [6] _broadcast_getindex at ./broadcast.jl:598 [inlined]
- [7] getindex at ./broadcast.jl:558 [inlined]
- [8] copy at ./broadcast.jl:832 [inlined]
- [9] materialize(::Base.Broadcast.Broadcasted{Base.Broadcast.DefaultArrayStyle{1},Nothing,typeof(extinct),Tuple{Array{Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1},StepRangeLen{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}},Base.TwicePrecision{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}},Base.TwicePrecision{Quantity{Float64,𝐋,Unitful.FreeUnits{(μm,),𝐋,nothing}}}},Float64}}) at ./broadcast.jl:798
- [10] top-level scope at none:4
+julia> redden.(flux, wave, 0.3)
+5-element Array{Quantity{Measurement{Float64},𝐌*𝐓^-2,Unitful.FreeUnits{(Jy,),𝐌*𝐓^-2,nothing}},1}:
+    22410.8 ± 0.18 Jy
+    4229.74 ± 0.27 Jy
+    1337.12 ± 0.48 Jy
+ 554.3349 ± 0.0089 Jy
+     268.31 ± 0.75 Jy
 
 ```
 
 ## API/Reference
 
+### Helper Functions
+
 ```@docs
-extinct
+redden
+deredden
+```
+
+### Parametric Extinction Laws
+
+These laws are all parametrized by the selective extinction `RV`. Mathematically, this is the ratio of the total extinction by the reddening
+
+```math
+R_V = \frac{A_V}{E(B-V)}
+```
+
+and is loosely associated with the size of the dust grains in the interstellar medium.
+
+#### Clayton, Cardelli and Mathis (1989)
+
+```@setup ccm89_plots
+using Plots, LaTeXStrings
+import DustExtinction: ccm89_ca, ccm89_cb, ccm89_invum
+w = range(0.3, 10.0, length=1000)
+plot()
+for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
+  m = ccm89_invum.(w, rv, Ref(ccm89_ca), Ref(ccm89_cb))
+  plot!(w, m, label="RV=$rv")
+end
+xlabel!(L"\mu m ^{-1}")
+ylabel!(L"E(B-V)")
+savefig("ccm89_plot.svg")
+```
+```@raw html
+<div style="">
+<img src="ccm89_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
+</div>
+```
+
+```@docs
 ccm89
+```
+
+#### O'Donnell 1994
+
+```@setup od94_plots
+using Plots, LaTeXStrings
+import DustExtinction: od94_ca, od94_cb, ccm89_invum
+w = range(0.3, 10.0, length=1000)
+plot()
+for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
+  m = ccm89_invum.(w, rv, Ref(od94_ca), Ref(od94_cb))
+  plot!(w, m, label="RV=$rv")
+end
+xlabel!(L"\mu m ^{-1}")
+ylabel!(L"E(B-V)")
+savefig("od94_plot.svg")
+```
+```@raw html
+<div style="">
+<img src="od94_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
+</div>
+```
+
+```@docs
 od94
+```
+
+#### Calzetti et al. (2000)
+
+```@setup cal00_plots
+using Plots, LaTeXStrings
+import DustExtinction: cal00_invum
+w = range(0.46, 8.3, length=1000)
+plot()
+for rv in [2.0, 3.0, 4.05, 5.0, 6.0]
+  m = cal00_invum.(w, rv)
+  plot!(w, m, label="RV=$rv")
+end
+xlabel!(L"\mu m ^{-1}")
+ylabel!(L"E(B-V)")
+savefig("cal00_plot.svg")
+```
+```@raw html
+<div style="">
+<img src="cal00_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
+</div>
+```
+```@docs
 cal00
 ```
