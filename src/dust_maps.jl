@@ -21,7 +21,9 @@ end
 """
     SFD98Map([mapdir])
 
-Schlegel, Finkbeiner and Davis (1998) dust map. `mapdir` should be a directory 
+Schlegel, Finkbeiner and Davis (1998) dust map. 
+
+`mapdir` should be a directory 
 containing the two FITS files defining the map, which are downloaded during the 
 build step automatically, `SFD_dust_4096_[ngp,sgp].fits`. If not provided, will 
 automatically provide this package's build folder unless the `SFD98_DIR` 
@@ -29,9 +31,7 @@ environement variable is set. Internally, this type keeps the FITS files definin
 the map open, speeding up repeated queries for E(B-V) values.
 
 # References
-[[1]]
-    (https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel 
-    et al. (1998)
+[[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel, Finkbeiner and Davis (1998)
 """
 function SFD98Map(mapdir::AbstractString)
     try

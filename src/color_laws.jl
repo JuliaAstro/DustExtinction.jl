@@ -1,4 +1,8 @@
-using Polynomials
+using Polynomials, Unitful, UnitfulAstro
+
+# Convenience function for wavelength conversion
+aa_to_invum(wave::Real) = 10000 / wave
+aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
 ##################################
 # ccm89 and od94 implementations #
@@ -12,8 +16,8 @@ const od94_ca = Poly([1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -
 const od94_cb = Poly([0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347])
 
 """
-    ccm89(λ::Real, RV=3.1)
-    ccm89(λ::Quantity, RV=3.1)
+    ccm89(λ::Real, RV=3.1)
+    ccm89(λ::Quantity, RV=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law. 
 
@@ -22,8 +26,7 @@ Returns E(B-V) in magnitudes at the given wavelength relative to the 
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]]
-    (http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Cardelli, Clayton and Mathis (1989)
+[[1]](http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Cardelli, Clayton and Mathis (1989)
 """
 function ccm89(λ::Real, RV = 3.1)
     x = aa_to_invum(λ)
@@ -43,6 +46,7 @@ This is identical to the Clayton, Cardelli and Mathis (1989) dust law
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the returned value will be `UnitfulAstro.mag`.
 
 # References
+
 [[1]](http://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
 
 # See Also
@@ -87,7 +91,7 @@ end
 
 ##########################
 # cal00  implementations #
-##########################
+##########################\
 
 """
     cal00(λ::Real, RV=4.05)
