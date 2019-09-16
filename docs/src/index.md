@@ -10,8 +10,7 @@ Extinction describes the effect of dust grains on observations of stars in space
 From the REPL, press `]` to enter Pkg mode
 
 ```julia
-(v 1.1) pkg> add DustExtinction
-[...]
+(v 1.2) pkg> add DustExtinction
 
 julia> using DustExtinction
 ```
@@ -33,7 +32,7 @@ For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) s
 There are various citations relevant to this work. Please be considerate when using this work or any derivate of it by adding the appropriate citations.
 
 [`ccm89`](@ref) - 
-[Cardelli, Clayton and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract) - [BibTex](assets/ccm89.bib)
+[Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract) - [BibTex](assets/ccm89.bib)
 
 [`od94`](@ref) - [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O/abstract) - [BibTex](assets/od94.bib)
 

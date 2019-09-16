@@ -1,6 +1,5 @@
 using DustExtinction
-using Test
-using Measurements, Unitful, UnitfulAstro
+using Test, Measurements, Unitful, UnitfulAstro
 
 include("color_laws.jl")
 include("dust_maps.jl")

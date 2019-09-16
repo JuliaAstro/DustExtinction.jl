@@ -1,13 +1,9 @@
 using Documenter
 using DustExtinction
 
-makedocs(
-    modules = [DustExtinction],
+makedocs(modules = [DustExtinction],
     sitename = "DustExtinction.jl",
-    format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true",
-        assets = [
-            "assets/front_image.png",
-        ]),
+    format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
     authors = "Kyle Barbary, Mosé Giordano, Miles Lucas",
     strict = true,
     pages = [
