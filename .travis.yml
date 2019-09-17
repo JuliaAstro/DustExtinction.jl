@@ -3,7 +3,6 @@ language: julia
 os:
   - linux
   - osx
-  - windows
 
 julia:
   - 1.0
@@ -22,22 +21,6 @@ codecov: true
 
 jobs:
   include:
-    - os: windows
-      arch: x86
-      julia: 1.0
-      name: "Julia: 1.0 (32bit)"
-    - os: windows
-      arch: x86
-      julia: 1.1
-      name: "Julia: 1.1 (32bit)"
-    - os: windows
-      arch: x86
-      julia: 1.2
-      name: "Julia: 1.2 (32bit)"
-    - os: windows
-      arch: x86
-      julia: nightly
-      name: "Julia: nightly (32bit)"
     - stage: "Documentation"
       julia: 1.2
       os: linux
