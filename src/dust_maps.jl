@@ -120,12 +120,11 @@ function (dustmap::SFD98Map)(l::Real, b::Real)
 
     x, y = galactic_to_lambert(crpix1, crpix2, lam_scal, n, l, b)
 
-    # determine interger pixel locations and weights for bilinear interpolation
-    xfloor = floor(x)
-    xw = x - xfloor
+    # determine integer pixel locations and weights for bilinear interpolation
+
+    xw, xfloor = modf(x)
     x0 = round(Int, xfloor)
-    yfloor = floor(y)
-    yw = y - yfloor
+    yw, yfloor = modf(y)
     y0 = round(Int, yfloor)
 
     # handle cases near l = [0, pi/2. pi, 3pi/2] where two pixels

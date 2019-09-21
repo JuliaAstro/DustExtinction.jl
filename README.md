@@ -68,7 +68,7 @@ julia> extinct.(flux, wave, 0.3)
 
 ```
 
-We provide first-class support for `Unitful.jl` and `Measurements.jl` types, too! Check out the documentation for more examples.
+We provide first-class support for `Unitful.jl` and `Measurements.jl` packages, too! Check out the documentation for more examples.
 
 ## Contributing
 

@@ -1,7 +1,7 @@
 # Downloads the SFD98 Map file
 const SFD98_BASEURL = "http://sncosmo.github.io/data/dust/"
 
-destdir = haskey(ENV, "SFD98_DIR") ? ENV["SFD98_DIR"] : @__DIR__
+const destdir = haskey(ENV, "SFD98_DIR") ? ENV["SFD98_DIR"] : @__DIR__
 
 try
     for fname in ["SFD_dust_4096_ngp.fits", "SFD_dust_4096_sgp.fits"]
