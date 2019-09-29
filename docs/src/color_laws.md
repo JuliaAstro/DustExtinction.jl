@@ -153,9 +153,7 @@ ylabel!(L"E(B-V)")
 savefig("ccm89_plot.svg")
 ```
 
-```@raw html
-<img src="ccm89_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](ccm89_plot.svg)
 
 ```@docs
 ccm89
@@ -177,9 +175,7 @@ ylabel!(L"E(B-V)")
 savefig("od94_plot.svg")
 ```
 
-```@raw html
-<img src="od94_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](od94_plot.svg)
 
 ```@docs
 od94
@@ -201,9 +197,7 @@ ylabel!(L"E(B-V)")
 savefig("cal00_plot.svg")
 ```
 
-```@raw html
-<img src="cal00_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](cal00_plot.svg)
 
 ```@docs
 cal00

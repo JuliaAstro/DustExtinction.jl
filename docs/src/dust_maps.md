@@ -68,9 +68,7 @@ ylabel!("b (rad)")
 savefig("sfd98_plot.svg")
 ```
 
-```@raw html
-<img src="sfd98_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](sfd98_plot.svg)
 
 ```@docs
 SFD98Map
