@@ -32,7 +32,7 @@ and stored in a directory following the semantics of
  defining the map open, speeding up repeated queries for E(B-V) values.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel, Finkbeiner and Davis (1998)
+[Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract)
 """
 function SFD98Map(mapdir::String)
     try

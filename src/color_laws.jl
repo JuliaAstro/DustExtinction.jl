@@ -28,7 +28,7 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Clayton,Cardelli and Mathis (1989)
+[Clayton,Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)
 """
 function ccm89(λ::Real, Rv = 3.1)
     x = aa_to_invum(λ)
@@ -50,7 +50,7 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and
 the returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
+[O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)
 
 # See Also
 [`ccm89`](@ref)
@@ -112,7 +112,7 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
+[Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
 function cal00(λ::Real, Rv = 3.1)
     # Convert to inverse-um
