@@ -1,9 +1,7 @@
 using Documenter
 using DustExtinction
 
-if get(ENV, "CI", false)
-    ENV["DATADEPS_ALWAYS_ACCEPT"] = true
-end
+ENV["DATADEPS_ALWAYS_ACCEPT"] = get(ENV, "CI", nothing) == "true"
 
 makedocs(modules = [DustExtinction],
     sitename = "DustExtinction.jl",
