@@ -17,3 +17,5 @@ task:
     - cirrusjl test
   data_cache:
     folder: $HOME/.julia/datadeps
+  environment:
+    DATADEPS_ALWAYS_ACCEPT: true

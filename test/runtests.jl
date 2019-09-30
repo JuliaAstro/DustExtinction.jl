@@ -1,8 +1,6 @@
 using DustExtinction
 using Test, Measurements, Unitful, UnitfulAstro
 
-ENV["DATADEPS_ALWAYS_ACCEPT"] = get(ENV, "CI", nothing) == "true"
-
 include("color_laws.jl")
 include("dust_maps.jl")
 

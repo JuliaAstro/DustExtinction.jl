@@ -1,8 +1,6 @@
 using Documenter
 using DustExtinction
 
-ENV["DATADEPS_ALWAYS_ACCEPT"] = get(ENV, "CI", nothing) == "true"
-
 makedocs(modules = [DustExtinction],
     sitename = "DustExtinction.jl",
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
