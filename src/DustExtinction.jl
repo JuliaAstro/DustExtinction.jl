@@ -1,6 +1,6 @@
 module DustExtinction
 
-using Unitful, UnitfulAstro
+using Unitful, UnitfulAstro, DataDeps
 
 export redden,
        deredden,
@@ -14,8 +14,8 @@ export redden,
 include("color_laws.jl")
 include("dust_maps.jl")
 
-@deprecate ccm89(x::AbstractArray, r_v::Real=3.1) ccm89.(x, r_v)
-@deprecate od94(x::AbstractArray, r_v::Real=3.1) od94.(x, r_v)
+@deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
+@deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
 
 # reddening functions
 """
@@ -41,5 +41,18 @@ a `Quantity`.
 """
 deredden(f::Real, λ::Real, Av::Real; RV = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, RV))
 deredden(f::Quantity, λ::Quantity, Av::Real; RV = 3.1, law = ccm89) = f / (Av * law(λ, RV))
+
+function __init__()
+    # register our data dependencies
+    register(DataDep("sfd98_map",
+    """
+    SFD98 Galactic Dust Maps
+    Website: https://sncosmo.github.io
+    """,
+    ["https://sncosmo.github.io/data/dust/SFD_dust_4096_ngp.fits", 
+    "https://sncosmo.github.io/data/dust/SFD_dust_4096_sgp.fits"],
+    ["50b6aaad0b880762d0fd081177802dcc17c39d7044a410dd5649e2dfd0503e97",
+    "84891a59054adab44a7be54051e4dcf0e66e3f13eee0d845ce3739242f553b83"]))
+end
 
 end # module

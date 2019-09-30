@@ -1,6 +1,10 @@
 using DustExtinction
 using Test, Measurements, Unitful, UnitfulAstro
 
+if get(ENV, "CI", false)
+    ENV["DATADEPS_ALWAYS_ACCEPT"] = true
+end
+
 include("color_laws.jl")
 include("dust_maps.jl")
 
