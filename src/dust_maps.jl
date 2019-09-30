@@ -5,6 +5,7 @@ import Base: show
 # SFD98 Dust Maps
 
 mutable struct SFD98Map
+    mapdir::String
     ngp::ImageHDU
     ngp_size::Tuple{Int,Int}
     ngp_crpix1::Float64
@@ -18,37 +19,39 @@ mutable struct SFD98Map
 end
 
 """
-    SFD98Map()
+    SFD98Map([mapdir])
 
 Schlegel, Finkbeiner and Davis (1998) dust map. 
 
-The first time this is constructed, the data files required will be downloaded and stored in a directory following the semantics of [DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked to download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to `true`. Internally, this type keeps the FITS files defining the map open, speeding up repeated queries for E(B-V) values.
+The first time this is constructed, the data files required will be downloaded and stored in a directory following the semantics of [DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked to download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to `true`. You can also provide the directory of the two requisite files manually instead of relying on DataDeps.jl. Internally, this type keeps the FITS files defining the map open, speeding up repeated queries for E(B-V) values.
 
 # References
 [[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel, Finkbeiner and Davis (1998)
 """
-function SFD98Map()
+function SFD98Map(mapdir::String)
     try
-        ngp = FITS(joinpath(datadep"sfd98_map", "SFD_dust_4096_ngp.fits"))[1]
+        ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
         ngp_size = size(ngp)
         ngp_crpix1 = read_key(ngp, "CRPIX1")[1]
         ngp_crpix2 = read_key(ngp, "CRPIX2")[1]
         ngp_lam_scal = read_key(ngp, "LAM_SCAL")[1]
-        sgp = FITS(joinpath(datadep"sfd98_map", "SFD_dust_4096_sgp.fits"))[1]
+        sgp = FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
         sgp_size = size(sgp)
         sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
         sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
         sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
-        SFD98Map(
+        SFD98Map(mapdir,
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
             sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
     catch
-        error("Could not open dust map FITS files.")
+        error("Could not open dust map FITS files in directory $mapdir")
     end
     
 end
 
-show(io::IO, map::SFD98Map) = print(io, "SFD98Map")
+SFD98Map() = SFD98Map(datadep"sfd98_map")
+
+show(io::IO, map::SFD98Map) = print(io, "SFD98Map($(map.mapdir))")
 
 # Convert from galactic longitude/latitude to lambert pixels.
 # See SFD 98 Appendix C. For the 4096x4096 maps, lam_scal = 2048,
