@@ -54,4 +54,5 @@ using DataDeps
     end
     mapdir = datadep"sfd98_map"
     @test sprint(show, dustmap) == "SFD98Map($mapdir)"
+    @test_throws ErrorException SFD98Map(randstring(10))
 end

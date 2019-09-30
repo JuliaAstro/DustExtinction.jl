@@ -1,5 +1,7 @@
 using DustExtinction
-using Test, Measurements, Unitful, UnitfulAstro
+using Test, Measurements, Unitful, UnitfulAstro, Random
+
+Random.seed!(9994445781)
 
 include("color_laws.jl")
 include("dust_maps.jl")
