@@ -56,21 +56,7 @@ julia> dustmap(l, b)
 
 ### Schlegel, Finkbeiner and Davis (1998)
 
-```@setup sfd98_plot
-using Plots, DustExtinction
-l = range(-pi, pi, length=400)
-b = range(-pi/64, pi/64, length=300)
-dustmap = SFD98Map()
-m = [dustmap(li, bj) for li in l, bj in b]
-heatmap(l, b, m, label="", transpose=true, colorbar_title="E(B-V)")
-xlabel!("l (rad)")
-ylabel!("b (rad)")
-savefig("sfd98_plot.svg")
-```
-
-```@raw html
-<img src="sfd98_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](assets/sfd98_plot.svg)
 
 ```@docs
 SFD98Map

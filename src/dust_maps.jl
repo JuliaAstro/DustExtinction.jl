@@ -23,17 +23,18 @@ end
 
 Schlegel, Finkbeiner and Davis (1998) dust map. 
 
-`mapdir` should be a directory 
-containing the two FITS files defining the map, which are downloaded during the 
-build step automatically, `SFD_dust_4096_[ngp,sgp].fits`. If not provided, will 
-automatically provide this package's build folder unless the `SFD98_DIR` 
-environement variable is set. Internally, this type keeps the FITS files defining 
-the map open, speeding up repeated queries for E(B-V) values.
+The first time this is constructed, the data files required will be downloaded 
+and stored in a directory following the semantics of 
+[DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked to
+ download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to 
+ `true`. You can also provide the directory of the two requisite files manually 
+ instead of relying on DataDeps.jl. Internally, this type keeps the FITS files 
+ defining the map open, speeding up repeated queries for E(B-V) values.
 
 # References
-[[1]](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) Schlegel, Finkbeiner and Davis (1998)
+[Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract)
 """
-function SFD98Map(mapdir::AbstractString)
+function SFD98Map(mapdir::String)
     try
         ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
         ngp_size = size(ngp)
@@ -49,17 +50,14 @@ function SFD98Map(mapdir::AbstractString)
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
             sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
     catch
-        error("Could not open dust map FITS files from $mapdir. Either re-build DustExtinction or download the files directly and set the SF98_DIR environment variable")
+        error("Could not open dust map FITS files in directory $mapdir")
     end
     
 end
 
-function SFD98Map()
-    mapdir = get(ENV, "SF98_DIR", abspath(joinpath(@__DIR__, "..", "deps")))
-    SFD98Map(mapdir) 
-end
+SFD98Map() = SFD98Map(datadep"sfd98_map")
 
-show(io::IO, map::SFD98Map) = print(io, "SFD98Map(\"$(map.mapdir)\")")
+show(io::IO, map::SFD98Map) = print(io, "SFD98Map($(map.mapdir))")
 
 # Convert from galactic longitude/latitude to lambert pixels.
 # See SFD 98 Appendix C. For the 4096x4096 maps, lam_scal = 2048,
@@ -77,7 +75,7 @@ end
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`), 
 given in radians. Uses bilinear interpolation between pixel values. If `l` and 
 `b` are `Unitful.Quantity` they will be converted to radians and the output 
-will be given as `UnitfulAstro.mag`.
+will be given as `UnitfulAstro.mag`. 
 
 # Example
 

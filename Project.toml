@@ -4,6 +4,7 @@ license = "MIT"
 version = "0.6.0"
 
 [deps]
+DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
 Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
@@ -18,6 +19,7 @@ julia = "≥ 1.0.0"
 [extras]
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [targets]
-test = ["Measurements", "Test"]
+test = ["Measurements", "Random", "Test"]

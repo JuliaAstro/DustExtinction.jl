@@ -1,3 +1,4 @@
+using DataDeps
 @testset "SFD98 dust maps" begin
 
     # refebv obtained using http://irsa.ipac.caltech.edu/applications/DUST/
@@ -51,4 +52,7 @@
         @test eltype(output) <: Gain
         @test ustrip.(output) ≈ refebv rtol = 0.02
     end
+    mapdir = datadep"sfd98_map"
+    @test sprint(show, dustmap) == "SFD98Map($mapdir)"
+    @test_throws ErrorException SFD98Map(randstring(10))
 end

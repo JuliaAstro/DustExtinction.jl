@@ -129,7 +129,7 @@ deredden
 
 ### Parametric Extinction Laws
 
-These laws are all parametrized by the selective extinction `RV`. Mathematically, this is the ratio of the total extinction by the reddening
+These laws are all parametrized by the selective extinction `Rv`. Mathematically, this is the ratio of the total extinction by the reddening
 
 ```math
 R_V = \frac{A_V}{E(B-V)}
@@ -139,23 +139,7 @@ and is loosely associated with the size of the dust grains in the interstellar m
 
 #### Clayton, Cardelli and Mathis (1989)
 
-```@setup ccm89_plots
-using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, ccm89_invum
-w = range(0.3, 10.0, length=1000)
-plot()
-for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
-  m = ccm89_invum.(w, rv, Ref(ccm89_ca), Ref(ccm89_cb))
-  plot!(w, m, label="RV=$rv")
-end
-xlabel!(L"\mu m ^{-1}")
-ylabel!(L"E(B-V)")
-savefig("ccm89_plot.svg")
-```
-
-```@raw html
-<img src="ccm89_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](assets/ccm89_plot.svg)
 
 ```@docs
 ccm89
@@ -163,23 +147,7 @@ ccm89
 
 #### O'Donnell 1994
 
-```@setup od94_plots
-using Plots, LaTeXStrings
-import DustExtinction: od94_ca, od94_cb, ccm89_invum
-w = range(0.3, 10.0, length=1000)
-plot()
-for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
-  m = ccm89_invum.(w, rv, Ref(od94_ca), Ref(od94_cb))
-  plot!(w, m, label="RV=$rv")
-end
-xlabel!(L"\mu m ^{-1}")
-ylabel!(L"E(B-V)")
-savefig("od94_plot.svg")
-```
-
-```@raw html
-<img src="od94_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](assets/od94_plot.svg)
 
 ```@docs
 od94
@@ -187,23 +155,7 @@ od94
 
 #### Calzetti et al. (2000)
 
-```@setup cal00_plots
-using Plots, LaTeXStrings
-import DustExtinction: cal00_invum
-w = range(0.46, 8.3, length=1000)
-plot()
-for rv in [2.0, 3.0, 4.05, 5.0, 6.0]
-  m = cal00_invum.(w, rv)
-  plot!(w, m, label="RV=$rv")
-end
-xlabel!(L"\mu m ^{-1}")
-ylabel!(L"E(B-V)")
-savefig("cal00_plot.svg")
-```
-
-```@raw html
-<img src="cal00_plot.svg" style="max-width:80%; display: block; margin-left: auto; margin-right: auto">
-```
+![](assets/cal00_plot.svg)
 
 ```@docs
 cal00
