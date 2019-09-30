@@ -4,9 +4,7 @@ using Polynomials, Unitful, UnitfulAstro
 aa_to_invum(wave::Real) = 10000 / wave
 aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
-##################################
-# ccm89 and od94 implementations #
-##################################
+#--------------------------------------------------------------------------------
 
 # Optical coefficients
 const ccm89_ca = Poly([1.0, 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.7753, 0.32999])
@@ -94,9 +92,7 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
     return a + b / Rv
 end
 
-##########################
-# cal00  implementations #
-##########################\
+#--------------------------------------------------------------------------------
 
 """
     cal00(λ::Real, Rv=4.05)

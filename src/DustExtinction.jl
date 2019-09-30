@@ -17,6 +17,8 @@ include("dust_maps.jl")
 @deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
 @deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
 
+#--------------------------------------------------------------------------------
+
 # reddening functions
 """
     redden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
@@ -41,6 +43,8 @@ a `Quantity`.
 """
 deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
 deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
+
+#--------------------------------------------------------------------------------
 
 function __init__()
     # register our data dependencies
