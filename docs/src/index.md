@@ -31,14 +31,12 @@ For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) s
 
 There are various citations relevant to this work. Please be considerate when using this work or any derivate of it by adding the appropriate citations.
 
-[`ccm89`](@ref) - 
-[Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract) - [BibTex](assets/ccm89.bib)
-
-[`od94`](@ref) - [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O/abstract) - [BibTex](assets/od94.bib)
-
-[`cal00`](@ref) - [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C/abstract) - [BibTex](assets/cal00.bib)
-
-[`SFD98Map`](@ref) - [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) - [BibTex](assets/sfd98.bib)
+| Function | Reference | BibTeX |
+|:--------:|:----------|:-------|
+| [`ccm89`](@ref) | [Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract) | [download](assets/ccm89.bib) |
+| [`od94`](@ref) | [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O/abstract) | [download](assets/od94.bib) |
+| [`cal00`](@ref) | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C/abstract) | [download](assets/cal00.bib) |
+| [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) | [download](assets/sfd98.bib) |
 
 ## Index
 

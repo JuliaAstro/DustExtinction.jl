@@ -20,15 +20,15 @@ const od94_cb = Poly([0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805,
 Clayton, Cardelli and Mathis (1989) dust law. 
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the extinction 
-at 5494.5 Å. `λ` is the wavelength in Å and has support over `[1000, 33333]`. 
+at 5494.5 Å. `λ` is the wavelength in Å and has support over [1000, 33333]. 
 Outside of that range this will return 0. `Rv` is the selective extinction 
-and is valid over `[2, 6]`. A typical value for the Milky Way is 3.1
+and is valid over [2, 6]. A typical value for the Milky Way is 3.1
 
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the 
 returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Clayton,Cardelli and Mathis (1989)
+[[1]](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C) Clayton,Cardelli and Mathis (1989)
 """
 function ccm89(λ::Real, Rv = 3.1)
     x = aa_to_invum(λ)
@@ -38,8 +38,8 @@ end
 ccm89(λ::Quantity, Rv::Real = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
 
 """
-    od94(λ::Real, Rv=3.1)
-    od94(λ::Quantity, Rv=3.1)
+    od94(λ::Real, Rv=3.1)
+    od94(λ::Quantity, Rv=3.1)
 
 O'Donnell (1994) dust law.
 
@@ -50,7 +50,7 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to�
 the returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](http://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
+[[1]](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O) O'Donnell (1994)
 
 # See Also
 [`ccm89`](@ref)
@@ -59,6 +59,7 @@ function od94(λ::Real, Rv = 3.1)
     x = aa_to_invum(λ)
     return ccm89_invum(x, Rv, od94_ca, od94_cb)
 end
+
 od94(λ::Quantity, Rv = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
 
 function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
@@ -95,13 +96,13 @@ end
 #--------------------------------------------------------------------------------
 
 """
-    cal00(λ::Real, Rv=4.05)
-    cal00(λ::Quantity, Rv=4.05)
+    cal00(λ::Real, Rv=4.05)
+    cal00(λ::Quantity, Rv=4.05)
 
 Calzetti et al. (2000) Dust Law.
 
 Returns E(B-V) in magnitudes at the given wavelength. `λ` is the wavelength in Å
- and has support over `[1200, 22000]`. Outside of that range this will return 0. 
+ and has support over [1200, 22000]. Outside of that range this will return 0. 
 
 Calzetti et al. (2000) developed a recipe for dereddening the spectra of 
 galaxies where massive stars dominate the radiation output. They found the best
@@ -111,13 +112,14 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to�
 returned value will be `UnitfulAstro.mag`.
 
 # References
-[[1]](http://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
+[[1]](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C) Calzetti et al. (2000)
 """
 function cal00(λ::Real, Rv = 3.1)
     # Convert to inverse-um
     x = aa_to_invum.(λ)
     return cal00_invum(x, Rv)
 end
+
 cal00(λ::Quantity, Rv::Real = 3.1) = cal00(ustrip(u"angstrom", λ), Rv) * u"mag"
 
 function cal00_invum(x::Real, Rv::Real)
