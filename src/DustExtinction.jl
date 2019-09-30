@@ -19,28 +19,28 @@ include("dust_maps.jl")
 
 # reddening functions
 """
-    redden(f::Real, λ::Real, Av; RV=3.1, law=ccm89)
-    redden(f::Quantity, λ::Quantity, Av; RV=3.1, law=ccm89)
+    redden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
+    redden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
 
 Redden the value `f` by the value calculated via the given law and total 
-extinction value `Av`. By default we use `RV=3.1` which is the Milky Way 
+extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way 
 average selective attenuation. Note that λ should be in Angstrom if it is not 
 a `Quantity`.
 """
-redden(f::Real, λ::Real, Av::Real; RV = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, RV))
-redden(f::Quantity, λ::Quantity, Av::Real; RV = 3.1, law = ccm89) = f * (Av * law(λ, RV))
+redden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
+redden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
 
 """
-    deredden(f::Real, λ::Real, Av; RV=3.1, law=ccm89)
-    deredden(f::Quantity, λ::Quantity, Av; RV=3.1, law=ccm89)
+    deredden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
+    deredden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
 
 Deredden the value `f` by the value calculated via the given law and total 
-extinction value `Av`. By default we use `RV=3.1` which is the Milky Way 
+extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way 
 average selective attenuation. Note that λ should be in Angstrom if it is not 
 a `Quantity`.
 """
-deredden(f::Real, λ::Real, Av::Real; RV = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, RV))
-deredden(f::Quantity, λ::Quantity, Av::Real; RV = 3.1, law = ccm89) = f / (Av * law(λ, RV))
+deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
+deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
 
 function __init__()
     # register our data dependencies

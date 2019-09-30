@@ -129,7 +129,7 @@ deredden
 
 ### Parametric Extinction Laws
 
-These laws are all parametrized by the selective extinction `RV`. Mathematically, this is the ratio of the total extinction by the reddening
+These laws are all parametrized by the selective extinction `Rv`. Mathematically, this is the ratio of the total extinction by the reddening
 
 ```math
 R_V = \frac{A_V}{E(B-V)}
@@ -146,7 +146,7 @@ w = range(0.3, 10.0, length=1000)
 plot()
 for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
   m = ccm89_invum.(w, rv, Ref(ccm89_ca), Ref(ccm89_cb))
-  plot!(w, m, label="RV=$rv")
+  plot!(w, m, label="Rv=$rv")
 end
 xlabel!("um^-1")
 ylabel!("E(B-V)")
@@ -168,7 +168,7 @@ w = range(0.3, 10.0, length=1000)
 plot()
 for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
   m = ccm89_invum.(w, rv, Ref(od94_ca), Ref(od94_cb))
-  plot!(w, m, label="RV=$rv")
+  plot!(w, m, label="Rv=$rv")
 end
 xlabel!("um^-1")
 ylabel!("E(B-V)")
@@ -190,7 +190,7 @@ w = range(0.46, 8.3, length=1000)
 plot()
 for rv in [2.0, 3.0, 4.05, 5.0, 6.0]
   m = cal00_invum.(w, rv)
-  plot!(w, m, label="RV=$rv")
+  plot!(w, m, label="Rv=$rv")
 end
 xlabel!("um^-1")
 ylabel!("E(B-V)")
