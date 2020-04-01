@@ -156,15 +156,13 @@ gcc09(λ::Quantity, Rv::Real = 3.1) = gcc09(ustrip(u"angstrom", λ), Rv) * u"mag
 
 function gcc09_invum(x::Real, Rv::Real)
 
-    a = zeros(typeof(Rv))
-    b = zeros(typeof(Rv))
-    if 3.3 <= x && x <= 11.0  # NUV
+    if 3.3 <= x <= 11.0  # NUV
         a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
         b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
     else
         return 0.0x
     end
-    if 5.9 <= x && x <= 11.0  # far-NUV
+    if 5.9 <= x <= 11.0  # far-NUV
         y = x - 5.9
         a += Poly([0.0, 0.0, -0.110, -0.0100])(y)
         b += Poly([0.0, 0.0, 0.531, 0.0544])(y)
