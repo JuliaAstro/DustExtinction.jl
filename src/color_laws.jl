@@ -17,14 +17,14 @@ const od94_cb = Poly([0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805,
     ccm89(λ::Real, Rv=3.1)
     ccm89(λ::Quantity, Rv=3.1)
 
-Clayton, Cardelli and Mathis (1989) dust law. 
+Clayton, Cardelli and Mathis (1989) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the extinction 
-at 5494.5 Å. `λ` is the wavelength in Å and has support over [1000, 33333]. 
-Outside of that range this will return 0. `Rv` is the selective extinction 
+Returns E(B-V) in magnitudes at the given wavelength relative to the extinction
+at 5494.5 Å. `λ` is the wavelength in Å and has support over [1000, 33333].
+Outside of that range this will return 0. `Rv` is the selective extinction
 and is valid over [2, 6]. A typical value for the Milky Way is 3.1
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the 
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 
 # References
@@ -43,10 +43,10 @@ ccm89(λ::Quantity, Rv::Real = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag
 
 O'Donnell (1994) dust law.
 
-This is identical to the Clayton, Cardelli and Mathis (1989) dust law, except 
+This is identical to the Clayton, Cardelli and Mathis (1989) dust law, except
 for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and 
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and
 the returned value will be `UnitfulAstro.mag`.
 
 # References
@@ -102,13 +102,13 @@ end
 Calzetti et al. (2000) Dust Law.
 
 Returns E(B-V) in magnitudes at the given wavelength. `λ` is the wavelength in Å
- and has support over [1200, 22000]. Outside of that range this will return 0. 
+ and has support over [1200, 22000]. Outside of that range this will return 0.
 
-Calzetti et al. (2000) developed a recipe for dereddening the spectra of 
+Calzetti et al. (2000) developed a recipe for dereddening the spectra of
 galaxies where massive stars dominate the radiation output. They found the best
  fit value for such galaxies was 4.05±0.80.
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the 
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 
 # References
@@ -116,7 +116,7 @@ returned value will be `UnitfulAstro.mag`.
 """
 function cal00(λ::Real, Rv = 3.1)
     # Convert to inverse-um
-    x = aa_to_invum.(λ)
+    x = aa_to_invum(λ)
     return cal00_invum(x, Rv)
 end
 
