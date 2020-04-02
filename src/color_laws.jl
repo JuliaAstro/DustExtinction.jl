@@ -144,6 +144,9 @@ end
 
 Gordon, Cartledge, & Clayton (2009) dust law.
 
+This model applies to the UV spectral region all the way to 909.09 Å.
+This model was not derived for the optical or NIR.
+
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 """
@@ -177,6 +180,9 @@ end
     vcg04(λ::Quantity, Rv=3.1)
 
 Valencic, Clayton, & Gordon (2004) dust law.
+
+This model applies to the UV spectral region all the way to 912 Å.
+This model was not derived for the optical or NIR.
 
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
