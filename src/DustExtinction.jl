@@ -18,6 +18,7 @@ include("dust_maps.jl")
 
 @deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
 @deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
+@deprecate vcg04(x::AbstractArray, r_v::Real = 3.1) vcg04.(x, r_v)
 
 #--------------------------------------------------------------------------------
 
