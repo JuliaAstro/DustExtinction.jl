@@ -4,7 +4,7 @@ using DustExtinction
 # Make plots!
 include("plots.jl")
 
-DocMeta.setdocmeta!(DustExtinction, :DocTestSetup, :(using DustExtinction); recursive = true
+DocMeta.setdocmeta!(DustExtinction, :DocTestSetup, :(using DustExtinction); recursive = true)
 
 makedocs(modules = [DustExtinction],
     sitename = "DustExtinction.jl",
