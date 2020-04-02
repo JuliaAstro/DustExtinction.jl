@@ -10,7 +10,7 @@ Extinction describes the effect of dust grains on observations of stars in space
 From the REPL, press `]` to enter Pkg mode
 
 ```julia
-(v 1.2) pkg> add DustExtinction
+(v 1.3) pkg> add DustExtinction
 
 julia> using DustExtinction
 ```
@@ -22,7 +22,6 @@ julia> using DustExtinction
 
 julia> ccm89(4000., 3.1)
 1.464555702942584
-
 ```
 
 For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) sections.
