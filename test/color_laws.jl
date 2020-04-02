@@ -162,7 +162,6 @@ end
     end
 end
 
-
 @testset "vcg04" begin
 
     x_inv_microns = [8.0, 7.0, 6.0, 5.0, 4.6, 4.0, 3.4]
@@ -197,6 +196,46 @@ end
         # Unitful
         wave_u = wave * u"angstrom"
         reddening = @inferred broadcast(vcg04, wave_u, rv)
+        @test eltype(reddening) <: Gain
+        @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
+    end
+end
+
+@testset "gcc09" begin
+
+    x_inv_microns = [10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.6, 4.0, 3.4]
+    wave = 1e4 ./ x_inv_microns
+
+    ref_values = Dict(3.1 => [5.23161, 4.20810, 3.45123, 2.92264, 2.61283, 2.85130, 3.19451, 2.34301, 1.89256],
+        2.0 => [10.5150, 8.07274, 6.26711, 5.00591, 4.24237, 4.42844, 4.99482, 3.42585, 2.59322],
+        3.0 => [5.55181, 4.44232, 3.62189, 3.04890, 2.71159, 2.94688, 3.30362, 2.40863, 1.93502],
+        4.0 => [3.07020, 2.62711, 2.29927, 2.07040, 1.94621, 2.20610, 2.45801, 1.90003, 1.60592],
+        5.0 => [1.58123, 1.53798, 1.50571, 1.48330, 1.48697, 1.76164, 1.95065, 1.59486, 1.40846],
+        6.0 => [0.588581, 0.811898, 0.976660, 1.09190, 1.18082, 1.46533, 1.61241, 1.39142, 1.27682])
+
+
+    @test @inferred(broadcast(gcc09, wave)) ≈ ref_values[3.1] rtol = 0.016
+    @test_deprecated gcc09(wave)
+
+    for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
+        output = @inferred broadcast(gcc09, wave, rv)
+        @test output ≈ ref_values[rv] rtol = 0.016
+
+        # Test deprecated array syntax
+        @test_deprecated gcc09(wave, rv)
+
+        bad_waves = [100, 4e4]
+        @test @inferred(broadcast(gcc09, bad_waves, rv)) == zeros(length(bad_waves))
+
+        # uncertainties
+        noise = randn(length(wave)) .* 0.01
+        wave_unc = wave .± noise
+        reddening = @inferred broadcast(gcc09, wave_unc, rv)
+        @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
+
+        # Unitful
+        wave_u = wave * u"angstrom"
+        reddening = @inferred broadcast(gcc09, wave_u, rv)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end
