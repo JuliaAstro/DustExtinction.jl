@@ -114,13 +114,13 @@ returned value will be `UnitfulAstro.mag`.
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
-function cal00(λ::Real, Rv = 3.1)
+function cal00(λ::Real, Rv = 4.05)
     # Convert to inverse-um
     x = aa_to_invum(λ)
     return cal00_invum(x, Rv)
 end
 
-cal00(λ::Quantity, Rv::Real = 3.1) = cal00(ustrip(u"angstrom", λ), Rv) * u"mag"
+cal00(λ::Quantity, Rv::Real = 4.05) = cal00(ustrip(u"angstrom", λ), Rv) * u"mag"
 
 function cal00_invum(x::Real, Rv::Real)
 
@@ -135,5 +135,4 @@ function cal00_invum(x::Real, Rv::Real)
     end
 
     return 1.0 + k / Rv
-
 end
