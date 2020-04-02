@@ -134,7 +134,7 @@ end
     -0.27070401, -0.3133946 , -0.42493784, -0.49613821, -0.50739595])
 
     # test defaults
-    @test cal00.(refwave, Rv = 3.1) ≈ refmag[3.1]
+    @test cal00.(refwave, 3.1) ≈ refmag[3.1]
 
     for rv in [2.4, 3.1]
         reddening = @inferred broadcast(cal00, refwave, rv)
