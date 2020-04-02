@@ -12,10 +12,6 @@ julia:
 env:
   - DATADEPS_ALWAYS_ACCEPT=true
 
-matrix:
-  allow_failures:
-    - julia: nightly
-
 notifications:
   email: false
 
@@ -26,6 +22,8 @@ cache:
     - $HOME/.julia/datadeps
 
 jobs:
+  allow_failures:
+    - julia: nightly
   include:
     - stage: "Documentation"
       julia: 1.3
