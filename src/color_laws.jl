@@ -127,9 +127,9 @@ function cal00_invum(x::Real, Rv::Real)
     if x > 1 / 0.12
         return 0.0x
     elseif x > 1 / 0.63
-        k = 2.659 * (((0.011x - 0.198)x + 1.509)x - 2.156)
+        k = 2.659 * Poly([-2.156, 1.509, -0.198, 0.011])(x)
     elseif x >  1 / 2.2
-        k = 2.659 * (1.040x - 1.857)
+        k = 2.659 * Poly([-1.857, 1.040])(x)
     else
         return 0.0x
     end
@@ -166,6 +166,40 @@ function gcc09_invum(x::Real, Rv::Real)
         y = x - 5.9
         a += Poly([0.0, 0.0, -0.110, -0.0100])(y)
         b += Poly([0.0, 0.0, 0.531, 0.0544])(y)
+    end
+
+    return a + b / Rv
+end
+
+
+"""
+    vcg04(λ::Real, Rv=3.1)
+    vcg04(λ::Quantity, Rv=3.1)
+
+Valencic, Clayton, & Gordon (2004) dust law.
+
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
+returned value will be `UnitfulAstro.mag`.
+"""
+function vcg04(λ::Real, Rv = 3.1)
+    x = aa_to_invum(λ)
+    return vcg04_invum(x, Rv)
+end
+
+vcg04(λ::Quantity, Rv::Real = 3.1) = vcg04(ustrip(u"angstrom", λ), Rv) * u"mag"
+
+function vcg04_invum(x::Real, Rv::Real)
+
+    if 3.3 <= x <= 8.0  # NUV
+        a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
+        b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
+    else
+        return 0.0x
+    end
+    if 5.9 <= x <= 8.0  # far-NUV
+        y = x - 5.9
+        a += Poly([0.0, 0.0, -0.0077, -0.0030])(y)
+        b += Poly([0.0, 0.0, 0.2060, 0.0550])(y)
     end
 
     return a + b / Rv

@@ -8,6 +8,7 @@ export redden,
        cal00,
        od94,
        gcc09,
+       vcg04,
        SFD98Map,
        ebv_galactic
 
