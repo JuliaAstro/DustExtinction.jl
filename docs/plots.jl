@@ -1,5 +1,5 @@
 using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invnum
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum
 
 dir = joinpath(@__DIR__, "src", "assets")
 
