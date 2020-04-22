@@ -10,11 +10,13 @@ export redden,
        gcc09,
        vcg04,
        SFD98Map,
-       ebv_galactic
+       ebv_galactic,
+       FM90
 
 
 include("color_laws.jl")
 include("dust_maps.jl")
+include("fittable_models.jl")
 
 @deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
 @deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
