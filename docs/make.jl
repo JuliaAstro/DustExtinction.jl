@@ -1,6 +1,8 @@
 using Documenter
 using DustExtinction
 
+DocMeta.setdocmeta!(DustExtinction, :DocTestSetup, :(using DustExtinction); recursive = true)
+
 makedocs(modules = [DustExtinction],
     sitename = "DustExtinction.jl",
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
@@ -13,4 +15,4 @@ makedocs(modules = [DustExtinction],
     ],
 )
 
-deploydocs(repo = "github.com/JuliaAstro/DustExtinction.jl.git")
+deploydocs(repo = "github.com/JuliaAstro/DustExtinction.jl.git", push_preview=true)
