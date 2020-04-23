@@ -1,7 +1,7 @@
 
 # [Color laws](@id laws)
 
-The following empirical laws allow us to model the reddening of light as it travels to us. The law you use should depend on the type of data you have and the goal of its use. [`ccm89`](@ref) is very common for use in removing extinction from stellar observations, but [`cal00`](@ref), for instance, is suited for galaxies with massive stars. Look through the citations and documentation for each law to get a better idea of what sort of physics it targets. 
+The following empirical laws allow us to model the reddening of light as it travels to us. The law you use should depend on the type of data you have and the goal of its use. [`ccm89`](@ref) is very common for use in removing extinction from stellar observations, but [`cal00`](@ref), for instance, is suited for galaxies with massive stars. Look through the citations and documentation for each law to get a better idea of what sort of physics it targets.
 
 ```@meta
 DocTestSetup = quote
@@ -159,4 +159,20 @@ od94
 
 ```@docs
 cal00
+```
+
+#### Valencic, Clayton, & Gordon (2004)
+
+![](assets/vcg04_plot.svg)
+
+```@docs
+vcg04
+```
+
+#### Gordon, Cartledge, & Clayton (2009)
+
+![](assets/gcc09_plot.svg)
+
+```@docs
+gcc09
 ```

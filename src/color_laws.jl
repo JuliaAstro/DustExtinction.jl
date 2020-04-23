@@ -79,13 +79,13 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
         b = -3.090 + 1.825x + (1.206 / ((x - 4.62)^2 + 0.263))
         if x > 5.9 # Far NUV
             y = x - 5.9
-            a += Poly([0.0, 0.0, -0.04473, -0.009779])(y)
-            b += Poly([0.0, 0.0, 0.213, 0.1207])(y)
+            a += @evalpoly y 0.0 0.0 -0.04473 -0.009779
+            b += @evalpoly y 0.0 0.0 0.213 0.1207
         end
     elseif x ≤ 10.0 # FUV
         y = x - 8.0
-        a = Poly([-1.073, -0.628, 0.137, -0.07])(y)
-        b = Poly([13.67, 4.257, -0.42, 0.374])(y)
+        a = @evalpoly y -1.073 -0.628 0.137 -0.07
+        b = @evalpoly y 13.67 4.257 -0.42 0.374
     else
         return 0.0x
     end
@@ -127,12 +127,86 @@ function cal00_invum(x::Real, Rv::Real)
     if x > 1 / 0.12
         return 0.0x
     elseif x > 1 / 0.63
-        k = 2.659 * (((0.011x - 0.198)x + 1.509)x - 2.156)
+        k = @evalpoly x -2.156 1.509 -0.198 0.011
     elseif x >  1 / 2.2
-        k = 2.659 * (1.040x - 1.857)
+        k = @evalpoly x -1.857 1.040
     else
         return 0.0x
     end
 
-    return 1.0 + k / Rv
+    return 1.0 + 2.659 * k / Rv
+end
+
+
+"""
+    gcc09(λ::Real, Rv=3.1)
+    gcc09(λ::Quantity, Rv=3.1)
+
+Gordon, Cartledge, & Clayton (2009) dust law.
+
+This model applies to the UV spectral region all the way to 909.09 Å.
+This model was not derived for the optical or NIR.
+
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
+returned value will be `UnitfulAstro.mag`.
+"""
+function gcc09(λ::Real, Rv = 3.1)
+    x = aa_to_invum(λ)
+    return gcc09_invum(x, Rv)
+end
+
+gcc09(λ::Quantity, Rv::Real = 3.1) = gcc09(ustrip(u"angstrom", λ), Rv) * u"mag"
+
+function gcc09_invum(x::Real, Rv::Real)
+
+    if 3.3 <= x <= 11.0  # NUV
+        a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
+        b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
+    else
+        return 0.0x
+    end
+    if 5.9 <= x <= 11.0  # far-NUV
+        y = x - 5.9
+        a += @evalpoly y 0.0 0.0 -0.110 -0.0100
+        b += @evalpoly y 0.0 0.0 0.531 0.0544
+    end
+
+    return a + b / Rv
+end
+
+
+"""
+    vcg04(λ::Real, Rv=3.1)
+    vcg04(λ::Quantity, Rv=3.1)
+
+Valencic, Clayton, & Gordon (2004) dust law.
+
+This model applies to the UV spectral region all the way to 912 Å.
+This model was not derived for the optical or NIR.
+
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
+returned value will be `UnitfulAstro.mag`.
+"""
+function vcg04(λ::Real, Rv = 3.1)
+    x = aa_to_invum(λ)
+    return vcg04_invum(x, Rv)
+end
+
+vcg04(λ::Quantity, Rv::Real = 3.1) = vcg04(ustrip(u"angstrom", λ), Rv) * u"mag"
+
+function vcg04_invum(x::Real, Rv::Real)
+
+    if 3.3 <= x <= 8.0  # NUV
+        a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
+        b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
+    else
+        return 0.0x
+    end
+    if 5.9 <= x <= 8.0  # far-NUV
+        y = x - 5.9
+        a += @evalpoly y 0.0 0.0 -0.0077 -0.0030
+        b += @evalpoly y 0.0 0.0 0.2060 0.0550
+    end
+
+    return a + b / Rv
 end
