@@ -134,7 +134,7 @@ function cal00_invum(x::Real, Rv::Real)
         return 0.0x
     end
 
-    return 1.0 + k / Rv
+    return 1.0 + 2.659 * k / Rv
 end
 
 
