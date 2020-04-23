@@ -175,14 +175,10 @@ end
         6.0 => [1.74620, 1.59829, 1.56031, 1.75850, 1.96549, 1.64151, 1.52005])
 
     @test @inferred(broadcast(vcg04, wave)) ≈ ref_values[3.1] rtol = 0.016
-    @test_deprecated vcg04(wave)
 
     for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
         output = @inferred broadcast(vcg04, wave, rv)
         @test output ≈ ref_values[rv] rtol = 0.016
-
-        # Test deprecated array syntax
-        @test_deprecated vcg04(wave, rv)
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(vcg04, bad_waves, rv)) == zeros(length(bad_waves))
@@ -215,14 +211,10 @@ end
 
 
     @test @inferred(broadcast(gcc09, wave)) ≈ ref_values[3.1] rtol = 0.016
-    @test_deprecated gcc09(wave)
 
     for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
         output = @inferred broadcast(gcc09, wave, rv)
         @test output ≈ ref_values[rv] rtol = 0.016
-
-        # Test deprecated array syntax
-        @test_deprecated gcc09(wave, rv)
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(gcc09, bad_waves, rv)) == zeros(length(bad_waves))

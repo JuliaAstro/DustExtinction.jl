@@ -79,13 +79,13 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
         b = -3.090 + 1.825x + (1.206 / ((x - 4.62)^2 + 0.263))
         if x > 5.9 # Far NUV
             y = x - 5.9
-            a += Poly([0.0, 0.0, -0.04473, -0.009779])(y)
-            b += Poly([0.0, 0.0, 0.213, 0.1207])(y)
+            a += @evalpoly y 0.0 0.0 -0.04473 -0.009779
+            b += @evalpoly y 0.0 0.0 0.213 0.1207
         end
     elseif x ≤ 10.0 # FUV
         y = x - 8.0
-        a = Poly([-1.073, -0.628, 0.137, -0.07])(y)
-        b = Poly([13.67, 4.257, -0.42, 0.374])(y)
+        a = @evalpoly y -1.073 -0.628 0.137 -0.07
+        b = @evalpoly y 13.67 4.257 -0.42 0.374
     else
         return 0.0x
     end
@@ -127,9 +127,9 @@ function cal00_invum(x::Real, Rv::Real)
     if x > 1 / 0.12
         return 0.0x
     elseif x > 1 / 0.63
-        k = 2.659 * Poly([-2.156, 1.509, -0.198, 0.011])(x)
+        k = @evalpoly x -2.156 1.509 -0.198 0.011
     elseif x >  1 / 2.2
-        k = 2.659 * Poly([-1.857, 1.040])(x)
+        k = @evalpoly x -1.857 1.040
     else
         return 0.0x
     end
@@ -167,8 +167,8 @@ function gcc09_invum(x::Real, Rv::Real)
     end
     if 5.9 <= x <= 11.0  # far-NUV
         y = x - 5.9
-        a += Poly([0.0, 0.0, -0.110, -0.0100])(y)
-        b += Poly([0.0, 0.0, 0.531, 0.0544])(y)
+        a += @evalpoly y 0.0 0.0 -0.110 -0.0100
+        b += @evalpoly y 0.0 0.0 0.531 0.0544
     end
 
     return a + b / Rv
@@ -204,8 +204,8 @@ function vcg04_invum(x::Real, Rv::Real)
     end
     if 5.9 <= x <= 8.0  # far-NUV
         y = x - 5.9
-        a += Poly([0.0, 0.0, -0.0077, -0.0030])(y)
-        b += Poly([0.0, 0.0, 0.2060, 0.0550])(y)
+        a += @evalpoly y 0.0 0.0 -0.0077 -0.0030
+        b += @evalpoly y 0.0 0.0 0.2060 0.0550
     end
 
     return a + b / Rv
