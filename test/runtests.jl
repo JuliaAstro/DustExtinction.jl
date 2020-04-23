@@ -5,6 +5,7 @@ Random.seed!(9994445781)
 
 include("color_laws.jl")
 include("dust_maps.jl")
+include("fittable_models.jl")
 
 @testset "redden" begin
     wave = [3372., 4404., 5428., 6509., 8090.,
