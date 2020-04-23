@@ -12,14 +12,15 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
 FITSIO = "≥ 0.13.0"
+Polynomials = "0.8"
 Unitful = "≥ 0.17.0"
 UnitfulAstro = "≥ 0.3.0"
 julia = "≥ 1.0.0"
 
 [extras]
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Measurements", "Random", "Test"]
