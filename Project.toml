@@ -11,6 +11,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
+DataDeps = "0.7"
 FITSIO = "≥ 0.13.0"
 Unitful = "≥ 0.17.0"
 UnitfulAstro = "≥ 0.3.0"
@@ -18,8 +19,8 @@ julia = "≥ 1.0.0"
 
 [extras]
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Measurements", "Random", "Test"]
