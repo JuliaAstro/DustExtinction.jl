@@ -4,6 +4,7 @@ aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
 """
     FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Real)
+    FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Quantity)
 
 The parameters C1, C2, C3, C4, xo and γ are y-intercept, slope, bump amplitude, FUV rise amplitude,
 bump centroid and bump width respectively.
@@ -13,16 +14,23 @@ Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model, this model is on
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 """
-struct FM90
-    C1::Real
-    C2::Real
-    C3::Real
-    C4::Real
-    xo::Real
-    γ::Real
+struct FM90{T <: Number}
+    C1::T
+    C2::T
+    C3::T
+    C4::T
+    xo::T
+    γ::T
+
+    function FM90(C1::T, C2::T, C3::T, C4::T, xo::T, γ::T) where T <: Number
+        xo < 0 && error("Invalid axis xo=$xo. xo must be greater than or equal to 0")
+        γ < 0 && error("Invalid axis γ=$γ. γ must be greater than or equal to 0")
+        new{T}(C1, C2, C3, C4, xo, γ)
+    end
 end
 
-FM90() = FM90(0.10, 0.70, 3.23, 0.41, 4.60, 0.9)
+FM90(C1, C2, C3, C4, xo, γ) = FM90(promote(C1, C2, C3, C4, xo, γ)...)
+FM90() = FM90(0.10, 0.70, 3.23, 0.41, 4.60, 0.99)
 
 function (z::FM90)(λ::Real)
     x = aa_to_invum(λ)
@@ -43,3 +51,5 @@ function (z::FM90)(λ::Real)
 
     return exvebv
 end
+
+(z::FM90)(λ::Quantity) = z(ustrip(u"angstrom", λ)) * u"mag"
