@@ -6,8 +6,13 @@ aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
     FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Real)
     FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Quantity)
 
-The parameters C1, C2, C3, C4, xo and γ are y-intercept, slope, bump amplitude, FUV rise amplitude,
-bump centroid and bump width respectively.
+### Parameters
+* `C1` - y-intercept of linear term
+* `C2` - slope of liner term
+* `C3` - amplitude of 2175 Å bump
+* `C4` - amplitude of FUV rise
+* `xo` - centroid of 2175 Å bump
+*  `γ` - width of 2175 Å bump
 
 Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model, this model is only applicable at UV wavelengths.
 
@@ -36,7 +41,7 @@ function (z::FM90)(λ::Real)
     x = aa_to_invum(λ)
 
     if !(1.0 / 0.32 <= x <= 1.0 / 0.0912)
-        return zero(eltype(x))
+        return zero(float(eltype(x)))
     end
 
     exvebv = z.C1 + z.C2 * x
