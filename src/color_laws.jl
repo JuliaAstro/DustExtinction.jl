@@ -1,4 +1,4 @@
-using Polynomials, Unitful, UnitfulAstro
+using Unitful, UnitfulAstro
 
 # Convenience function for wavelength conversion
 aa_to_invum(wave::Real) = 10000 / wave
@@ -7,11 +7,11 @@ aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 #--------------------------------------------------------------------------------
 
 # Optical coefficients
-const ccm89_ca = Poly([1.0, 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.7753, 0.32999])
-const ccm89_cb = Poly([0.0, 1.41338, 2.28305, 1.07233, -5.38434, -0.62251, 5.3026, -2.09002])
+const ccm89_ca = [1.0, 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.7753, 0.32999, 0.0]
+const ccm89_cb = [0.0, 1.41338, 2.28305, 1.07233, -5.38434, -0.62251, 5.3026, -2.09002, 0.0]
 
-const od94_ca = Poly([1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505])
-const od94_cb = Poly([0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347])
+const od94_ca = [1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505]
+const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347]
 
 """
     ccm89(λ::Real, Rv=3.1)
@@ -62,7 +62,7 @@ end
 
 od94(λ::Quantity, Rv = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
 
-function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
+function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
         return 0.0x
     elseif x < 1.1  # Near IR
@@ -72,8 +72,8 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Poly{<:Real}, c_b::Poly{<:Real})
     elseif x < 3.3  # Optical
         y = x - 1.82
         yn = 1.0
-        a = c_a(y)
-        b = c_b(y)
+        a = @evalpoly y c_a[1] c_a[2] c_a[3] c_a[4] c_a[5] c_a[6] c_a[7] c_a[8] c_a[9]
+        b = @evalpoly y c_b[1] c_b[2] c_b[3] c_b[4] c_b[5] c_b[6] c_b[7] c_b[8] c_b[9]
     elseif x < 8.0  # NUV
         a =  1.752 - 0.316x - (0.104 / ((x - 4.67)^2 + 0.341))
         b = -3.090 + 1.825x + (1.206 / ((x - 4.62)^2 + 0.263))
