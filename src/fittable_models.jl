@@ -1,7 +1,17 @@
+<<<<<<< HEAD
+=======
+# convenience function for wavelength conversion
+aa_to_invum(wave::Real) = 10000 / wave
+aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
+>>>>>>> 067e457... added compat entry and modified constructor
 
 """
     FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Real)
     FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Quantity)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 067e457... added compat entry and modified constructor
 ### Parameters
 * `c1` - y-intercept of linear term
 * `c2` - slope of liner term
@@ -37,14 +47,14 @@ function (z::FM90)(λ::Real)
         return zero(float(eltype(x)))
     end
 
-    exvebv = z.C1 + z.C2 * x
+    exvebv = z.c1 + z.c2 * x
 
     x2 = x^2
-    exvebv += z.C3 * (x2 / ((x2 - z.xo^2)^2 + x2 * (z.γ^2)))
+    exvebv += z.c3 * (x2 / ((x2 - z.x0^2)^2 + x2 * (z.gamma^2)))
 
     if x >= 5.9
         y = x - 5.9
-        exvebv += z.C4 * @evalpoly y 0.0 0.0 0.5392 0.05644
+        exvebv += z.c4 * @evalpoly y 0.0 0.0 0.5392 0.05644
     end
 
     return exvebv
