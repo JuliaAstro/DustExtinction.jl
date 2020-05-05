@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-=======
-# convenience function for wavelength conversion
-aa_to_invum(wave::Real) = 10000 / wave
-aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
->>>>>>> 067e457... added compat entry and modified constructor
+
 
 """
     FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Real)
     FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Quantity)
-<<<<<<< HEAD
-=======
 
->>>>>>> 067e457... added compat entry and modified constructor
 ### Parameters
 * `c1` - y-intercept of linear term
 * `c2` - slope of liner term
