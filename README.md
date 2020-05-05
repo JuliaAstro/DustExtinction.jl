@@ -61,7 +61,7 @@ julia> flux = [1.0, 1.5]
  1.0
  1.5
 
-julia> extinct.(flux, wave, 0.3)
+julia> redden.(flux, wave, 0.3)
 2-element Array{Float64,1}:
  0.6671958182723856
  1.1000733242882896
