@@ -1,41 +1,34 @@
-# Convenience function for wavelength conversion
-aa_to_invum(wave::Real) = 10000 / wave
-aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
 
 """
-    FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Real)
-    FM90(C1 = 0.10, C2 = 0.70, C3 = 3.23, C4 = 0.41, xo = 4.60, γ = 0.9)(λ::Quantity)
-
+    FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Real)
+    FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Quantity)
 ### Parameters
-* `C1` - y-intercept of linear term
-* `C2` - slope of liner term
-* `C3` - amplitude of 2175 Å bump
-* `C4` - amplitude of FUV rise
-* `xo` - centroid of 2175 Å bump
-*  `γ` - width of 2175 Å bump
+* `c1` - y-intercept of linear term
+* `c2` - slope of liner term
+* `c3` - amplitude of 2175 Å bump
+* `c4` - amplitude of FUV rise
+* `x0` - centroid of 2175 Å bump
+* `gamma` - width of 2175 Å bump
 
 Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model, this model is only applicable at UV wavelengths.
 
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 """
-struct FM90{T <: Number}
-    C1::T
-    C2::T
-    C3::T
-    C4::T
-    xo::T
-    γ::T
-
-    function FM90(C1::T, C2::T, C3::T, C4::T, xo::T, γ::T) where T <: Number
-        xo < 0 && error("Invalid axis xo=$xo. xo must be greater than or equal to 0")
-        γ < 0 && error("Invalid axis γ=$γ. γ must be greater than or equal to 0")
-        new{T}(C1, C2, C3, C4, xo, γ)
-    end
+@with_kw struct FM90{T<:Number} @deftype T
+    c1 = 0.10
+    c2 = 0.70
+    c3 = 3.23
+    c4 = 0.41
+    x0 = 4.60
+    gamma = 0.99
+    @assert x0 ≥ 0 "`x0` must be ≥ 0, got $x0"
+    @assert gamma ≥ 0 "`gamma` must be ≥ 0, got $gamma"
 end
 
-FM90(C1, C2, C3, C4, xo, γ) = FM90(promote(C1, C2, C3, C4, xo, γ)...)
-FM90() = FM90(0.10, 0.70, 3.23, 0.41, 4.60, 0.99)
+FM90(c1, c2, c3, c4, x0, gamma) = FM90(promote(c1, c2, c3, c4, x0, gamma)...)
+FM90(coeffs, x0, gamma) = FM90(promote(coeffs..., x0, gamma)...)
+FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
 function (z::FM90)(λ::Real)
     x = aa_to_invum(λ)

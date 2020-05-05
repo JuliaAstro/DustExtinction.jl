@@ -1,6 +1,6 @@
 module DustExtinction
 
-using Unitful, UnitfulAstro, DataDeps
+using Unitful, UnitfulAstro, DataDeps, Parameters
 
 export redden,
        deredden,
