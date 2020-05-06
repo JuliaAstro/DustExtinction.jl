@@ -29,7 +29,6 @@ returned value will be `UnitfulAstro.mag`.
 end
 
 FM90(c1, c2, c3, c4, x0, gamma) = FM90(promote(c1, c2, c3, c4, x0, gamma)...)
-FM90(coeffs, x0, gamma) = FM90(promote(coeffs..., x0, gamma)...)
 FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
 function (z::FM90)(λ::Real)
