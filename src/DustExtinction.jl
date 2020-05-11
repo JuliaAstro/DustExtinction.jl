@@ -22,13 +22,19 @@ The abstract super-type for dust extinction laws. See the extended help (`??Dust
 ## Interface
 
 Each extinction law implements the following methods
-* `bounds(::ExtinctionLaw)::Tuple` - The bounds for the extinction law, as a `(min, max)` tuple in angstrom. If not implemented, will fallback to `(0, Inf)`
-* `(::ExtinctionLaw)(wavelength::Real)::Real` - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
+* [`DustExtinction.bounds(::ExtinctionLaw)`](@ref) - The bounds for the extinction law, as a `(min, max)` tuple in angstrom. If not implemented, will fallback to `(0, Inf)`
+* [`(::ExtinctionLaw)(wavelength::Real)`](@ref) - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
 
 This is the bare-minimum required to use the law with [`redden`](@ref), [`deredden`](@ref), and the plotting recipes. Within the library we add support for [Unitful.jl](https://github.com/PainterQubits/Unitful.jl) using code generation in `DustExtinction.jl/src/DustExtinction.jl`.
 """
 abstract type ExtinctionLaw end
 
+"""
+    DustExtinction.bounds(::ExtinctionLaw)::Tuple
+
+Get the natural wavelengths bounds for the extinction law, in angstrom
+"""
+bounds(::ExtinctionLaw) = (0, Inf)
 
 
 
@@ -65,6 +71,18 @@ a `Quantity`.
 """
 deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
 deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
+
+# --------------------------------------------------------------------------------
+# Here be codegen!
+
+# generature unitful support for the following laws
+# this can be removed when julia support is pinned to 1.3 or higher,
+# at which point adding `(l::ExtinctionLaw)(wave)` is possible, until then
+# using this code-gen does the trick but requires manually editing
+# instead of providing support for all <: ExtinctionLaw
+for law in [:CCM89, :OD94, :CAL00, :GCC09, :VCG04]
+    @eval (l::$law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
+end
 
 # --------------------------------------------------------------------------------
 
