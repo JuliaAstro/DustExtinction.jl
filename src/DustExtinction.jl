@@ -13,6 +13,25 @@ export redden,
        ebv_galactic
 
 
+"""
+    DustExtinction.ExtinctionLaw
+
+The abstract super-type for dust extinction laws. See the extended help (`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
+
+## Extended Help
+## Interface
+
+Each extinction law implements the following methods
+* `bounds(::ExtinctionLaw)::Tuple` - The bounds for the extinction law, as a `(min, max)` tuple in angstrom. If not implemented, will fallback to `(0, Inf)`
+* `(::ExtinctionLaw)(wavelength::Real)::Real` - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
+
+This is the bare-minimum required to use the law with [`redden`](@ref), [`deredden`](@ref), and the plotting recipes. Within the library we add support for [Unitful.jl](https://github.com/PainterQubits/Unitful.jl) using code generation in `DustExtinction.jl/src/DustExtinction.jl`.
+"""
+abstract type ExtinctionLaw end
+
+
+
+
 include("color_laws.jl")
 include("dust_maps.jl")
 
@@ -20,7 +39,7 @@ include("dust_maps.jl")
 @deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
 
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 # reddening functions
 """
@@ -47,7 +66,7 @@ a `Quantity`.
 deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
 deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 function __init__()
     # register our data dependencies
