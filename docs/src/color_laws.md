@@ -176,3 +176,13 @@ vcg04
 ```@docs
 gcc09
 ```
+
+### Fittable Extinction Laws
+
+#### Fitzpatrick & Massa (1990)
+
+![](assets/FM90_plot.svg)
+
+```@docs
+FM90
+```

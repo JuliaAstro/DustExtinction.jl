@@ -11,8 +11,7 @@ makedocs(modules = [DustExtinction],
     pages = [
         "Home" => "index.md",
         "Color Laws" => "color_laws.md",
-        "Dust Maps" => "dust_maps.md",
-        "Fitting Models" => "fitting_models.md"
+        "Dust Maps" => "dust_maps.md"
     ],
 )
 

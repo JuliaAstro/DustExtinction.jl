@@ -1,8 +1,10 @@
 
 
 """
-    FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Real)
-    FM90(c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Quantity)
+    FM90(;c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Real)
+    FM90(;c1 = 0.10, c2 = 0.70, c3 = 3.23, c4 = 0.41, x0 = 4.60, gamma = 0.9)(λ::Quantity)
+    FM90(coeffs, x0=4.60, gamma=0.9)(λ::Real)
+    FM90(coeffs, x0=4.60, gamma=0.9)(λ::Quantity)
 
 ### Parameters
 * `c1` - y-intercept of linear term
@@ -14,8 +16,31 @@
 
 Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model, this model is only applicable at UV wavelengths.
 
+The model has form ``c_1 + c_2x + c_3D(x; \\gamma, x_0) + c_4 F(x)`` where ``x`` is the wavenumber in inverse microns, ``D(x)``
+is a Drude profile (modified Lorentzian) used to model the 2175 Å bump with the scale-free parameters ``x_0`` (central wavenumber)
+and ``\\gamma`` (damping coefficient), and ``F(x)``, a piecewise function for the far-UV. Note that the coefficients will change
+the overall normalization, possibly changing the expected behavior of reddening via the parameter ``A_V``.
+
 If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
+
+# Examples
+```jldoctest
+julia> model = FM90(c1 = 0.2, c2 = 0.7, c3 = 3.23, c4 = 0.41, x0 = 4.6, gamma = 0.99);
+
+julia> model(1500)
+5.2521258452800135
+
+julia> FM90()(1500)
+5.152125845280013
+
+julia> FM90(c1 = 0.2, c2 = 0.7, c3 = 3.23, c4 = 0.41, x0 = 4.6, gamma = 0.99).([1000, 1200, 1800])
+3-element Array{Float64,1}:
+ 12.562237969522851
+  7.769215017329513
+  4.890128210972148
+
+```
 """
 @with_kw struct FM90{T<:Number} @deftype T
     c1 = 0.10

@@ -24,7 +24,7 @@ julia> ccm89(4000., 3.1)
 1.464555702942584
 ```
 
-For more examples, view the [Color Laws](@ref laws), [Fitting Models](@ref models) and [Dust Maps](@ref maps) sections.
+For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) sections.
 
 ## Citations
 
