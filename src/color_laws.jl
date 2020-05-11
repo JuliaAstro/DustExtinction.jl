@@ -15,7 +15,7 @@ const od94_ca = [1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505
 const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347]
 
 """
-    CCM89(Rv=3.1)
+    CCM89(;Rv=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law.
 
@@ -35,45 +35,53 @@ function (law::CCM89)(wave)
     return ccm89_invum(x, law.Rv, ccm89_ca, ccm89_cb)
 end
 
+bounds(::CCM89) = (1000.0, 33333.0)
+
 
 """
-    od94(λ::Real, Rv=3.1)
-    od94(λ::Quantity, Rv=3.1)
+    OD94(;Rv=3.1)
 
 O'Donnell (1994) dust law.
 
 This is identical to the Clayton, Cardelli and Mathis (1989) dust law, except
 for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and
-the returned value will be `UnitfulAstro.mag`.
-
 # References
 [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)
 
 # See Also
-[`ccm89`](@ref)
+[`CCM89`](@ref)
 """
-function od94(λ::Real, Rv = 3.1)
-    x = aa_to_invum(λ)
-    return ccm89_invum(x, Rv, od94_ca, od94_cb)
+@with_kw struct OD94 <: ExtinctionLaw
+    Rv::Float64 = 3.1
+    @assert 2 ≤ Rv ≤ 6 "Rv must be ∈ [2, 6], got $(Rv)"
 end
 
-od94(λ::Quantity, Rv = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
+function (law::OD94)(wave)
+    x = aa_to_invum(wave)
+    return ccm89_invum(x, law.Rv, od94_ca, od94_cb)
+end
 
+bounds(::OD94) = (1000.0, 33333.0)
+
+"""
+    DustExtinction.ccm89_invum(x, Rv, c_a, c_b)
+
+The algorithm used for the [`CCM89`](@ref) extinction law, given inverse microns, Rv, and a set of coefficients for use in the optical (only difference between ccm89 and od94). For more information, seek the original paper.
+"""
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
         return 0.0x
-        elseif x < 1.1  # Near IR
+    elseif x < 1.1  # Near IR
         y = x^1.61
         a = 0.574y
         b = -0.527y
-        elseif x < 3.3  # Optical
+    elseif x < 3.3  # Optical
         y = x - 1.82
         yn = 1.0
         a = @evalpoly y c_a[1] c_a[2] c_a[3] c_a[4] c_a[5] c_a[6] c_a[7] c_a[8] c_a[9]
         b = @evalpoly y c_b[1] c_b[2] c_b[3] c_b[4] c_b[5] c_b[6] c_b[7] c_b[8] c_b[9]
-        elseif x < 8.0  # NUV
+    elseif x < 8.0  # NUV
         a =  1.752 - 0.316x - (0.104 / ((x - 4.67)^2 + 0.341))
         b = -3.090 + 1.825x + (1.206 / ((x - 4.62)^2 + 0.263))
         if x > 5.9 # Far NUV
@@ -81,22 +89,20 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real}
             a += @evalpoly y 0.0 0.0 -0.04473 -0.009779
             b += @evalpoly y 0.0 0.0 0.213 0.1207
         end
-        elseif x ≤ 10.0 # FUV
+    elseif x ≤ 10.0 # FUV
         y = x - 8.0
         a = @evalpoly y -1.073 -0.628 0.137 -0.07
         b = @evalpoly y 13.67 4.257 -0.42 0.374
-        else
+    else
         return 0.0x
     end
-
     return a + b / Rv
 end
 
 # --------------------------------------------------------------------------------
 
 """
-    cal00(λ::Real, Rv=4.05)
-    cal00(λ::Quantity, Rv=4.05)
+    CAL00(;Rv=4.05)
 
 Calzetti et al. (2000) Dust Law.
 
@@ -107,22 +113,26 @@ Calzetti et al. (2000) developed a recipe for dereddening the spectra of
 galaxies where massive stars dominate the radiation output. They found the best
  fit value for such galaxies was 4.05±0.80.
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
-
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
+@with_kw struct CAL00 <: ExtinctionLaw
+    Rv::Float64 = 4.05
+end
 function cal00(λ::Real, Rv = 4.05)
     # Convert to inverse-um
     x = aa_to_invum(λ)
     return cal00_invum(x, Rv)
 end
 
-cal00(λ::Quantity, Rv::Real = 4.05) = cal00(ustrip(u"angstrom", λ), Rv) * u"mag"
+bounds(::CAL00) = (1200, 22000)
 
+"""
+    DustExtinction.cal00_invum(x, Rv)
+
+The algorithm used for the [`CAL00`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+"""
 function cal00_invum(x::Real, Rv::Real)
-
     if x > 1 / 0.12
         return 0.0x
     elseif x > 1 / 0.63
@@ -132,7 +142,6 @@ function cal00_invum(x::Real, Rv::Real)
     else
         return 0.0x
     end
-
     return 1.0 + 2.659 * k / Rv
 end
 
@@ -162,7 +171,7 @@ function gcc09_invum(x::Real, Rv::Real)
         a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
         b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
     else
-        return 0.0x
+    return 0.0x
     end
     if 5.9 <= x <= 11.0  # far-NUV
         y = x - 5.9
@@ -170,7 +179,7 @@ function gcc09_invum(x::Real, Rv::Real)
         b += @evalpoly y 0.0 0.0 0.531 0.0544
     end
 
-    return a + b / Rv
+return a + b / Rv
 end
 
 
@@ -199,7 +208,7 @@ function vcg04_invum(x::Real, Rv::Real)
         a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
         b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
     else
-        return 0.0x
+    return 0.0x
     end
     if 5.9 <= x <= 8.0  # far-NUV
         y = x - 5.9
@@ -207,5 +216,5 @@ function vcg04_invum(x::Real, Rv::Real)
         b += @evalpoly y 0.0 0.0 0.2060 0.0550
     end
 
-    return a + b / Rv
+return a + b / Rv
 end
