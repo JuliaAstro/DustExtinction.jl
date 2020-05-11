@@ -14,3 +14,5 @@
 @deprecate ccm89(wave, Rv = 3.1) = CCM89(Rv = Rv)(wave)
 @deprecate od94(wave, Rv = 3.1) = OD94(Rv = Rv)(wave)
 @deprecate cal00(wave, Rv = 4.05) = CAL00(Rv = Rv)(wave)
+@deprecate gcc09(wave, Rv = 3.1) = GCC09(Rv = Rv)(wave)
+@deprecate vcg04(wave, Rv = 3.1) = VCG04(Rv = Rv)(wave)
