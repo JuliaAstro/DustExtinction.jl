@@ -63,16 +63,30 @@ redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * la
 redden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux * (Av * law(wave))
 
 """
-    deredden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
-    deredden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
+    deredden(::ExtinctionLaw, wave, flux; Av=1)
+    deredden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
 
 Deredden the value `f` by the value calculated via the given law and total
 extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way
 average selective attenuation. Note that λ should be in Angstrom if it is not
 a `Quantity`.
+
+# Examples
+
+```jldoctest
+julia> wave = 3000:3005, flux = randn(size(wave));
+
+julia> deredden(CCM89, wave, flux; Rv=3.1)
+
+julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
+```
+
+# See Also
+[`redden`](@ref)
 """
-deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
-deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
+deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(kwargs...), wave, flux; Av = Av)
+deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
+deredden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux / (Av * law(wave))
 
 # --------------------------------------------------------------------------------
 # bring in the laws
