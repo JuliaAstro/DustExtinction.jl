@@ -1,7 +1,3 @@
-using Unitful
-using UnitfulAstro
-using Parameters
-
 # Convenience function for wavelength conversion
 @inline aa_to_invum(wave::Real) = 10000 / wave
 
@@ -27,7 +23,6 @@ at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this w
 """
 @with_kw struct CCM89 <: ExtinctionLaw
     Rv::Float64 = 3.1
-    @assert 2 ≤ Rv ≤ 6 "Rv must be ∈ [2, 6], got $(Rv)"
 end
 
 function (law::CCM89)(wave)
@@ -54,7 +49,6 @@ for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 """
 @with_kw struct OD94 <: ExtinctionLaw
     Rv::Float64 = 3.1
-    @assert 2 ≤ Rv ≤ 6 "Rv must be ∈ [2, 6], got $(Rv)"
 end
 
 function (law::OD94)(wave)

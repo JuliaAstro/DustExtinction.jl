@@ -1,14 +1,17 @@
 module DustExtinction
 
-using Unitful, UnitfulAstro, DataDeps
+using Unitful
+using UnitfulAstro
+using DataDeps
+using Parameters
 
 export redden,
        deredden,
-       ccm89,
-       cal00,
-       od94,
-       gcc09,
-       vcg04,
+       CCM89,
+       CAL00,
+       OD94,
+       GCC09,
+       VCG04,
        SFD98Map,
        ebv_galactic
 
@@ -48,17 +51,18 @@ If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unit
 # Examples
 
 ```jldoctest
-julia> wave = 3000:3005, flux = randn(size(wave));
+julia> wave = 3000; flux = 1000;
 
 julia> redden(CCM89, wave, flux; Rv=3.1)
 
 julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
+35.11354215235764
 ```
 
 # See Also
 [`deredden`](@ref)
 """
-redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(kwargs...), wave, flux; Av = Av)
+redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av = Av)
 redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
 redden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux * (Av * law(wave))
 
@@ -83,7 +87,7 @@ julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
 # See Also
 [`redden`](@ref)
 """
-deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(kwargs...), wave, flux; Av = Av)
+deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av = Av)
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
 deredden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux / (Av * law(wave))
 
