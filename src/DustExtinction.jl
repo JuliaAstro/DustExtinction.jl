@@ -37,28 +37,30 @@ Get the natural wavelengths bounds for the extinction law, in angstrom
 bounds(::ExtinctionLaw) = (0, Inf)
 
 
-
-include("color_laws.jl")
-include("dust_maps.jl")
-
-@deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
-@deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
-
-
-# --------------------------------------------------------------------------------
-
-# reddening functions
 """
-    redden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
-    redden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
+    redden(::ExtinctionLaw, wave, flux; Av=1)
+    redden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
 
-Redden the value `f` by the value calculated via the given law and total
-extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way
-average selective attenuation. Note that λ should be in Angstrom if it is not
-a `Quantity`.
+Redden the given `flux` by the extinction law at the given wavelength.
+
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed object or just a type. If it is just a type, `kwargs` will be passed to the constructor.
+
+# Examples
+
+```jldoctest
+julia> wave = 3000:3005, flux = randn(size(wave));
+
+julia> redden(CCM89, wave, flux; Rv=3.1)
+
+julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
+```
+
+# See Also
+[`deredden`](@ref)
 """
-redden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
-redden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
+redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(kwargs...), wave, flux; Av = Av)
+redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
+redden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux * (Av * law(wave))
 
 """
     deredden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
@@ -71,6 +73,15 @@ a `Quantity`.
 """
 deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
 deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
+
+# --------------------------------------------------------------------------------
+# bring in the laws
+
+include("deprecate.jl")
+include("color_laws.jl")
+include("dust_maps.jl")
+
+
 
 # --------------------------------------------------------------------------------
 # Here be codegen!
