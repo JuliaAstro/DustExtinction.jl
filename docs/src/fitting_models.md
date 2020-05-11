@@ -98,7 +98,9 @@ julia> FM90().(wave_new)
 
 ## API/Reference
 
-### 1-D Fitting Models
+#### Fitzpatrick & Massa (1990)
+
+![](assets/FM90_plot.svg)
 
 ```@docs
 FM90
