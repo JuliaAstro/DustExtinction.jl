@@ -10,3 +10,5 @@
 
 @deprecate deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = deredden(CCM89, λ, f; Av = Av, Rv = 3.1)
 @deprecate deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = deredden(CCM89, λ, f; Av = Av, Rv = 3.1)
+
+@deprecate ccm89(wave::Real, Rv = 3.1) = CCM89(Rv = Rv)(wave)

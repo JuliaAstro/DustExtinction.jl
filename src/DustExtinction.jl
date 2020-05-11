@@ -41,7 +41,7 @@ bounds(::ExtinctionLaw) = (0, Inf)
     redden(::ExtinctionLaw, wave, flux; Av=1)
     redden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
 
-Redden the given `flux` by the extinction law at the given wavelength.
+Redden the given `flux` using the given extinction law at the given wavelength.
 
 If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed object or just a type. If it is just a type, `kwargs` will be passed to the constructor.
 
@@ -66,10 +66,9 @@ redden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux * (Av * law(wave
     deredden(::ExtinctionLaw, wave, flux; Av=1)
     deredden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
 
-Deredden the value `f` by the value calculated via the given law and total
-extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way
-average selective attenuation. Note that λ should be in Angstrom if it is not
-a `Quantity`.
+Deredden the given `flux` using the given extinction law at the given wavelength.
+
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed object or just a type. If it is just a type, `kwargs` will be passed to the constructor.
 
 # Examples
 
@@ -89,18 +88,16 @@ deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * 
 deredden(law::ExtinctionLaw, wave::Quantity, flux; Av = 1) = flux / (Av * law(wave))
 
 # --------------------------------------------------------------------------------
-# bring in the laws
+# bring in the support
 
 include("deprecate.jl")
 include("color_laws.jl")
 include("dust_maps.jl")
 
-
-
 # --------------------------------------------------------------------------------
 # Here be codegen!
 
-# generature unitful support for the following laws
+# generate unitful support for the following laws
 # this can be removed when julia support is pinned to 1.3 or higher,
 # at which point adding `(l::ExtinctionLaw)(wave)` is possible, until then
 # using this code-gen does the trick but requires manually editing
