@@ -1,6 +1,6 @@
 using Measurements
 
-@testset "ccm89" begin
+@testset "CCM89" begin
 
     # NOTE: Test is only to precision of 0.015 because there is a discrepancy
     # of 0.014 for the B band wavelength of unknown origin (and up to 0.002 in
@@ -25,35 +25,34 @@ using Measurements
         5.0 => [2.3582, 1.9422, 1.66114259, 1.51620499, 1.48998704, 1.73988465, 1.97445261, 1.57090496, 1.3480688, 1.33480314, 1.19999799, 1.0, 0.79600141, 0.5544017, 0.32717278, 0.22271044, 0.13422778],
         6.0 => [1.575, 1.34616667, 1.20546523, 1.17264354, 1.20936444, 1.44004346, 1.64499968, 1.36847709, 1.26799077, 1.27116996, 1.16666472, 1.0, 0.80816794, 0.5751682, 0.33943769, 0.23105931, 0.13925965])
 
-    # Test defaults
-    @test @inferred(broadcast(ccm89, wave)) ≈ ref_values[3.1] rtol = 0.016
-    @test_deprecated ccm89(wave)
 
-    for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
-        output = @inferred broadcast(ccm89, wave, rv)
+    # test defaults
+    @test CCM89().(wave) ≈ ref_values[3.1] rtol = 0.016
+
+
+    for rv in keys(ref_values)
+        law = CCM89(rv)
+        output = @inferred broadcast(law, wave)
         @test output ≈ ref_values[rv] rtol = 0.016
 
-        # Test deprecated array syntax
-        @test_deprecated ccm89(wave, rv)
-
         bad_waves = [100, 4e4]
-        @test @inferred(broadcast(ccm89, bad_waves, rv)) == zeros(length(bad_waves))
+        @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
         wave_unc = wave .± noise
-        reddening = @inferred broadcast(ccm89, wave_unc, rv)
+        reddening = @inferred broadcast(law, wave_unc)
         @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
 
         # Unitful
         wave_u = wave * u"angstrom"
-        reddening = @inferred broadcast(ccm89, wave_u, rv)
+        reddening = @inferred broadcast(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end
 end
 
-@testset "od94" begin
+@testset "OD94" begin
     # NOTE: The tabulated values go to 0.001, but the test is only for matching
     # at the 0.005 level, because there is currently a discrepancy up to 0.0047
     # of unknown origin.
@@ -98,46 +97,44 @@ end
                 0.885, 0.746, 0.597,
                 1.197, 0.811, 0.580]
 
-    reddening = @inferred broadcast(od94, wave, 3.1)
+    law = OD94()
+    reddening = @inferred broadcast(law, wave)
     @test reddening ≈ ref_values rtol = 0.016
-
-    # Test deprecated array syntax
-    @test_deprecated od94(wave)
 
     # Test out of bounds
     bad_waves = [100, 4e4]
-    @test @inferred(broadcast(od94, bad_waves, 3.1)) == zeros(length(bad_waves))
+    @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
 
     @testset "uncertainties" begin
         noise = randn(length(wave)) .* 10
         wave_unc = wave .± noise
-        reddening = @inferred broadcast(od94, wave_unc, 3.1)
+        reddening = @inferred broadcast(law, wave_unc)
         @test Measurements.value.(reddening) ≈ ref_values rtol = 0.016
     end
     @testset "unitful" begin
         wave_u = wave * u"angstrom"
-        reddening = @inferred broadcast(od94, wave_u, 3.1)
+        reddening = @inferred broadcast(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values rtol = 0.016
     end
 end
 
-@testset "cal00" begin
+@testset "CAL00" begin
 
     refwave = [3090.90909091,  4561.61616162,  6872.72727273,  9604.04040404,
     14646.46464646, 14646.46464646, 15486.86868687, 18218.18181818,
     20529.29292929, 20949.49494949]
 
-    refmag = Dict(3.1 => [ 1.88010678,  1.27137591,  0.70513192,  0.33600273,  0.01622915,
-    0.01622915, -0.01682162, -0.10317769, -0.15830055, -0.16701622],
-        2.4 => [ 2.13680458,  1.35052722,  0.61912873,  0.14233687, -0.27070401,
-    -0.27070401, -0.3133946 , -0.42493784, -0.49613821, -0.50739595])
+    refmag = Dict(3.1 => [ 1.88010678,  1.27137591,  0.70513192,  0.33600273,  0.01622915, 0.01622915, -0.01682162, -0.10317769, -0.15830055, -0.16701622],
+        2.4 => [ 2.13680458,  1.35052722,  0.61912873,  0.14233687, -0.27070401, -0.27070401, -0.3133946 , -0.42493784, -0.49613821, -0.50739595],
+        4.05 => [1.67366198, 1.20771983, 0.77429851, 0.49175518, 0.24699022, 0.24699022, 0.22169209, 0.15559239, 0.11339958, 0.10672833])
 
     # test defaults
-    @test cal00.(refwave, 3.1) ≈ refmag[3.1]
+    @test CAL00().(refwave) ≈ refmag[4.05]
 
-    for rv in [2.4, 3.1]
-        reddening = @inferred broadcast(cal00, refwave, rv)
+    for rv in keys(refmag)
+        law = CAL00(Rv = rv)
+        reddening = @inferred broadcast(law, refwave)
         @test reddening ≈ refmag[rv]
 
         bad_waves = [
@@ -145,24 +142,24 @@ end
             3e4,
             4e4
         ]
-        @test @inferred(broadcast(cal00, bad_waves, rv)) == zeros(length(bad_waves))
+        @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
 
         # Uncertainties
         noise = randn(length(refwave)) .* 10
         wave_unc = refwave .± noise
-        reddening = @inferred broadcast(cal00, refwave, rv)
+        reddening = @inferred broadcast(law, refwave)
         @test Measurements.value.(reddening) ≈ refmag[rv]
 
 
         # Unitful
         wave_u = refwave * u"angstrom"
-        reddening = @inferred broadcast(cal00, wave_u, rv)
+        reddening = @inferred broadcast(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ refmag[rv]
     end
 end
 
-@testset "vcg04" begin
+@testset "VCG04" begin
 
     x_inv_microns = [8.0, 7.0, 6.0, 5.0, 4.6, 4.0, 3.4]
     wave = 1e4 ./ x_inv_microns
@@ -174,30 +171,32 @@ end
         5.0 => [2.09235, 1.86411, 1.77892, 1.99880, 2.24199, 1.81076, 1.622711],
         6.0 => [1.74620, 1.59829, 1.56031, 1.75850, 1.96549, 1.64151, 1.52005])
 
-    @test @inferred(broadcast(vcg04, wave)) ≈ ref_values[3.1] rtol = 0.016
+    # test defaults
+    @test VCG04().(wave) ≈ ref_values[3.1] rtol = 0.016
 
-    for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
-        output = @inferred broadcast(vcg04, wave, rv)
+    for rv in keys(ref_values)
+        law = VCG04(Rv = rv)
+        output = @inferred broadcast(law, wave)
         @test output ≈ ref_values[rv] rtol = 0.016
 
         bad_waves = [100, 4e4]
-        @test @inferred(broadcast(vcg04, bad_waves, rv)) == zeros(length(bad_waves))
+        @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
         wave_unc = wave .± noise
-        reddening = @inferred broadcast(vcg04, wave_unc, rv)
+        reddening = @inferred broadcast(law, wave_unc)
         @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
 
         # Unitful
         wave_u = wave * u"angstrom"
-        reddening = @inferred broadcast(vcg04, wave_u, rv)
+        reddening = @inferred broadcast(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end
 end
 
-@testset "gcc09" begin
+@testset "GCC09" begin
 
     x_inv_microns = [10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.6, 4.0, 3.4]
     wave = 1e4 ./ x_inv_microns
@@ -210,24 +209,26 @@ end
         6.0 => [0.588581, 0.811898, 0.976660, 1.09190, 1.18082, 1.46533, 1.61241, 1.39142, 1.27682])
 
 
-    @test @inferred(broadcast(gcc09, wave)) ≈ ref_values[3.1] rtol = 0.016
+    # test defaults
+    @test GCC09().(wave) ≈ ref_values[3.1] rtol = 0.016
 
-    for rv in [2.0, 3.0, 3.1, 4.0, 5.0, 6.0]
-        output = @inferred broadcast(gcc09, wave, rv)
+    for rv in keys(ref_values)
+        law = GCC09(Rv = rv)
+        output = @inferred broadcast(law, wave)
         @test output ≈ ref_values[rv] rtol = 0.016
 
         bad_waves = [100, 4e4]
-        @test @inferred(broadcast(gcc09, bad_waves, rv)) == zeros(length(bad_waves))
+        @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
         wave_unc = wave .± noise
-        reddening = @inferred broadcast(gcc09, wave_unc, rv)
+        reddening = @inferred broadcast(law, wave_unc)
         @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
 
         # Unitful
         wave_u = wave * u"angstrom"
-        reddening = @inferred broadcast(gcc09, wave_u, rv)
+        reddening = @inferred broadcast(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end

@@ -45,7 +45,7 @@ bounds(::Type{<:ExtinctionLaw}) = (0, Inf)
 checkbounds(::E, wave) where {E <: ExtinctionLaw} = checkbounds(E, wave)
 function checkbounds(E::Type{<:ExtinctionLaw}, wave)
     b = bounds(E)
-    return b[1] < wave < b[2]
+    return b[1] ≤ wave ≤ b[2]
 end
 
 

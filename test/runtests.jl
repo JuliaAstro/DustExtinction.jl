@@ -1,13 +1,23 @@
 using DustExtinction
+using DustExtinction: bounds, checkbounds
 using Test, Measurements, Unitful, UnitfulAstro, Random
 
 Random.seed!(9994445781)
 
-# include("deprecate.jl")
-# include("color_laws.jl")
-# include("dust_maps.jl")
+include("deprecate.jl")
+include("color_laws.jl")
+include("dust_maps.jl")
 
-@testset "redden" begin
+@testset "interfaces" begin
+    for LAW in [CCM89, OD94, CAL00, GCC09, VCG04]
+        @test bounds(LAW) == bounds(LAW())
+        @test checkbounds(LAW, 1000) == checkbounds(LAW(), 1000)
+
+        @test LAW(3.1) == LAW(Rv = 3.1)
+    end
+end
+
+@testset "redden/deredden" begin
     wave = [3372., 4404., 5428., 6509., 8090.,
             3683., 4393., 5519., 6602., 8046.,
             12660., 16732., 22152.,
