@@ -52,6 +52,9 @@ julia> redden.(CCM89, wave, flux; Av=0.3)
  0.007154659823737299
  0.007370491272731541
 
+julia> deredden.(CCM89(Rv=3.1), wave, ans; Av=0.3) ≈ flux
+true
+
 ```
 
 ## Advanced Usage
