@@ -4,7 +4,7 @@
     FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)(λ::Union{Real, Quantity})
     FM90(coeffs, x0=4.60, gamma=0.9)(λ::Union{Real, Quantity})
 
-Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model, this model is only applicable at UV wavelengths.
+Fitzpatrick & Massa (1990) generative model for ultraviolet dust extinction.
 
 ### Parameters
 * `c1` - y-intercept of linear term
