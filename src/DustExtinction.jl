@@ -27,7 +27,7 @@ The abstract super-type for dust extinction laws. See the extended help (`??Dust
 
 Each extinction law implements the following methods
 * [`DustExtinction.bounds(::ExtinctionLaw)`](@ref) - The bounds for the extinction law, as a `(min, max)` tuple in angstrom. If not implemented, will fallback to `(0, Inf)`
-* [`(::ExtinctionLaw)(wavelength::Real)`](@ref) - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
+* `(::ExtinctionLaw)(wavelength::Real)` - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
 
 This is the bare-minimum required to use the law with [`redden`](@ref), [`deredden`](@ref), and the plotting recipes. Within the library we add support for [Unitful.jl](https://github.com/PainterQubits/Unitful.jl) using code generation in `DustExtinction.jl/src/DustExtinction.jl`.
 """
@@ -63,6 +63,7 @@ If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unit
 julia> wave = 3000; flux = 1000;
 
 julia> redden(CCM89, wave, flux; Rv=3.1)
+187.38607779757183
 
 julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 35.11354215235764
@@ -87,11 +88,13 @@ If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unit
 # Examples
 
 ```jldoctest
-julia> wave = 3000:3005, flux = randn(size(wave));
+julia> wave = 3000; flux = 187.386;
 
 julia> deredden(CCM89, wave, flux; Rv=3.1)
+999.9995848273642
 
 julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
+5336.573541539394
 ```
 
 # See Also
