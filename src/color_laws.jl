@@ -25,12 +25,13 @@ at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this w
     Rv::Float64 = 3.1
 end
 
-function (law::CCM89)(wave)
+function (law::CCM89)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return ccm89_invum(x, law.Rv, ccm89_ca, ccm89_cb)
 end
 
-bounds(::CCM89) = (1000, 33333)
+bounds(::Type{CCM89}) = (1000, 33333)
 
 
 """
@@ -51,12 +52,13 @@ for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
     Rv::Float64 = 3.1
 end
 
-function (law::OD94)(wave)
+function (law::OD94)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return ccm89_invum(x, law.Rv, od94_ca, od94_cb)
 end
 
-bounds(::OD94) = (1000, 33333)
+bounds(::Type{OD94}) = (1000, 33333)
 
 """
     DustExtinction.ccm89_invum(x, Rv, c_a, c_b)
@@ -65,7 +67,7 @@ The algorithm used for the [`CCM89`](@ref) extinction law, given inverse microns
 """
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
-        return 0.0x
+        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
     elseif x < 1.1  # Near IR
         y = x^1.61
         a = 0.574y
@@ -88,7 +90,7 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real}
         a = @evalpoly y -1.073 -0.628 0.137 -0.07
         b = @evalpoly y 13.67 4.257 -0.42 0.374
     else
-        return 0.0x
+        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
     end
     return a + b / Rv
 end
@@ -113,12 +115,13 @@ galaxies where massive stars dominate the radiation output. They found the best
 @with_kw struct CAL00 <: ExtinctionLaw
     Rv::Float64 = 4.05
 end
-function (law::CAL00)(λ::Real, Rv = 4.05)
-    x = aa_to_invum(λ)
+function (law::CAL00)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
     return cal00_invum(x, law.Rv)
 end
 
-bounds(::CAL00) = (1200, 22000)
+bounds(::Type{CAL00}) = (1200, 22000)
 
 """
     DustExtinction.cal00_invum(x, Rv)
@@ -127,13 +130,13 @@ The algorithm used for the [`CAL00`](@ref) extinction law, given inverse microns
 """
 function cal00_invum(x::Real, Rv::Real)
     if x > 1 / 0.12
-        return 0.0x
+        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
     elseif x > 1 / 0.63
         k = @evalpoly x -2.156 1.509 -0.198 0.011
-    elseif x >  1 / 2.2
+    elseif x > 1 / 2.2
         k = @evalpoly x -1.857 1.040
     else
-        return 0.0x
+        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
     end
     return 1.0 + 2.659 * k / Rv
 end
@@ -151,12 +154,13 @@ This model was not derived for the optical or NIR.
     Rv::Float64 = 3.1
 end
 
-function (law::GCC09)(wave)
+function (law::GCC09)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return gcc09_invum(x, law.Rv)
 end
 
-bounds(::GCC09) = (909.09, 3030.3)
+bounds(::Type{GCC09}) = (909.09, 3030.3)
 
 """
     DustExtinction.gcc09_invum(x, Rv)
@@ -168,7 +172,7 @@ function gcc09_invum(x::Real, Rv::Real)
         a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
         b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
     else # out of bounds
-        return 0.0x
+        error("out of bounds of GCC09, support is over $(bounds(GCC09)) angstrom")
     end
     if 5.9 ≤ x ≤ 11.0  # far-NUV
         y = x - 5.9
@@ -192,12 +196,13 @@ This model was not derived for the optical or NIR.
     Rv::Float64 = 3.1
 end
 
-function (law::VCG04)(wave)
+function (law::VCG04)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return vcg04_invum(x, law.Rv)
 end
 
-bounds(::VCG04) = (1250, 3030.3)
+bounds(::Type{VCG04}) = (1250, 3030.3)
 
 """
     DustExtinction.vcg04_invum(x, Rv)
@@ -209,7 +214,7 @@ function vcg04_invum(x::Real, Rv::Real)
         a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
         b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
     else
-        return 0.0x
+        error("out of bounds of VCG04, support is over $(bounds(VCG04)) angstrom")
     end
     if 5.9 ≤ x ≤ 8.0  # far-NUV
         y = x - 5.9

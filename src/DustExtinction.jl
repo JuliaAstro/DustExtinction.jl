@@ -21,7 +21,8 @@ export redden,
 
 The abstract super-type for dust extinction laws. See the extended help (`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
 
-## Extended Help
+# Extended Help
+
 ## Interface
 
 Each extinction law implements the following methods
@@ -34,10 +35,18 @@ abstract type ExtinctionLaw end
 
 """
     DustExtinction.bounds(::ExtinctionLaw)::Tuple
+    DustExtinction.bounds(::Type{<:ExtinctionLaw})::Tuple
 
 Get the natural wavelengths bounds for the extinction law, in angstrom
 """
-bounds(::ExtinctionLaw) = (0, Inf)
+bounds(::E) where {E <: ExtinctionLaw} = bounds(E)
+bounds(::Type{<:ExtinctionLaw}) = (0, Inf)
+
+checkbounds(::E, wave) where {E <: ExtinctionLaw} = checkbounds(E, wave)
+function checkbounds(E::Type{<:ExtinctionLaw}, wave)
+    b = bounds(E)
+    return b[1] < wave < b[2]
+end
 
 
 """
