@@ -1,4 +1,15 @@
 using Measurements
+using DustExtinction: ccm89_invum,
+                      cal00_invum,
+                      vcg04_invum,
+                      gcc09_invum,
+                      aa_to_invum,
+                      ccm89_ca,
+                      ccm89_cb
+
+@testset "helper" begin
+    @test aa_to_invum(10000) ≈ 1
+end
 
 @testset "CCM89" begin
 
@@ -37,6 +48,8 @@ using Measurements
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
+        @test_throws ErrorException ccm89_invum(aa_to_invum(bad_waves[1]), rv, ccm89_ca, ccm89_cb)
+        @test_throws ErrorException ccm89_invum(aa_to_invum(bad_waves[2]), rv, ccm89_ca, ccm89_cb)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
@@ -137,12 +150,10 @@ end
         reddening = @inferred broadcast(law, refwave)
         @test reddening ≈ refmag[rv]
 
-        bad_waves = [
-            1e2,
-            3e4,
-            4e4
-        ]
+        bad_waves = [1e2, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
+        @test_throws ErrorException cal00_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws ErrorException cal00_invum(aa_to_invum(bad_waves[2]), rv)
 
         # Uncertainties
         noise = randn(length(refwave)) .* 10
@@ -181,6 +192,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
+        @test_throws ErrorException vcg04_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws ErrorException vcg04_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
@@ -219,6 +232,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
+        @test_throws ErrorException gcc09_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws ErrorException gcc09_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01

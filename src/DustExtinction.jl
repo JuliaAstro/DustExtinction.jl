@@ -33,6 +33,8 @@ This is the bare-minimum required to use the law with [`redden`](@ref), [`deredd
 """
 abstract type ExtinctionLaw end
 
+Base.broadcastable(law::ExtinctionLaw) = Ref(law)
+
 """
     DustExtinction.bounds(::ExtinctionLaw)::Tuple
     DustExtinction.bounds(::Type{<:ExtinctionLaw})::Tuple

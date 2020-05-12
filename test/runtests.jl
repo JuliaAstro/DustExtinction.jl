@@ -15,6 +15,7 @@ include("dust_maps.jl")
 
         @test LAW(3.1) == LAW(Rv = 3.1)
     end
+    @test bounds(DustExtinction.ExtinctionLaw) == (0, Inf)
 end
 
 @testset "redden/deredden" begin
@@ -40,6 +41,13 @@ end
     flux .= redden.(CCM89, wave, flux, Av = 0.3)
     @test flux ≈ ref_values
 
+
+    # interfaces
+    @test redden(CCM89, wave[1], flux[1]) == redden(CCM89(), wave[1], flux[1])
+    @test redden(CCM89, wave[1], flux[1], Rv = 2.8) == redden(CCM89(Rv = 2.8), wave[1], flux[1])
+    @test redden.(CCM89, wave, flux) == redden.(CCM89(), wave, flux)
+    @test redden.(CCM89, wave, flux, Rv = 2.8) == redden.(CCM89(Rv = 2.8), wave, flux)
+
     # Measurements
     flux = ones(length(wave)) .± 0.1
     output = @inferred broadcast((l, w, f)->redden(l, w, f; Av = 0.3), CCM89, wave, flux)
@@ -52,8 +60,10 @@ end
     flux = ones(length(wave))u"Jy"
     wave = wave * u"angstrom"
     output = @inferred broadcast((l, w, f)->redden(l, w, f; Av = 0.3), CCM89, wave, flux)
+    @test redden.(CCM89, wave, ustrip.(u"Jy", flux), Av = 0.3) ≈ ustrip.(u"Jy", output)
     @test ustrip.(output) ≈ ref_values
     @test @inferred(broadcast((l, w, f)->deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
+    @test deredden.(CCM89, wave, ustrip.(u"Jy", output), Av = 0.3) ≈ ustrip.(u"Jy", flux)
     flux .= redden.(CCM89, wave, flux, Av = 0.3)
     @test flux ≈ output
 end
