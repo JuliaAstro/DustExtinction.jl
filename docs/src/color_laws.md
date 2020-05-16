@@ -182,3 +182,13 @@ deredden
 DustExtinction.ExtinctionLaw
 DustExtinction.bounds
 ```
+
+### Fittable Extinction Laws
+
+#### Fitzpatrick & Massa (1990)
+
+![](assets/FM90_plot.svg)
+
+```@docs
+FM90
+```

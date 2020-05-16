@@ -7,6 +7,7 @@ Random.seed!(9994445781)
 include("deprecate.jl")
 include("color_laws.jl")
 include("dust_maps.jl")
+include("fittable_laws.jl")
 
 @testset "interfaces" begin
     for LAW in [CCM89, OD94, CAL00, GCC09, VCG04]

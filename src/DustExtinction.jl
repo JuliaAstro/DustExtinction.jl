@@ -13,8 +13,8 @@ export redden,
        GCC09,
        VCG04,
        SFD98Map,
-       ebv_galactic
-
+       ebv_galactic,
+       FM90
 
 """
     DustExtinction.ExtinctionLaw

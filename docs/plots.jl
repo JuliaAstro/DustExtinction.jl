@@ -1,5 +1,5 @@
 using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, FM90
 
 dir = joinpath(@__DIR__, "src", "assets")
 
@@ -79,3 +79,26 @@ end
 xlabel!(L"\mu m ^{-1}")
 ylabel!("E(B-V)")
 savefig(joinpath(dir, "vcg04_plot.svg"))
+
+#--------------------------------------------------------------------------------
+# FM90
+
+w = range(3.8, 8.6, step = 0.001)
+x = 1e4 ./ w
+plot()
+
+m1 = FM90().(x)
+plot!(w, m1, label = "total")
+
+m2 = FM90(c3=0.0, c4=0.0).(x)
+plot!(w, m2, label = "linear term")
+
+m3 = FM90(c1=0.0, c2=0.0, c4=0.0).(x)
+plot!(w, m3, label = "bump term")
+
+m4 = FM90(c1=0.0, c2=0.0, c3=0.0).(x)
+plot!(w, m4, label = "FUV rise term")
+
+xlabel!(L"\mu m ^{-1}")
+ylabel!(L"E(\lambda - V)/E(B - V)")
+savefig(joinpath(dir, "FM90_plot.svg"))
