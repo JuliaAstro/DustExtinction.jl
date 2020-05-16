@@ -24,10 +24,10 @@ Color laws:
 ```julia
 julia> using DustExtinction
 
-julia> ccm89(4000., 3.1)
+julia> CCM89(Rv=3.1)(4000)
 1.4645557029425842
 
-julia> ccm89.([4000., 5000.], 3.1)
+julia> CCM89(Rv=3.1).([4000, 5000])
 2-element Array{Float64,1}:
  1.46456
  1.12225
@@ -48,7 +48,7 @@ julia> dustmap.([0.1, 0.2], [0.1, 0.2])
  0.539507
 ```
 
-Extinction:
+Reddening:
 
 ```julia
 julia> wave = [4000., 5000.]
@@ -61,11 +61,16 @@ julia> flux = [1.0, 1.5]
  1.0
  1.5
 
-julia> redden.(flux, wave, 0.3)
+julia> red = redden.(CCM89, wave, flux; Av=0.3, Rv=3.1)
 2-element Array{Float64,1}:
  0.6671958182723856
  1.1000733242882896
 
+julia> deredden.(CCM89(Rv=3.1), wave, red; Av=0.3)
+2-element Array{Float64,1}:
+2-element Array{Float64,1}:
+ 1.0
+ 1.5
 ```
 
 We provide first-class support for `Unitful.jl` and `Measurements.jl` packages, too! Check out the documentation for more examples.

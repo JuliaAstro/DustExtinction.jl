@@ -1,10 +1,7 @@
-using Unitful, UnitfulAstro
-
 # Convenience function for wavelength conversion
-aa_to_invum(wave::Real) = 10000 / wave
-aa_to_invum(wave::Quantity) = aa_to_invum(ustrip(u"angstrom", wave))
+@inline aa_to_invum(wave::Real) = 10000 / wave
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 # Optical coefficients
 const ccm89_ca = [1.0, 0.17699, -0.50447, -0.02427, 0.72085, 0.01979, -0.7753, 0.32999, 0.0]
@@ -14,57 +11,63 @@ const od94_ca = [1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505
 const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347]
 
 """
-    ccm89(λ::Real, Rv=3.1)
-    ccm89(λ::Quantity, Rv=3.1)
+    CCM89(;Rv=3.1)
 
 Clayton, Cardelli and Mathis (1989) dust law.
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the extinction
-at 5494.5 Å. `λ` is the wavelength in Å and has support over [1000, 33333].
-Outside of that range this will return 0. `Rv` is the selective extinction
-and is valid over [2, 6]. A typical value for the Milky Way is 3.1
-
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
+at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this will return 0. `Rv` is the selective extinction and is valid over [2, 6]. A typical value for the Milky Way is 3.1.
 
 # References
 [Clayton,Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)
 """
-function ccm89(λ::Real, Rv = 3.1)
-    x = aa_to_invum(λ)
-    return ccm89_invum(x, Rv, ccm89_ca, ccm89_cb)
+@with_kw struct CCM89 <: ExtinctionLaw
+    Rv::Float64 = 3.1
 end
 
-ccm89(λ::Quantity, Rv::Real = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
+function (law::CCM89)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return ccm89_invum(x, law.Rv, ccm89_ca, ccm89_cb)
+end
+
+bounds(::Type{CCM89}) = (1000, 33333)
+
 
 """
-    od94(λ::Real, Rv=3.1)
-    od94(λ::Quantity, Rv=3.1)
+    OD94(;Rv=3.1)
 
 O'Donnell (1994) dust law.
 
 This is identical to the Clayton, Cardelli and Mathis (1989) dust law, except
 for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and
-the returned value will be `UnitfulAstro.mag`.
-
 # References
 [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)
 
 # See Also
-[`ccm89`](@ref)
+[`CCM89`](@ref)
 """
-function od94(λ::Real, Rv = 3.1)
-    x = aa_to_invum(λ)
-    return ccm89_invum(x, Rv, od94_ca, od94_cb)
+@with_kw struct OD94 <: ExtinctionLaw
+    Rv::Float64 = 3.1
 end
 
-od94(λ::Quantity, Rv = 3.1) = ccm89(ustrip(u"angstrom", λ), Rv) * u"mag"
+function (law::OD94)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return ccm89_invum(x, law.Rv, od94_ca, od94_cb)
+end
 
+bounds(::Type{OD94}) = (1000, 33333)
+
+"""
+    DustExtinction.ccm89_invum(x, Rv, c_a, c_b)
+
+The algorithm used for the [`CCM89`](@ref) extinction law, given inverse microns, Rv, and a set of coefficients for use in the optical (only difference between ccm89 and od94). For more information, seek the original paper.
+"""
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
-        return 0.0x
+        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
     elseif x < 1.1  # Near IR
         y = x^1.61
         a = 0.574y
@@ -87,17 +90,15 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real}
         a = @evalpoly y -1.073 -0.628 0.137 -0.07
         b = @evalpoly y 13.67 4.257 -0.42 0.374
     else
-        return 0.0x
+        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
     end
-
     return a + b / Rv
 end
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 """
-    cal00(λ::Real, Rv=4.05)
-    cal00(λ::Quantity, Rv=4.05)
+    CAL00(;Rv=4.05)
 
 Calzetti et al. (2000) Dust Law.
 
@@ -108,104 +109,121 @@ Calzetti et al. (2000) developed a recipe for dereddening the spectra of
 galaxies where massive stars dominate the radiation output. They found the best
  fit value for such galaxies was 4.05±0.80.
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
-
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
-function cal00(λ::Real, Rv = 4.05)
-    # Convert to inverse-um
-    x = aa_to_invum(λ)
-    return cal00_invum(x, Rv)
+@with_kw struct CAL00 <: ExtinctionLaw
+    Rv::Float64 = 4.05
+end
+function (law::CAL00)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return cal00_invum(x, law.Rv)
 end
 
-cal00(λ::Quantity, Rv::Real = 4.05) = cal00(ustrip(u"angstrom", λ), Rv) * u"mag"
+bounds(::Type{CAL00}) = (1200, 22000)
 
+"""
+    DustExtinction.cal00_invum(x, Rv)
+
+The algorithm used for the [`CAL00`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+"""
 function cal00_invum(x::Real, Rv::Real)
-
     if x > 1 / 0.12
-        return 0.0x
+        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
     elseif x > 1 / 0.63
         k = @evalpoly x -2.156 1.509 -0.198 0.011
-    elseif x >  1 / 2.2
+    elseif x > 1 / 2.2
         k = @evalpoly x -1.857 1.040
     else
-        return 0.0x
+        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
     end
-
     return 1.0 + 2.659 * k / Rv
 end
 
-
 """
-    gcc09(λ::Real, Rv=3.1)
-    gcc09(λ::Quantity, Rv=3.1)
-
-Gordon, Cartledge, & Clayton (2009) dust law.
-
-This model applies to the UV spectral region all the way to 909.09 Å.
-This model was not derived for the optical or NIR.
-
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
-"""
-function gcc09(λ::Real, Rv = 3.1)
-    x = aa_to_invum(λ)
-    return gcc09_invum(x, Rv)
-end
-
-gcc09(λ::Quantity, Rv::Real = 3.1) = gcc09(ustrip(u"angstrom", λ), Rv) * u"mag"
-
-function gcc09_invum(x::Real, Rv::Real)
-
-    if 3.3 <= x <= 11.0  # NUV
-        a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
-        b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
-    else
-        return 0.0x
-    end
-    if 5.9 <= x <= 11.0  # far-NUV
-        y = x - 5.9
-        a += @evalpoly y 0.0 0.0 -0.110 -0.0100
-        b += @evalpoly y 0.0 0.0 0.531 0.0544
-    end
-
-    return a + b / Rv
-end
-
-
-"""
-    vcg04(λ::Real, Rv=3.1)
-    vcg04(λ::Quantity, Rv=3.1)
+    VCG04(;Rv=3.1)
 
 Valencic, Clayton, & Gordon (2004) dust law.
 
 This model applies to the UV spectral region all the way to 912 Å.
 This model was not derived for the optical or NIR.
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
+# References
+[Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V/)
 """
-function vcg04(λ::Real, Rv = 3.1)
-    x = aa_to_invum(λ)
-    return vcg04_invum(x, Rv)
+@with_kw struct VCG04 <: ExtinctionLaw
+    Rv::Float64 = 3.1
 end
 
-vcg04(λ::Quantity, Rv::Real = 3.1) = vcg04(ustrip(u"angstrom", λ), Rv) * u"mag"
+function (law::VCG04)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return vcg04_invum(x, law.Rv)
+end
 
+bounds(::Type{VCG04}) = (1250, 3030.3)
+
+"""
+    DustExtinction.vcg04_invum(x, Rv)
+
+The algorithm used for the [`VCG04`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+"""
 function vcg04_invum(x::Real, Rv::Real)
-
-    if 3.3 <= x <= 8.0  # NUV
+    if 3.3 ≤ x ≤ 8.0  # NUV
         a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
         b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
     else
-        return 0.0x
+        error("out of bounds of VCG04, support is over $(bounds(VCG04)) angstrom")
     end
-    if 5.9 <= x <= 8.0  # far-NUV
+    if 5.9 ≤ x ≤ 8.0  # far-NUV
         y = x - 5.9
         a += @evalpoly y 0.0 0.0 -0.0077 -0.0030
         b += @evalpoly y 0.0 0.0 0.2060 0.0550
+    end
+
+    return a + b / Rv
+end
+
+"""
+    GCC09(;Rv=3.1)
+
+Gordon, Cartledge, & Clayton (2009) dust law.
+
+This model applies to the UV spectral region all the way to 909.09 Å.
+This model was not derived for the optical or NIR.
+
+# References
+[Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G/)
+"""
+@with_kw struct GCC09 <: ExtinctionLaw
+    Rv::Float64 = 3.1
+end
+
+function (law::GCC09)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return gcc09_invum(x, law.Rv)
+end
+
+bounds(::Type{GCC09}) = (909.09, 3030.3)
+
+"""
+    DustExtinction.gcc09_invum(x, Rv)
+
+The algorithm used for the [`GCC09`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+"""
+function gcc09_invum(x::Real, Rv::Real)
+    if 3.3 ≤ x ≤ 11.0  # NUV
+        a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
+        b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
+    else # out of bounds
+        error("out of bounds of GCC09, support is over $(bounds(GCC09)) angstrom")
+    end
+    if 5.9 ≤ x ≤ 11.0  # far-NUV
+        y = x - 5.9
+        a += @evalpoly y 0.0 0.0 -0.110 -0.0100
+        b += @evalpoly y 0.0 0.0 0.531 0.0544
     end
 
     return a + b / Rv

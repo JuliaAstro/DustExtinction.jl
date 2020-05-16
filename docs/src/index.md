@@ -10,7 +10,7 @@ Extinction describes the effect of dust grains on observations of stars in space
 From the REPL, press `]` to enter Pkg mode
 
 ```julia
-(v 1.2) pkg> add DustExtinction
+(v 1.4) pkg> add DustExtinction
 
 julia> using DustExtinction
 ```
@@ -20,7 +20,7 @@ julia> using DustExtinction
 ```jldoctest
 julia> using DustExtinction
 
-julia> ccm89(4000., 3.1)
+julia> CCM89(Rv=3.1)(4000)
 1.464555702942584
 ```
 
@@ -30,12 +30,14 @@ For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) s
 
 There are various citations relevant to this work. Please be considerate when using this work or any derivate of it by adding the appropriate citations.
 
-| Function | Reference | BibTeX |
-|:--------:|:----------|:-------|
-| [`ccm89`](@ref) | [Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C/abstract) | [download](assets/ccm89.bib) |
-| [`od94`](@ref) | [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O/abstract) | [download](assets/od94.bib) |
-| [`cal00`](@ref) | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C/abstract) | [download](assets/cal00.bib) |
-| [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract) | [download](assets/sfd98.bib) |
+|        Law         | Reference                                                                                      | BibTeX                       |
+| :----------------: | :--------------------------------------------------------------------------------------------- | :--------------------------- |
+|  [`CCM89`](@ref)   | [Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)   | [download](assets/ccm89.bib) |
+|   [`OD94`](@ref)   | [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)                      | [download](assets/od94.bib)  |
+|  [`CAL00`](@ref)   | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)                | [download](assets/cal00.bib) |
+|  [`VCG04`](@ref)   | [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V)    | [download](assets/vcg04.bib) |
+|  [`GCC09`](@ref)   | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)   | [download](assets/gcc09.bib) |
+| [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
 
 ## Index
 

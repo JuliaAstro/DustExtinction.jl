@@ -1,53 +1,132 @@
 module DustExtinction
 
-using Unitful, UnitfulAstro, DataDeps
+using Unitful
+using UnitfulAstro
+using DataDeps
+using Parameters
 
 export redden,
        deredden,
-       ccm89,
-       cal00,
-       od94,
-       gcc09,
-       vcg04,
+       CCM89,
+       CAL00,
+       OD94,
+       GCC09,
+       VCG04,
        SFD98Map,
        ebv_galactic
 
 
+"""
+    DustExtinction.ExtinctionLaw
+
+The abstract super-type for dust extinction laws. See the extended help (`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
+
+# Extended Help
+
+## Interface
+
+Each extinction law implements the following methods
+* [`DustExtinction.bounds(::ExtinctionLaw)`](@ref) - The bounds for the extinction law, as a `(min, max)` tuple in angstrom. If not implemented, will fallback to `(0, Inf)`
+* `(::ExtinctionLaw)(wavelength::Real)` - the implmentation of the law, taking in angstrom and returning normalized extinction in astronomical magnitudes.
+
+This is the bare-minimum required to use the law with [`redden`](@ref), [`deredden`](@ref), and the plotting recipes. Within the library we add support for [Unitful.jl](https://github.com/PainterQubits/Unitful.jl) using code generation in `DustExtinction.jl/src/DustExtinction.jl`.
+"""
+abstract type ExtinctionLaw end
+
+Base.broadcastable(law::ExtinctionLaw) = Ref(law)
+
+"""
+    DustExtinction.bounds(::ExtinctionLaw)::Tuple
+    DustExtinction.bounds(::Type{<:ExtinctionLaw})::Tuple
+
+Get the natural wavelengths bounds for the extinction law, in angstrom
+"""
+bounds(::E) where {E <: ExtinctionLaw} = bounds(E)
+bounds(::Type{<:ExtinctionLaw}) = (0, Inf)
+
+checkbounds(::E, wave) where {E <: ExtinctionLaw} = checkbounds(E, wave)
+function checkbounds(E::Type{<:ExtinctionLaw}, wave)
+    b = bounds(E)
+    return b[1] ≤ wave ≤ b[2]
+end
+
+
+"""
+    redden(::ExtinctionLaw, wave, flux; Av=1)
+    redden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
+
+Redden the given `flux` using the given extinction law at the given wavelength.
+
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed object or just a type. If it is just a type, `kwargs` will be passed to the constructor.
+
+# Examples
+
+```jldoctest
+julia> wave = 3000; flux = 1000;
+
+julia> redden(CCM89, wave, flux; Rv=3.1)
+187.38607779757183
+
+julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
+35.11354215235764
+```
+
+# See Also
+[`deredden`](@ref)
+"""
+redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av = Av)
+redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
+redden(law::ExtinctionLaw, wave::Quantity, flux::Real; Av = 1) = redden(law, ustrip(u"Å", wave), flux; Av = Av)
+redden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux * (Av * law(wave))
+
+"""
+    deredden(::ExtinctionLaw, wave, flux; Av=1)
+    deredden(::Type{ExtinctionLaw}, wave, flux; Av=1, kwargs...)
+
+Deredden the given `flux` using the given extinction law at the given wavelength.
+
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed object or just a type. If it is just a type, `kwargs` will be passed to the constructor.
+
+# Examples
+
+```jldoctest
+julia> wave = 3000; flux = 187.386;
+
+julia> deredden(CCM89, wave, flux; Rv=3.1)
+999.9995848273642
+
+julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
+5336.573541539394
+```
+
+# See Also
+[`redden`](@ref)
+"""
+deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av = Av)
+deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
+deredden(law::ExtinctionLaw, wave::Quantity, flux::Real; Av = 1) = deredden(law, ustrip(u"Å", wave), flux; Av = Av)
+deredden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux / (Av * law(wave))
+
+# --------------------------------------------------------------------------------
+# bring in the support
+
+include("deprecate.jl")
 include("color_laws.jl")
 include("dust_maps.jl")
 
-@deprecate ccm89(x::AbstractArray, r_v::Real = 3.1) ccm89.(x, r_v)
-@deprecate od94(x::AbstractArray, r_v::Real = 3.1) od94.(x, r_v)
+# --------------------------------------------------------------------------------
+# Here be codegen!
 
+# generate unitful support for the following laws
+# this can be removed when julia support is pinned to 1.3 or higher,
+# at which point adding `(l::ExtinctionLaw)(wave)` is possible, until then
+# using this code-gen does the trick but requires manually editing
+# instead of providing support for all <: ExtinctionLaw
+for law in [CCM89, OD94, CAL00, GCC09, VCG04]
+    (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
+end
 
-#--------------------------------------------------------------------------------
-
-# reddening functions
-"""
-    redden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
-    redden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
-
-Redden the value `f` by the value calculated via the given law and total
-extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way
-average selective attenuation. Note that λ should be in Angstrom if it is not
-a `Quantity`.
-"""
-redden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f * 10^(-0.4 * Av * law(λ, Rv))
-redden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f * (Av * law(λ, Rv))
-
-"""
-    deredden(f::Real, λ::Real, Av; Rv=3.1, law=ccm89)
-    deredden(f::Quantity, λ::Quantity, Av; Rv=3.1, law=ccm89)
-
-Deredden the value `f` by the value calculated via the given law and total
-extinction value `Av`. By default we use `Rv=3.1` which is the Milky Way
-average selective attenuation. Note that λ should be in Angstrom if it is not
-a `Quantity`.
-"""
-deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = ccm89) = f / 10^(-0.4 * Av * law(λ, Rv))
-deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = ccm89) = f / (Av * law(λ, Rv))
-
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 function __init__()
     # register our data dependencies
