@@ -122,8 +122,8 @@ include("dust_maps.jl")
 # at which point adding `(l::ExtinctionLaw)(wave)` is possible, until then
 # using this code-gen does the trick but requires manually editing
 # instead of providing support for all <: ExtinctionLaw
-for law in [:CCM89, :OD94, :CAL00, :GCC09, :VCG04]
-    @eval (l::$law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
+for law in [CCM89, OD94, CAL00, GCC09, VCG04]
+    (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 end
 
 # --------------------------------------------------------------------------------
