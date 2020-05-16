@@ -1,7 +1,7 @@
 name = "DustExtinction"
 uuid = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
 license = "MIT"
-version = "0.6.0"
+version = "0.7.0"
 
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
@@ -13,6 +13,7 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 [compat]
 DataDeps = "0.7"
 FITSIO = "0.13.0, 0.14"
+Parameters = "0.12"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
 julia = "1.0.0"
