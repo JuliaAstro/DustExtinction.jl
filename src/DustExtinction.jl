@@ -30,13 +30,21 @@ The abstract super-type for dust extinction laws. See the extended help (`??Dust
 
 Here's how to make a new extinction law, called `MyLaw`
 1. Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref). 
-       struct MyLaw <: DustExtinction.ExtinctionLaw end
+```julia
+struct MyLaw <: DustExtinction.ExtinctionLaw end
+end
 2. (Optional) Define the limits. This will default to `(0, Inf)`. Currently, this is used within the [`DustExtinction.checkbounds`](@ref) function and in the future will be used for plotting recipes.
-       DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
+```julia
+DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
+```
 3. Define the law. You only need to provide one function which takes wavelength as angstrom. If your law is naturally written for inverse-micron, there is a helper function `aa_to_invum`.
-       (::MyLaw)(wavelength::Real)
+```julia
+(::MyLaw)(wavelength::Real)
+```
 4. (Optional) enable `Unitful.jl` support by adding this function. If you are building a new law within `DustExtinction.jl` you can add your law to the code-gen list inside `DustExtinction.jl/src/DustExtinction.jl`.
-       (l::MyLaw)(wavelength::Unitful.Quantity) = l(ustrip(u"angstrom", wavelength)) * u"mag"
+```julia
+(l::MyLaw)(wavelength::Unitful.Quantity) = l(ustrip(u"angstrom", wavelength)) * u"mag"
+```
 """
 abstract type ExtinctionLaw end
 

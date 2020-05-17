@@ -1,8 +1,8 @@
 
 
 """
-    FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)(λ::Union{Real, Quantity})
-    FM90(coeffs, x0=4.60, gamma=0.9)(λ::Union{Real, Quantity})
+    FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)
+    FM90(coeffs, x0=4.60, gamma=0.9)
 
 Fitzpatrick & Massa (1990) generative model for ultraviolet dust extinction. The default values are the published values for the Milky Way average.
 
@@ -41,6 +41,8 @@ is a Drude profile (modified Lorentzian) used to model the 2175 Å bump with the
 and ``\\gamma`` (damping coefficient), and ``F(x)``, a piecewise function for the far-UV. Note that the coefficients will change
 the overall normalization, possibly changing the expected behavior of reddening via the parameter ``A_V``.
 
+## References
+[Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
 @with_kw struct FM90{T<:Number}  <: ExtinctionLaw @deftype T    
     c1 = 0.10

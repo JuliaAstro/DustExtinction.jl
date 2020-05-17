@@ -37,6 +37,7 @@ There are various citations relevant to this work. Please be considerate when us
 |  [`CAL00`](@ref)   | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)                | [download](assets/cal00.bib) |
 |  [`VCG04`](@ref)   | [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V)    | [download](assets/vcg04.bib) |
 |  [`GCC09`](@ref)   | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)   | [download](assets/gcc09.bib) |
+|  [`FM90`](@ref)   | [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)   | [download](assets/fm90.bib) |
 | [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
 
 ## Index
