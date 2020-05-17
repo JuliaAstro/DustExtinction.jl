@@ -13,7 +13,7 @@ include("fittable_laws.jl")
     for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90]
         @test bounds(LAW) == bounds(LAW())
         @test checkbounds(LAW, 1000) == checkbounds(LAW(), 1000)
-	@test checkbounds(LAW, rand(bounds(LAW)))
+	@test checkbounds(LAW, rand(vcat(bounds(LAW)...)))
     end
     @test bounds(DustExtinction.ExtinctionLaw) == (0, Inf)
 end
