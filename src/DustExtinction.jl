@@ -117,6 +117,7 @@ deredden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux / (A
 include("deprecate.jl")
 include("color_laws.jl")
 include("dust_maps.jl")
+include("fittable_laws.jl")
 
 # --------------------------------------------------------------------------------
 # Here be codegen!
