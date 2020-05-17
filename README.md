@@ -68,7 +68,6 @@ julia> red = redden.(CCM89, wave, flux; Av=0.3, Rv=3.1)
 
 julia> deredden.(CCM89(Rv=3.1), wave, red; Av=0.3)
 2-element Array{Float64,1}:
-2-element Array{Float64,1}:
  1.0
  1.5
 ```
