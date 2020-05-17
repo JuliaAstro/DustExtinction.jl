@@ -7,14 +7,17 @@ using Parameters
 
 export redden,
        deredden,
+       # Rv laws
        CCM89,
        CAL00,
        OD94,
        GCC09,
        VCG04,
+       # Fittable laws
+       FM90,
+       # Dust maps
        SFD98Map,
-       ebv_galactic,
-       FM90
+       ebv_galactic
 
 """
     DustExtinction.ExtinctionLaw
@@ -26,9 +29,9 @@ The abstract super-type for dust extinction laws. See the extended help (`??Dust
 ## Interface
 
 Here's how to make a new extinction law, called `MyLaw`
-1. Create your subtype
+1. Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref). 
        struct MyLaw <: DustExtinction.ExtinctionLaw end
-2. Define the limits. This will default to `(0, Inf)`. Currently this doesn't do anything internally.
+2. (Optional) Define the limits. This will default to `(0, Inf)`. Currently, this is used within the [`DustExtinction.checkbounds`](@ref) function and in the future will be used for plotting recipes.
        DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
 3. Define the law. You only need to provide one function which takes wavelength as angstrom. If your law is naturally written for inverse-micron, there is a helper function `aa_to_invum`.
        (::MyLaw)(wavelength::Real)
@@ -37,7 +40,7 @@ Here's how to make a new extinction law, called `MyLaw`
 """
 abstract type ExtinctionLaw end
 
-Base.broadcastable(law::ExtinctionLaw) = Ref(law)
+Base.broadcastable(law::ExtinctionLaw) = (law,)
 
 """
     DustExtinction.bounds(::ExtinctionLaw)::Tuple
@@ -48,6 +51,12 @@ Get the natural wavelengths bounds for the extinction law, in angstrom
 bounds(::E) where {E <: ExtinctionLaw} = bounds(E)
 bounds(::Type{<:ExtinctionLaw}) = (0, Inf)
 
+"""
+    DustExtinction.checkbounds(::ExtinctionLaw, wavelength)::Bool
+    DustExtinction.checkbounds(::Type{<:ExtinctionLaw, wavelength}::Bool
+
+Helper function that uses [`DustExtinction.bounds`](@ref) to return whether the given wavelength is in the support for the law.
+"""
 checkbounds(::E, wave) where {E <: ExtinctionLaw} = checkbounds(E, wave)
 function checkbounds(E::Type{<:ExtinctionLaw}, wave)
     b = bounds(E)
@@ -117,6 +126,7 @@ deredden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux / (A
 include("deprecate.jl")
 include("color_laws.jl")
 include("dust_maps.jl")
+include("fittable_laws.jl")
 
 # --------------------------------------------------------------------------------
 # Here be codegen!
@@ -126,7 +136,7 @@ include("dust_maps.jl")
 # at which point adding `(l::ExtinctionLaw)(wave::Quantity)` is possible, until then
 # using this code-gen does the trick but requires manually editing
 # instead of providing support for all <: ExtinctionLaw
-for law in [CCM89, OD94, CAL00, GCC09, VCG04]
+for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90]
     (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 end
 
