@@ -32,7 +32,7 @@ Here's how to make a new extinction law, called `MyLaw`
 1. Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref). 
 ```julia
 struct MyLaw <: DustExtinction.ExtinctionLaw end
-end
+```
 2. (Optional) Define the limits. This will default to `(0, Inf)`. Currently, this is used within the [`DustExtinction.checkbounds`](@ref) function and in the future will be used for plotting recipes.
 ```julia
 DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
