@@ -12,7 +12,7 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
 DataDeps = "0.7"
-FITSIO = "0.13.0, 0.14"
+FITSIO = "0.13.0, 0.14, 0.15"
 Parameters = "0.12"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
