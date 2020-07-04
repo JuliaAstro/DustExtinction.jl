@@ -77,8 +77,8 @@ function (law::FM90)(wave::T) where T
     return exvebv
 end
 
-function _p92_single_term(in_lamda, amplitude, cen_wave, b, n)
-    l_norm = in_lamda / cen_wave
+function _p92_single_term(x::Real, amplitude::Real, cen_wave::Real, b::Real, n::Real)
+    l_norm = x / cen_wave
     return amplitude / (l_norm^n + inv(l_norm^n) + b)
 end
 
@@ -112,11 +112,11 @@ end
 P92(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
     NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
     SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
-    FIR_b, FIR_n) = 
+    FIR_b, FIR_n) =
     P92(promote(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
-                  NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
-                  SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
-                  FIR_b, FIR_n)...)
+                NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
+                SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
+                FIR_b, FIR_n)...)
 
 bounds(::Type{<:P92}) = (10, 10000000)
 

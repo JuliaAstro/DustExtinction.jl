@@ -15,7 +15,7 @@ export redden,
        VCG04,
        # Fittable laws
        FM90,
-       P92
+       P92,
        # Dust maps
        SFD98Map,
        ebv_galactic
