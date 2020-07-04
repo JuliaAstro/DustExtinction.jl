@@ -107,6 +107,17 @@ end
     FIR_lambda = 25.0
     FIR_b = 0.00
     FIR_n = 2.0
+    @assert BKG_amp ≥ 0 "`BKG_amp` must be ≥ 0, got $BKG_amp"
+    @assert FUV_amp ≥ 0 "`FUV_amp` must be ≥ 0, got $FUV_amp"
+    @assert 0.06 ≤ FUV_lambda ≤ 0.08 "`FUV_lambda` must be in between [0.06, 0.08], got $FUV_lambda"
+    @assert NUV_amp ≥ 0 "`NUV_amp` must be ≥ 0, got $NUV_amp"
+    @assert 0.20 ≤ NUV_lambda ≤ 0.24 "`NUV_lambda` must be in between [0.20, 0.24], got $NUV_lambda"
+    @assert SIL1_amp ≥ 0 "`SIL1_amp` must be ≥ 0, got $SIL1_amp"
+    @assert 7 ≤ SIL1_lambda ≤ 13 "`SIL1_lambda` must be in between [7, 13], got $SIL1_lambda"
+    @assert SIL2_amp ≥ 0 "`SIL2_amp` must be ≥ 0, got $SIL2_amp"
+    @assert 15 ≤ SIL2_lambda ≤ 21 "`SIL2_lambda` must be in between [15, 21], got $SIL2_lambda"
+    @assert FIR_amp ≥ 0 "`FIR_amp` must be ≥ 0, got $FIR_amp"
+    @assert 20 ≤ FIR_lambda ≤ 30 "`FIR_lambda` must be in between [20, 30], got $FIR_lambda"
 end
 
 P92(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
