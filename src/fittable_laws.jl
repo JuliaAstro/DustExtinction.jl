@@ -44,7 +44,7 @@ the overall normalization, possibly changing the expected behavior of reddening 
 ## References
 [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
-@with_kw struct FM90{T<:Number}  <: ExtinctionLaw @deftype T    
+@with_kw struct FM90{T<:Number}  <: ExtinctionLaw @deftype T
     c1 = 0.10
     c2 = 0.70
     c3 = 3.23
@@ -77,3 +77,61 @@ function (law::FM90)(wave::T) where T
     return exvebv
 end
 
+function _p92_single_term(in_lamda, amplitude, cen_wave, b, n)
+    l_norm = in_lamda / cen_wave
+    return amplitude / (l_norm^n + inv(l_norm^n) + b)
+end
+
+@with_kw struct P92{T<:Number} <: ExtinctionLaw @deftype T
+    BKG_amp = 165.0 * (1 / 3.08 + 1)
+    BKG_lambda = 0.047
+    BKG_b = 90.0
+    BKG_n = 2.0
+    FUV_amp = 14.0 * (1 / 3.08 + 1)
+    FUV_lambda = 0.07
+    FUV_b = 4.0
+    FUV_n = 6.5
+    NUV_amp = 0.045 * (1 / 3.08 + 1)
+    NUV_lambda = 0.22
+    NUV_b = -1.95
+    NUV_n = 2.0
+    SIL1_amp = 0.002 * (1 / 3.08 + 1)
+    SIL1_lambda = 9.7
+    SIL1_b = -1.95
+    SIL1_n = 2.0
+    SIL2_amp = 0.002 * (1 / 3.08 + 1)
+    SIL2_lambda = 18.0
+    SIL2_b = -1.80
+    SIL2_n = 2.0
+    FIR_amp = 0.012 * (1 / 3.08 + 1)
+    FIR_lambda = 25.0
+    FIR_b = 0.00
+    FIR_n = 2.0
+end
+
+P92(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
+    NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
+    SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
+    FIR_b, FIR_n) = 
+    P92(promote(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
+                  NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
+                  SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
+                  FIR_b, FIR_n)...)
+
+bounds(::Type{<:P92}) = (10, 10000000)
+
+function (law::P92)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+
+    x = aa_to_invum(wave)
+    lam = 1.0 / x
+
+    axav = _p92_single_term(lam, law.BKG_amp, law.BKG_lambda, law.BKG_b, law.BKG_n)
+    axav += _p92_single_term(lam, law.FUV_amp, law.FUV_lambda, law.FUV_b, law.FUV_n)
+    axav += _p92_single_term(lam, law.NUV_amp, law.NUV_lambda, law.NUV_b, law.NUV_n)
+    axav += _p92_single_term(lam, law.SIL1_amp, law.SIL1_lambda, law.SIL1_b, law.SIL1_n)
+    axav += _p92_single_term(lam, law.SIL2_amp, law.SIL2_lambda, law.SIL2_b, law.SIL2_n)
+    axav += _p92_single_term(lam, law.FIR_amp, law.FIR_lambda, law.FIR_b, law.FIR_n)
+
+    return axav
+end

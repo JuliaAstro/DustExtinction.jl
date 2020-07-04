@@ -15,6 +15,7 @@ export redden,
        VCG04,
        # Fittable laws
        FM90,
+       P92
        # Dust maps
        SFD98Map,
        ebv_galactic
@@ -29,7 +30,7 @@ The abstract super-type for dust extinction laws. See the extended help (`??Dust
 ## Interface
 
 Here's how to make a new extinction law, called `MyLaw`
-* Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref). 
+* Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref).
 ```julia
 struct MyLaw <: DustExtinction.ExtinctionLaw end
 ```
@@ -144,7 +145,7 @@ include("fittable_laws.jl")
 # at which point adding `(l::ExtinctionLaw)(wave::Quantity)` is possible, until then
 # using this code-gen does the trick but requires manually editing
 # instead of providing support for all <: ExtinctionLaw
-for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90]
+for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, P92]
     (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 end
 
