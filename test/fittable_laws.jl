@@ -53,4 +53,16 @@ end
 
     # testing main part
     @test model.(wave) ≈ ref_values rtol = 0.25 atol = 0.01
+
+    # uncertainties
+    noise = randn(length(wave)) .* 0.01
+    wave_unc = wave .± noise
+    reddening = @inferred broadcast(model, wave_unc)
+    @test Measurements.value.(reddening) ≈ ref_values rtol = 0.25 atol = 0.01
+
+    # Unitful
+    wave_u = wave * u"angstrom"
+    reddening = @inferred broadcast(model, wave_u)
+    @test eltype(reddening) <: Gain
+    @test ustrip.(reddening) ≈ ref_values rtol = 0.25 atol = 0.01
 end
