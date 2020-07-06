@@ -5,6 +5,7 @@ version = "0.7.0"
 
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
+Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
 FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"

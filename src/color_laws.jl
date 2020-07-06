@@ -1,3 +1,5 @@
+using Dierckx
+
 # Convenience function for wavelength conversion
 @inline aa_to_invum(wave::Real) = 10000 / wave
 
@@ -227,4 +229,145 @@ function gcc09_invum(x::Real, Rv::Real)
     end
 
     return a + b / Rv
+end
+
+# Shape models used by F99 and F04
+function _curve_F99_method(
+    x,
+    Rv,
+    c1,
+    c2,
+    c3,
+    c4,
+    x0,
+    gamma,
+    optnir_axav_x,
+    optnir_axav_y,
+    )
+
+    # x value above which FM90 parametrization used
+    x_cutval_uv = 10000.0 / 2700.0
+
+    # required UV points for spline interpolation
+    x_splineval_uv = 10000.0 ./ [2700.0, 2600.0]
+
+    # UV points in input x
+    indxs_uv = (x >= x_cutval_uv)
+
+    # add in required spline points, otherwise just spline points
+    if indxs_uv
+        xuv = vcat(x_splineval_uv, x)
+    else
+        xuv = x_splineval_uv
+    end
+
+    # FM90 model and values
+    fm90_model = FM90(c1=c1, c2=c2, c3=c3, c4=c4, x0=x0, gamma=gamma)
+    # evaluate model and get results in A(x)/A(V)
+    axav_fm90 = fm90_model.( 10000.0 ./ xuv ) / Rv .+ 1.0 # Expects xuv in Å
+
+    # ignore the spline points
+    if indxs_uv
+        axav = axav_fm90[3:end][1]
+    end
+
+    # **Optical Portion**
+    #   using cubic spline anchored in UV, optical, and IR
+
+    # optical/NIR points in input x
+    indxs_opir = (x < x_cutval_uv)
+
+    if indxs_opir
+        # save spline points
+        y_splineval_uv = axav_fm90[1:2]
+
+        # spline points
+        x_splineval_optir = optnir_axav_x
+
+        # determine optical/IR values at spline points
+        y_splineval_optir = optnir_axav_y
+
+        spline_x = vcat(x_splineval_optir, x_splineval_uv)
+        spline_y = vcat(y_splineval_optir, y_splineval_uv)
+        spl = Spline1D(spline_x, spline_y, k=3)
+        axav = spl(x)
+    end
+
+    # return A(x)/A(V)
+    return axav
+end
+
+"""
+    F99(;Rv=3.1)
+
+Fitzpatrick (1999) dust law.
+
+# References
+[Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
+"""
+@with_kw struct F99 <: ExtinctionLaw
+    Rv::Float64 = 3.1
+end
+
+function (law::F99)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return f99_invum(x, law.Rv)
+end
+
+bounds(::Type{F99}) = (1000.0, 33333.3)
+
+"""
+    DustExtinction.f99_invum(x, Rv)
+
+The algorithm used for the [`F99`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+"""
+function f99_invum(x::Real, Rv::Real)
+    # constant terms
+    c3 = 3.23
+    c4 = 0.41
+    x0 = 4.596
+    gamma = 0.99
+
+    # terms depending on Rv
+    c2 = -0.824 + 4.717 / Rv
+    # original F99 c1-c2 correlation
+    c1 = 2.030 - 3.007 * c2
+
+    # spline points
+    optnir_axav_x = 10000.0 ./
+        [26500.0, 12200.0, 6000.0, 5470.0, 4670.0, 4110.0]
+
+    # determine optical/IR values at spline points
+    #    Final optical spline point has a leading "-1.208" in Table 4
+    #    of F99, but that does not reproduce Table 3.
+    #    Additional indication that this is not correct is from
+    #    fm_unred.pro
+    #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
+    #    --> confirmation needed?
+    #
+    #    Also, fm_unred.pro has different coeff and # of terms,
+    #    but later work does not include these terms
+    #    --> check with Fitzpatrick?
+    opt_axebv_y = [
+        -0.426 + 1.0044 * Rv,
+        -0.050 + 1.0016 * Rv,
+         0.701 + 1.0016 * Rv,
+         1.208 + 1.0032 * Rv - 0.00033 * (Rv^2),
+    ]
+    nir_axebv_y = [0.265, 0.829] * Rv / 3.1
+    optnir_axebv_y = vcat(nir_axebv_y, opt_axebv_y)
+
+    return _curve_F99_method(
+            x,
+            Rv,
+            c1,
+            c2,
+            c3,
+            c4,
+            x0,
+            gamma,
+            optnir_axav_x,
+            optnir_axebv_y / Rv,
+        )
 end
