@@ -251,11 +251,8 @@ function _curve_F99_method(
     # required UV points for spline interpolation
     x_splineval_uv = 10000.0 ./ [2700.0, 2600.0]
 
-    # UV points in input x
-    indxs_uv = (x >= x_cutval_uv)
-
     # add in required spline points, otherwise just spline points
-    if indxs_uv
+    if (x >= x_cutval_uv)
         xuv = vcat(x_splineval_uv, x)
     else
         xuv = x_splineval_uv
@@ -264,20 +261,18 @@ function _curve_F99_method(
     # FM90 model and values
     fm90_model = FM90(c1=c1, c2=c2, c3=c3, c4=c4, x0=x0, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
-    axav_fm90 = fm90_model.( 10000.0 ./ xuv ) / Rv .+ 1.0 # Expects xuv in Å
+    axav_fm90 = fm90_model.(10000.0 ./ xuv) / Rv .+ 1.0 # Expects xuv in Å
 
     # ignore the spline points
-    if indxs_uv
-        axav = axav_fm90[3:end][1]
+    if (x >= x_cutval_uv)
+        axav = last(axav_fm90)
     end
 
     # **Optical Portion**
     #   using cubic spline anchored in UV, optical, and IR
 
     # optical/NIR points in input x
-    indxs_opir = (x < x_cutval_uv)
-
-    if indxs_opir
+    if (x < x_cutval_uv)
         # save spline points
         y_splineval_uv = axav_fm90[1:2]
 
