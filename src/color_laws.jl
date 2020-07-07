@@ -266,13 +266,12 @@ function _curve_F99_method(
     # ignore the spline points
     if x >= x_cutval_uv
         axav = last(axav_fm90)
-    end
+    else
+        # **Optical Portion**
+        # using cubic spline anchored in UV, optical, and IR
 
-    # **Optical Portion**
-    #   using cubic spline anchored in UV, optical, and IR
+        # optical/NIR points in input x
 
-    # optical/NIR points in input x
-    if x < x_cutval_uv
         # save spline points
         y_splineval_uv = axav_fm90
 
@@ -281,7 +280,6 @@ function _curve_F99_method(
 
         # determine optical/IR values at spline points
         y_splineval_optir = optnir_axav_y
-
         spline_x = vcat(x_splineval_optir, x_splineval_uv)
         spline_y = vcat(y_splineval_optir, y_splineval_uv)
         spl = Spline1D(spline_x, spline_y, k=3)
