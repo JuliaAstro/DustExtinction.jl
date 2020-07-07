@@ -274,10 +274,10 @@ end
         @test_throws ErrorException f99_invum(bad_xs[2], rv)
 
         # uncertainties
-        #noise = randn(length(wave)) .* 0.01
-        #wave_unc = wave .± noise
-        #reddening = @inferred map(law, wave_unc)
-        #@test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
+        noise = rand(length(wave)) .* 0.01
+        wave_unc = wave .± noise
+        reddening = map(w -> @uncertain(law(w)), wave_unc)
+        @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 1e-3
 
         # Unitful
         wave_u = wave * u"angstrom"
