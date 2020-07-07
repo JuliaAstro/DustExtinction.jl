@@ -5,7 +5,8 @@ using DustExtinction: ccm89_invum,
                       gcc09_invum,
                       aa_to_invum,
                       ccm89_ca,
-                      ccm89_cb
+                      ccm89_cb,
+                      f99_invum
 
 @testset "helper" begin
     @test aa_to_invum(10000) ≈ 1
@@ -244,6 +245,43 @@ end
         # Unitful
         wave_u = wave * u"angstrom"
         reddening = @inferred broadcast(law, wave_u)
+        @test eltype(reddening) <: Gain
+        @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
+    end
+end
+
+@testset "F99" begin
+    # From Fitzpatrick (1999) Table 3
+
+    x_inv_microns = [0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846]
+    wave = 1e4 ./ x_inv_microns
+
+    ref_values = Dict(
+        3.1 => [0.265, 0.829, 2.688, 3.055, 3.806, 4.315, 6.265, 6.591] ./ 3.1,
+    )
+
+    # test defaults
+    @test F99().(wave) ≈ ref_values[3.1] rtol = 0.016
+
+    for rv in keys(ref_values)
+        law = F99(Rv = rv)
+        output = @inferred map(law, wave)
+        @test output ≈ ref_values[rv] rtol = 0.016
+
+        bad_xs = [0.2, 11.0]
+        @test @inferred(map(law, bad_xs)) == zeros(length(bad_xs))
+        @test_throws ErrorException f99_invum(bad_xs[1], rv)
+        @test_throws ErrorException f99_invum(bad_xs[2], rv)
+
+        # uncertainties
+        #noise = randn(length(wave)) .* 0.01
+        #wave_unc = wave .± noise
+        #reddening = @inferred map(law, wave_unc)
+        #@test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 0.016
+
+        # Unitful
+        wave_u = wave * u"angstrom"
+        reddening = @inferred map(law, wave_u)
         @test eltype(reddening) <: Gain
         @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
     end
