@@ -295,6 +295,12 @@ end
 
 Fitzpatrick (1999) dust law.
 
+Returns E(B-V) in magnitudes at the given wavelength relative to the
+extinction. This model applies to the UV and optical to NIR spectral range.
+The default support is [1000, 33333] Å. Outside of that range this will return
+0. Rv is the selective extinction and is valid over [2, 6]. A typical value for
+the Milky Way is 3.1.
+
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
