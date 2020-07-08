@@ -322,10 +322,6 @@ bounds(::Type{F99}) = (1000.0, 33333.3)
 The algorithm used for the [`F99`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
 """
 function f99_invum(x::Real, Rv::Real)
-    if !(0.3 <= x <= 10.0)
-        error("out of bounds of F99, support is over $(bounds(F99)) angstrom")
-    end
-
     # constant terms
     c3 = 3.23
     c4 = 0.41

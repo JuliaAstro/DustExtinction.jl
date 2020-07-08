@@ -268,11 +268,6 @@ end
         output = @inferred map(law, wave)
         @test output ≈ ref_values[rv] rtol = 0.016
 
-        bad_xs = [0.2, 11.0]
-        @test @inferred(map(law, bad_xs)) == zeros(length(bad_xs))
-        @test_throws ErrorException f99_invum(bad_xs[1], rv)
-        @test_throws ErrorException f99_invum(bad_xs[2], rv)
-
         # uncertainties
         noise = rand(length(wave)) .* 0.01
         wave_unc = wave .± noise
