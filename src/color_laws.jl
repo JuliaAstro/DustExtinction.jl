@@ -270,7 +270,7 @@ function _curve_F99_method(
     # FM90 model and values
     fm90_model = FM90(c1=c1, c2=c2, c3=c3, c4=c4, x0=x0, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
-    axav_fm90 = @. fm90_model(aa_to_invum(xuv)) / Rv + 1 # Expects xuv in Å
+    axav_fm90 = @. fm90_model(aa_to_invum(xuv)) / Rv + 1
 
     # ignore the spline points
     if x >= f99_x_cutval_uv
