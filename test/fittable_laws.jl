@@ -46,23 +46,31 @@ end
     ref_values = MW_exvebv ./ Rv .+ 1
 
     model = P92()
+    model1 = P92(FUV_b = 4.0)
 
     # Test out of bounds
     bad_waves = [9, 1e8]
     @test model.(bad_waves) == zeros(length(bad_waves))
+    @test model1.(bad_waves) == zeros(length(bad_waves))
 
     # testing main part
     @test model.(wave) ≈ ref_values rtol = 0.25 atol = 0.01
+    @test model1.(wave) ≈ ref_values rtol = 0.25 atol = 0.01
 
     # uncertainties
     noise = randn(length(wave)) .* 0.01
     wave_unc = wave .± noise
     reddening = @inferred broadcast(model, wave_unc)
+    reddening1 = @inferred broadcast(model1, wave_unc)
     @test Measurements.value.(reddening) ≈ ref_values rtol = 0.25 atol = 0.01
+    @test Measurements.value.(reddening1) ≈ ref_values rtol = 0.25 atol = 0.01
 
     # Unitful
     wave_u = wave * u"angstrom"
     reddening = @inferred broadcast(model, wave_u)
+    reddening1 = @inferred broadcast(model1, wave_u)
     @test eltype(reddening) <: Gain
+    @test eltype(reddening1) <: Gain
     @test ustrip.(reddening) ≈ ref_values rtol = 0.25 atol = 0.01
+    @test ustrip.(reddening1) ≈ ref_values rtol = 0.25 atol = 0.01
 end
