@@ -12,6 +12,21 @@ const ccm89_cb = [0.0, 1.41338, 2.28305, 1.07233, -5.38434, -0.62251, 5.3026, -2
 const od94_ca = [1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505]
 const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347]
 
+# x value above which FM90 parametrization used
+const f99_x_cutval_uv = aa_to_invum(2700)
+
+# required UV points for spline interpolation
+const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
+
+# spline points
+const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
+
+# c1-c2 correlation terms
+const c3 = 3.23
+const c4 = 0.41
+const x0 = 4.596
+const gamma = 0.99
+
 """
     CCM89(;Rv=3.1)
 
@@ -233,38 +248,32 @@ end
 
 # Shape models used by F99 and F04
 function _curve_F99_method(
-    x::Real,
-    Rv::Real,
-    c1::Real,
-    c2::Real,
-    c3::Real,
-    c4::Real,
-    x0::Real,
-    gamma::Real,
-    optnir_axav_x::Vector{<:Real},
-    optnir_axav_y::Vector{<:Real},
+    x,
+    Rv,
+    c1,
+    c2,
+    c3,
+    c4,
+    x0,
+    gamma,
+    f99_optnir_axav_x,
+    optnir_axav_y,
     )
 
-    # x value above which FM90 parametrization used
-    x_cutval_uv = 10000.0 / 2700.0
-
-    # required UV points for spline interpolation
-    x_splineval_uv = 10000.0 ./ [2700.0, 2600.0]
-
     # add in required spline points, otherwise just spline points
-    if x >= x_cutval_uv
-        xuv = vcat(x_splineval_uv, x)
+    if x >= f99_x_cutval_uv
+        xuv = (f99_x_splineval_uv..., x)
     else
-        xuv = x_splineval_uv
+        xuv = f99_x_splineval_uv
     end
 
     # FM90 model and values
     fm90_model = FM90(c1=c1, c2=c2, c3=c3, c4=c4, x0=x0, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
-    axav_fm90 = fm90_model.(10000.0 ./ xuv) / Rv .+ 1.0 # Expects xuv in Å
+    axav_fm90 = @. fm90_model(aa_to_invum(xuv)) / Rv + 1 # Expects xuv in Å
 
     # ignore the spline points
-    if x >= x_cutval_uv
+    if x >= f99_x_cutval_uv
         axav = last(axav_fm90)
     else
         # **Optical Portion**
@@ -276,13 +285,13 @@ function _curve_F99_method(
         y_splineval_uv = axav_fm90
 
         # spline points
-        x_splineval_optir = optnir_axav_x
+        x_splineval_optir = f99_optnir_axav_x
 
         # determine optical/IR values at spline points
         y_splineval_optir = optnir_axav_y
-        spline_x = vcat(x_splineval_optir, x_splineval_uv)
-        spline_y = vcat(y_splineval_optir, y_splineval_uv)
-        spl = Spline1D(spline_x, spline_y, k=3)
+        spline_x = (x_splineval_optir..., f99_x_splineval_uv...)
+        spline_y = (y_splineval_optir..., y_splineval_uv...)
+        spl = Spline1D(collect(spline_x), collect(spline_y), k=3)
         axav = spl(x)
     end
 
@@ -322,20 +331,12 @@ bounds(::Type{F99}) = (1000.0, 33333.3)
 The algorithm used for the [`F99`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
 """
 function f99_invum(x::Real, Rv::Real)
-    # constant terms
-    c3 = 3.23
-    c4 = 0.41
-    x0 = 4.596
-    gamma = 0.99
 
     # terms depending on Rv
     c2 = -0.824 + 4.717 / Rv
     # original F99 c1-c2 correlation
     c1 = 2.030 - 3.007 * c2
 
-    # spline points
-    optnir_axav_x = 10000.0 ./
-        [26500.0, 12200.0, 6000.0, 5470.0, 4670.0, 4110.0]
 
     # determine optical/IR values at spline points
     #    Final optical spline point has a leading "-1.208" in Table 4
@@ -348,14 +349,14 @@ function f99_invum(x::Real, Rv::Real)
     #    Also, fm_unred.pro has different coeff and # of terms,
     #    but later work does not include these terms
     #    --> check with Fitzpatrick?
-    opt_axebv_y = [
+    opt_axebv_y = (
         -0.426 + 1.0044 * Rv,
         -0.050 + 1.0016 * Rv,
          0.701 + 1.0016 * Rv,
          1.208 + 1.0032 * Rv - 0.00033 * (Rv^2),
-    ]
-    nir_axebv_y = [0.265, 0.829] * Rv / 3.1
-    optnir_axebv_y = vcat(nir_axebv_y, opt_axebv_y) / Rv
+    )
+    nir_axebv_y = @. (0.265, 0.829) * Rv / 3.1
+    optnir_axebv_y = @. (nir_axebv_y..., opt_axebv_y...) / Rv
 
     return _curve_F99_method(
             x,
@@ -366,7 +367,7 @@ function f99_invum(x::Real, Rv::Real)
             c4,
             x0,
             gamma,
-            optnir_axav_x,
+            f99_optnir_axav_x,
             optnir_axebv_y,
         )
 end
