@@ -30,7 +30,7 @@ const f99_nir_axebv_y_params = @. (0.265, 0.829) / 3.1
 
 # c1-c2 correlation terms
 const f99_Rv_params = (-0.824, 4.717)
-const f99_c2_params = (2.030, - 3.007)
+const f99_c1_params = (2.030, - 3.007)
 const f99_c3 = 3.23
 const f99_c4 = 0.41
 const f99_x0 = 4.596
@@ -347,7 +347,7 @@ function f99_invum(x::Real, Rv::Real)
     # terms depending on Rv
     c2 = @evalpoly (1. / Rv) f99_Rv_params...
     # original F99 c1-c2 correlation
-    c1 = @evalpoly c2 f99_c2_params...
+    c1 = @evalpoly c2 f99_c1_params...
 
     # determine optical/IR values at spline points
     #    Final optical spline point has a leading "-1.208" in Table 4
