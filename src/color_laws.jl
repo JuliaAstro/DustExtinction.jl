@@ -22,10 +22,10 @@ const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
 const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
 
 # c1-c2 correlation terms
-const c3 = 3.23
-const c4 = 0.41
-const x0 = 4.596
-const gamma = 0.99
+const f99_c3 = 3.23
+const f99_c4 = 0.41
+const f99_x0 = 4.596
+const f99_gamma = 0.99
 
 """
     CCM89(;Rv=3.1)
@@ -366,10 +366,10 @@ function f99_invum(x::Real, Rv::Real)
             Rv,
             c1,
             c2,
-            c3,
-            c4,
-            x0,
-            gamma,
+            f99_c3,
+            f99_c4,
+            f99_x0,
+            f99_gamma,
             f99_optnir_axav_x,
             optnir_axebv_y,
         )
