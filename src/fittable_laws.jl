@@ -77,11 +77,68 @@ function (law::FM90)(wave::T) where T
     return exvebv
 end
 
-function _p92_single_term(x::Real, amplitude::Real, cen_wave::Real, b::Real, n::Real)
-    l_norm = x / cen_wave
-    return amplitude / (l_norm^n + inv(l_norm^n) + b)
-end
 
+"""
+    P92(BKG_amp=218.57142857142858, BKG_lambda=0.047, BKG_b=90.0, BKG_n=2.0, FUV_amp=18.545454545454547, FUV_lambda=0.07,
+        FUV_b=4.0, FUV_n=6.5, NUV_amp=0.05961038961038961, NUV_lambda=0.22, NUV_b= -1.95, NUV_n=2.0, SIL1_amp=0.0026493506493506496,
+        SIL1_lambda=9.7, SIL1_b=-1.95, SIL1_n=2.0, SIL2_amp=0.0026493506493506496, SIL2_lambda=18.0, SIL2_b= -1.8, SIL2_n=2.0,
+        FIR_amp=0.015896103896103898, FIR_lambda=25.0, FIR_b=0.0, FIR_n=2.0)
+
+Pei (1992) generative model applicable from the extreme UV to far-IR.
+
+## Parameters
+
+* `BKG_amp` - background term amplitude
+* `BKG_lambda` - background term central wavelength
+* `BKG_b` - background term b coefficient
+* `BKG_n` - background term n coefficient
+
+* `FUV_amp` - far-ultraviolet term amplitude
+* `FUV_lambda` - far-ultraviolet term central wavelength
+* `FUV_b` - far-ultraviolet term b coefficent
+* `FUV_n` - far-ultraviolet term n coefficient
+
+* `NUV_amp` - near-ultraviolet (2175 Å) term amplitude
+* `NUV_lambda` - near-ultraviolet (2175 Å) term central wavelength
+* `NUV_b` - near-ultraviolet (2175 Å) term b coefficent
+* `NUV_n` - near-ultraviolet (2175 Å) term n coefficient
+
+* `SIL1_amp` - 1st silicate feature (~10 micron) term amplitude
+* `SIL1_lambda` - 1st silicate feature (~10 micron) term central wavelength
+* `SIL1_b` - 1st silicate feature (~10 micron) term b coefficent
+* `SIL1_n` - 1st silicate feature (~10 micron) term n coefficient
+
+* `SIL2_amp` - 2nd silicate feature (~18 micron) term amplitude
+* `SIL2_lambda` - 2nd silicate feature (~18 micron) term central wavelength
+* `SIL2_b` - 2nd silicate feature (~18 micron) term b coefficient
+* `SIL2_n` - 2nd silicate feature (~18 micron) term n coefficient
+
+* `FIR_amp` - far-infrared term amplitude
+* `FIR_lambda` - far-infrared term central wavelength
+* `FIR_b` - far-infrared term b coefficent
+* `FIR_n` - far-infrared term n coefficient
+
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
+returned value will be `UnitfulAstro.mag`.
+
+## Examples
+```jldoctest
+julia> model = P92();
+
+julia> model(1500)
+2.396291891812002
+
+julia> P92(FUV_b = 2.0).([1000, 2000, 3000])
+3-element Array{Float64,1}:
+ 3.8390886792306187
+ 2.7304534614548697
+ 1.806181164464396
+
+```
+
+## References
+[Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P)
+"""
 @with_kw struct P92{T<:Number} <: ExtinctionLaw @deftype T
     BKG_amp = 165.0 * (1 / 3.08 + 1)
     BKG_lambda = 0.047
@@ -145,4 +202,10 @@ function (law::P92)(wave::T) where T
     axav += _p92_single_term(lam, law.FIR_amp, law.FIR_lambda, law.FIR_b, law.FIR_n)
 
     return axav
+end
+
+# function for calculating a single P92 term
+function _p92_single_term(x::Real, amplitude::Real, cen_wave::Real, b::Real, n::Real)
+    l_norm = x / cen_wave
+    return amplitude / (l_norm^n + inv(l_norm^n) + b)
 end

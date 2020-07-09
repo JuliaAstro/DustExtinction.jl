@@ -192,3 +192,11 @@ DustExtinction.bounds
 ```@docs
 FM90
 ```
+
+#### Pei (1992)
+
+![](assets/P92_plot.svg)
+
+```@docs
+P92
+```
