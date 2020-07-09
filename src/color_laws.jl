@@ -20,12 +20,22 @@ const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
 
 # spline points
 const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
+const opt_axebv_y_params = (
+    (-0.426, +1.0044, +0.00000),
+    (-0.050, +1.0016, +0.00000),
+    (+0.701, +1.0016, +0.00000),
+    (+1.208, +1.0032, -0.00033),
+)
+const nir_axebv_y_params = @. (0.265, 0.829) / 3.1
 
 # c1-c2 correlation terms
+const f99_Rv_params = (-0.824, 4.717)
+const f99_c2_params = (2.030, - 3.007)
 const f99_c3 = 3.23
 const f99_c4 = 0.41
 const f99_x0 = 4.596
 const f99_gamma = 0.99
+
 
 """
     CCM89(;Rv=3.1)
@@ -336,10 +346,9 @@ function f99_invum(x::Real, Rv::Real)
     end
 
     # terms depending on Rv
-    c2 = -0.824 + 4.717 / Rv
+    c2 = @evalpoly (1. / Rv) f99_Rv_params...
     # original F99 c1-c2 correlation
-    c1 = 2.030 - 3.007 * c2
-
+    c1 = @evalpoly c2 f99_c2_params...
 
     # determine optical/IR values at spline points
     #    Final optical spline point has a leading "-1.208" in Table 4
@@ -352,13 +361,8 @@ function f99_invum(x::Real, Rv::Real)
     #    Also, fm_unred.pro has different coeff and # of terms,
     #    but later work does not include these terms
     #    --> check with Fitzpatrick?
-    opt_axebv_y = (
-        -0.426 + 1.0044 * Rv,
-        -0.050 + 1.0016 * Rv,
-         0.701 + 1.0016 * Rv,
-         1.208 + 1.0032 * Rv - 0.00033 * (Rv^2),
-    )
-    nir_axebv_y = @. (0.265, 0.829) * Rv / 3.1
+    opt_axebv_y = evalpoly.(Rv, opt_axebv_y_params)
+    nir_axebv_y = @. nir_axebv_y_params * Rv
     optnir_axebv_y = @. (nir_axebv_y..., opt_axebv_y...) / Rv
 
     return _curve_F99_method(
