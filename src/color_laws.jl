@@ -36,7 +36,6 @@ const f99_c4 = 0.41
 const f99_x0 = 4.596
 const f99_gamma = 0.99
 
-
 """
     CCM89(;Rv=3.1)
 
@@ -295,10 +294,10 @@ function _curve_F99_method(
         y_splineval_uv = axav_fm90
 
         # spline points
-        x_splineval_optir = f99_optnir_axav_x
+        x_splineval_optir = (0.0, f99_optnir_axav_x...)
 
         # determine optical/IR values at spline points
-        y_splineval_optir = optnir_axav_y
+        y_splineval_optir = (0.0, optnir_axav_y...)
         spline_x = (x_splineval_optir..., f99_x_splineval_uv...)
         spline_y = (y_splineval_optir..., y_splineval_uv...)
         spl = Spline1D(collect(spline_x), collect(spline_y), k=3)
