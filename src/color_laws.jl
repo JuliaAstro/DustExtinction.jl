@@ -20,12 +20,6 @@ const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
 
 # spline points
 const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
-const f99_opt_axebv_y_params = (
-    (-0.426, +1.0044, +0.00000),
-    (-0.050, +1.0016, +0.00000),
-    (+0.701, +1.0016, +0.00000),
-    (+1.208, +1.0032, -0.00033),
-)
 const f99_nir_axebv_y_params = @. (0.265, 0.829) / 3.1
 
 # c1-c2 correlation terms
@@ -360,7 +354,12 @@ function f99_invum(x::Real, Rv::Real)
     #    Also, fm_unred.pro has different coeff and # of terms,
     #    but later work does not include these terms
     #    --> check with Fitzpatrick?
-    opt_axebv_y = evalpoly.(Rv, f99_opt_axebv_y_params)
+    opt_axebv_y =
+        (@evalpoly Rv -0.426 1.0044),
+        (@evalpoly Rv -0.050 1.0016),
+        (@evalpoly Rv  0.701 1.0016),
+        (@evalpoly Rv  1.208 1.0032 -0.00033)
+
     nir_axebv_y = @. f99_nir_axebv_y_params * Rv
     optnir_axebv_y = @. (nir_axebv_y..., opt_axebv_y...) / Rv
 
