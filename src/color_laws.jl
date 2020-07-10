@@ -12,22 +12,6 @@ const ccm89_cb = [0.0, 1.41338, 2.28305, 1.07233, -5.38434, -0.62251, 5.3026, -2
 const od94_ca = [1.0, 0.104, -0.609, 0.701, 1.137, -1.718, -0.827, 1.647, -0.505]
 const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.347]
 
-# x value above which FM90 parametrization used
-const f99_x_cutval_uv = aa_to_invum(2700)
-
-# required UV points for spline interpolation
-const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
-
-# spline points
-const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
-const f99_nir_axebv_y_params = @. (0.265, 0.829) / 3.1
-
-# c1-c2 correlation terms
-const f99_c3 = 3.23
-const f99_c4 = 0.41
-const f99_x0 = 4.596
-const f99_gamma = 0.99
-
 """
     CCM89(;Rv=3.1)
 
@@ -299,6 +283,22 @@ function _curve_F99_method(
     # return A(x)/A(V)
     return axav
 end
+
+# x value above which FM90 parametrization used
+const f99_x_cutval_uv = aa_to_invum(2700)
+
+# required UV points for spline interpolation
+const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
+
+# spline points
+const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
+const f99_nir_axebv_y_params = @. (0.265, 0.829) / 3.1
+
+# c1-c2 correlation terms
+const f99_c3 = 3.23
+const f99_c4 = 0.41
+const f99_x0 = 4.596
+const f99_gamma = 0.99
 
 """
     F99(;Rv=3.1)
