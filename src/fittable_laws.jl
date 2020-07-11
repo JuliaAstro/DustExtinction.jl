@@ -88,38 +88,43 @@ Pei (1992) generative model applicable from the extreme UV to far-IR.
 
 ## Parameters
 
-* `BKG_amp` - background term amplitude
-* `BKG_lambda` - background term central wavelength
-* `BKG_b` - background term b coefficient
-* `BKG_n` - background term n coefficient
+Background Terms
+* `BKG_amp` - amplitude
+* `BKG_lambda` - central wavelength
+* `BKG_b` - b coefficient
+* `BKG_n` - n coefficient
 
-* `FUV_amp` - far-ultraviolet term amplitude
-* `FUV_lambda` - far-ultraviolet term central wavelength
-* `FUV_b` - far-ultraviolet term b coefficent
-* `FUV_n` - far-ultraviolet term n coefficient
+Far-Ultraviolet Terms
+* `FUV_amp` - amplitude
+* `FUV_lambda` - central wavelength
+* `FUV_b` - b coefficent
+* `FUV_n` - n coefficient
 
-* `NUV_amp` - near-ultraviolet (2175 Å) term amplitude
-* `NUV_lambda` - near-ultraviolet (2175 Å) term central wavelength
-* `NUV_b` - near-ultraviolet (2175 Å) term b coefficent
-* `NUV_n` - near-ultraviolet (2175 Å) term n coefficient
+Near-Ultraviolet (2175 Å) Terms
+* `NUV_amp` - amplitude
+* `NUV_lambda` - central wavelength
+* `NUV_b` - b coefficent
+* `NUV_n` - n coefficient
 
-* `SIL1_amp` - 1st silicate feature (~10 micron) term amplitude
-* `SIL1_lambda` - 1st silicate feature (~10 micron) term central wavelength
-* `SIL1_b` - 1st silicate feature (~10 micron) term b coefficent
-* `SIL1_n` - 1st silicate feature (~10 micron) term n coefficient
+1st Silicate Feature (~10 micron) Terms
+* `SIL1_amp` - amplitude
+* `SIL1_lambda` - central wavelength
+* `SIL1_b` - b coefficent
+* `SIL1_n` - n coefficient
 
-* `SIL2_amp` - 2nd silicate feature (~18 micron) term amplitude
-* `SIL2_lambda` - 2nd silicate feature (~18 micron) term central wavelength
-* `SIL2_b` - 2nd silicate feature (~18 micron) term b coefficient
-* `SIL2_n` - 2nd silicate feature (~18 micron) term n coefficient
+2nd Silicate Feature (~18 micron) Terms
+* `SIL2_amp` - amplitude
+* `SIL2_lambda` - central wavelength
+* `SIL2_b` - b coefficient
+* `SIL2_n` - n coefficient
 
-* `FIR_amp` - far-infrared term amplitude
-* `FIR_lambda` - far-infrared term central wavelength
-* `FIR_b` - far-infrared term b coefficent
-* `FIR_n` - far-infrared term n coefficient
+Far-Infrared Terms
+* `FIR_amp` - amplitude
+* `FIR_lambda` - central wavelength
+* `FIR_b` - b coefficent
+* `FIR_n` - n coefficient
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
-returned value will be `UnitfulAstro.mag`.
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the returned value will be `UnitfulAstro.mag`.
 
 ## Examples
 ```jldoctest
@@ -135,6 +140,18 @@ julia> P92(FUV_b = 2.0).([1000, 2000, 3000])
  1.806181164464396
 
 ```
+
+## Default Parameter Values
+
+|Term |lambda|A|b|n|
+|:---:|:---:|:---:|:---:|:---:|
+|BKG  |0.047 |218.57142857142858   |90   |2  |
+|FUV  |0.07  |18.545454545454547   |4.0  |6.5|
+|NUV  |0.22  |0.05961038961038961  |-1.95|2.0|
+|SIL1 |9.7   |0.0026493506493506496|-1.95|2.0|
+|SIL2 |18.0  |0.0026493506493506496|-1.8 |2.0|
+|FIR  |25.0  |0.015896103896103898 |0.0  |2.0|
+
 
 ## References
 [Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P)
@@ -192,7 +209,7 @@ function (law::P92)(wave::T) where T
     checkbounds(law, wave) || return zero(float(T))
 
     x = aa_to_invum(wave)
-    lam = 1.0 / x
+    lam = 1.0 / x # wavelength is in microns
 
     axav = _p92_single_term(lam, law.BKG_amp, law.BKG_lambda, law.BKG_b, law.BKG_n)
     axav += _p92_single_term(lam, law.FUV_amp, law.FUV_lambda, law.FUV_b, law.FUV_n)
