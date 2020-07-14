@@ -267,9 +267,6 @@ function _curve_F99_method(
         axav = last(axav_fm90)
     else
         # **Optical Portion**
-        # using cubic spline anchored in UV, optical, and IR
-
-        # optical/NIR points in input x
 
         # save spline points
         y_splineval_uv = axav_fm90
