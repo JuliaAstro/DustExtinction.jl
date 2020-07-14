@@ -39,6 +39,7 @@ There are various citations relevant to this work. Please be considerate when us
 |  [`GCC09`](@ref)   | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)   | [download](assets/gcc09.bib) |
 |  [`FM90`](@ref)   | [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)   | [download](assets/fm90.bib) |
 | [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
+| [`F19`](@ref) | [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F) | [download](assets/f19.bib) |
 
 ## Index
 
