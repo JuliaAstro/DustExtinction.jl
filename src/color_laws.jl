@@ -231,6 +231,11 @@ function gcc09_invum(x::Real, Rv::Real)
     return a + b / Rv
 end
 
+# x value above which FM90 parametrization used
+const f99_x_cutval_uv = aa_to_invum(2700)
+# required UV points for spline interpolation
+const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
+
 # Shape models used by F99 and F04
 function _curve_F99_method(
     x,
@@ -284,11 +289,6 @@ function _curve_F99_method(
     return axav
 end
 
-# x value above which FM90 parametrization used
-const f99_x_cutval_uv = aa_to_invum(2700)
-
-# required UV points for spline interpolation
-const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
 
 # spline points
 const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
