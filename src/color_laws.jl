@@ -289,7 +289,6 @@ function _curve_F99_method(
     return axav
 end
 
-
 # spline points
 const f99_optnir_axav_x = aa_to_invum.((26500, 12200, 6000, 5470, 4670, 4110))
 const f99_nir_axebv_y_params = @. (0.265, 0.829) / 3.1
