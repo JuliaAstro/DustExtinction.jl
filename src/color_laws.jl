@@ -343,7 +343,6 @@ function f04_invum(x::Real, Rv::Real)
     # updated F04 C1-C2 correlation
     c1 = @evalpoly c2 2.18 -2.91
 
-
     # **Keep optical spline points from F99:
     #    Final optical spline point has a leading "-1.208" in Table 4
     #    of F99, but that does not reproduce Table 3.
