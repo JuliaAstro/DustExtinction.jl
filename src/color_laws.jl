@@ -357,6 +357,7 @@ function f04_invum(x::Real, Rv::Real)
         (@evalpoly Rv  1.208 1.0032 -0.00033)
 
     # updated NIR curve from F04, note R dependence
+    # Julia v1.0 workaround: https://github.com/JuliaAstro/DustExtinction.jl/pull/31#commitcomment-40605778
     nir_axebv_y_coeff = (0.63 * Rv - 0.84)
     nir_axebv_y = @. nir_axebv_y_coeff * f04_nir_axav_x^1.84
 
