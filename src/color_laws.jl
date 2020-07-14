@@ -241,7 +241,7 @@ function _curve_F99_method(
     c4,
     x0,
     gamma,
-    f99_optnir_axav_x,
+    optnir_axav_x,
     optnir_axav_y,
     )
 
@@ -270,7 +270,7 @@ function _curve_F99_method(
         y_splineval_uv = axav_fm90
 
         # spline points
-        x_splineval_optir = (0.0, f99_optnir_axav_x...)
+        x_splineval_optir = (0.0, optnir_axav_x...)
 
         # determine optical/IR values at spline points
         y_splineval_optir = (0.0, optnir_axav_y...)
