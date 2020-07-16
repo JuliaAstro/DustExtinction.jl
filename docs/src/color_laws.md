@@ -183,6 +183,14 @@ GCC09
 F99
 ```
 
+### Maiz Apellaniz et al. (2014)
+
+![](assets/m14_plot.svg)
+
+```@docs
+M14
+```
+
 ## API/Reference
 
 ```@docs
