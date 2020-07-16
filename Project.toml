@@ -1,7 +1,7 @@
 name = "DustExtinction"
 uuid = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
 license = "MIT"
-version = "0.9.0"
+version = "0.8.0"
 
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
