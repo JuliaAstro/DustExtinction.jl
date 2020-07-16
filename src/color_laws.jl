@@ -372,9 +372,9 @@ function f99_invum(x::Real, Rv::Real)
 end
 
 # read and unpack tabulated data
-fpath = joinpath(dirname(pathof(DustExtinction)), "data/F19_tabulated.dat")
-data = readdlm(fpath, skipstart=1)
-const data_x, data_k, data_delta_k, data_sigma_k = (data[:, i] for i in 1:4)
+const data_x, data_k, data_delta_k, data_sigma_k = let data = readdlm(joinpath(dirname(pathof(DustExtinction)), "data", "F19_tabulated.dat"), skipstart=1)
+    (data[:, i] for i in 1:4)
+end
 
 """
     F19(;Rv=3.1)
