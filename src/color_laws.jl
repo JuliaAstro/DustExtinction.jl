@@ -371,11 +371,6 @@ function f99_invum(x::Real, Rv::Real)
         )
 end
 
-# read and unpack tabulated data
-const data_x, data_k, data_delta_k, data_sigma_k = let data = readdlm(joinpath(dirname(pathof(DustExtinction)), "data", "F19_tabulated.dat"), skipstart=1)
-    (data[:, i] for i in 1:4)
-end
-
 """
     F19(;Rv=3.1)
 
@@ -412,6 +407,11 @@ The algorithm used for the [`F19`](@ref) extinction law, given inverse microns
 and Rv. For more information, seek the original paper.
 """
 function f19_invum(x::Real, Rv::Real)
+    # read and unpack tabulated data
+    data_x, data_k, data_delta_k, data_sigma_k = let data = readdlm(joinpath(datadep"F19", "F19_tabulated.dat"), skipstart=1)
+        (data[:, i] for i in 1:4)
+    end
+
     if !(0.3 <= x <= 8.7)
         error("out of bounds of F19, support is over $(bounds(F19)) angstrom")
     end
