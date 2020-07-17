@@ -134,6 +134,7 @@ and is loosely associated with the size of the dust grains in the interstellar m
 - [`VCG04`](@ref)
 - [`GCC09`](@ref)
 - [`F99`](@ref)
+- [`F04`](@ref)
 
 ### Clayton, Cardelli and Mathis (1989)
 
@@ -181,6 +182,14 @@ GCC09
 
 ```@docs
 F99
+```
+
+### Fitzpatrick (2004)
+
+![](assets/F04_plot.svg)
+
+```@docs
+F04
 ```
 
 ### Maiz Apellaniz et al. (2014)
