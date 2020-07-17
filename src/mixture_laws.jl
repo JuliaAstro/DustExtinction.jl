@@ -95,7 +95,7 @@ extinction and is valid over [2, 6]. A typical value for the Milky Way is 3.1.
     f_A = 1.0
 end
 
-G16(Rv, f_A) = G16(promote(Rv, f_A)...)
+#G16(Rv, f_A) = G16(promote(Rv, f_A)...)
 #G16(Rv=3.1, f_A=3.1) = G16(Rv, f_A)
 
 bounds(::Type{<:G16}) = (1000.0, 33333.3)
