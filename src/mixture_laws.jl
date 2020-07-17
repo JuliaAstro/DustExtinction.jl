@@ -58,7 +58,7 @@ end
 
 function g03_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G03, support is over $(bounds(G03)) angstrom")
+        error("out of bounds of G03_SMCBar, support is over $(bounds(G03_SMCBar)) angstrom")
     end
 
     # return A(x)/A(V)
