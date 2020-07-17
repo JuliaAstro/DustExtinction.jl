@@ -23,7 +23,7 @@
     @test collect(tmodel.(wave)) ≈ collect(ref_values) rtol = tolerance
 
     # Test out of bounds
-    model = G16()
+    model = G16(Rv=3.1, f_A=1.0)
     bad_waves = [100, 4e4]
     @test model.(bad_waves) == zeros(length(bad_waves))
 
@@ -37,8 +37,44 @@
     @test Measurements.value.(reddening) ≈ ref_values rtol = 1e-3
 
     # Unitful
+    model = G16(Rv=3.1, f_A=1.0)
+    x_invum, ref_values = get_fA_1_ref()
+    wave = 1e4 ./ x_invum
     wave_u = wave * u"angstrom"
     reddening = @inferred map(model, wave_u)
     @test eltype(reddening) <: Gain
     @test ustrip.(reddening) ≈ ref_values rtol = 0.016
+
+end
+
+@testset "G03_SMCBar" begin
+
+    # Test output
+    model = G03_SMCBar()
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    w = 1e4 ./ x
+    @test model.(collect(w)) ≈ collect(y) rtol = tolerance
+
+    # Test out of bounds
+    model = G03_SMCBar(Rv=2.74)
+    bad_waves = [100, 4e4]
+    @test model.(bad_waves) == zeros(length(bad_waves))
+
+    # uncertainties
+    model = G03_SMCBar(Rv=2.74)
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    wave = 1e4 ./ x
+    noise = rand(length(wave)) .* 0.01
+    wave_unc = wave .± noise
+    reddening = map(w -> @uncertain(model(w)), wave_unc)
+    @test Measurements.value.(reddening) ≈ collect(y) rtol = tolerance
+
+    # Unitful
+    model = G03_SMCBar(Rv=2.74)
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    wave = 1e4 ./ x
+    wave_u = collect(wave) * u"angstrom"
+    reddening = @inferred map(model, wave_u)
+    @test eltype(reddening) <: Gain
+    @test ustrip.(reddening) ≈ collect(y) rtol = tolerance
 end
