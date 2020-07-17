@@ -14,10 +14,11 @@ export redden,
        GCC09,
        VCG04,
        F99,
-       G16,
+       F04,
        # Fittable laws
        FM90,
        # Mixture laws
+       G16,
        G03_SMCBar,
        # Dust maps
        SFD98Map,
@@ -149,7 +150,7 @@ include("mixture_laws.jl")
 # at which point adding `(l::ExtinctionLaw)(wave::Quantity)` is possible, until then
 # using this code-gen does the trick but requires manually editing
 # instead of providing support for all <: ExtinctionLaw
-for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, F99, G16, G03_SMCBar]
+for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, F99, F04, G16, G03_SMCBar]
     (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 end
 
