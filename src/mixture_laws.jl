@@ -83,7 +83,7 @@ Gordon et al. (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the
 extinction. This is mixture model between the F99 R(V) dependent model
-(component A) and the G03_SMCBar model (component B) The default support is
+(component A) and the [`G03_SMCBar`](@ref) model (component B) The default support is
 [1000, 33333] Å. Outside of that range this will return 0. Rv is the selective
 extinction and is valid over [2, 6]. A typical value for the Milky Way is 3.1.
 By default, Rv=3.1 and f_A=1.0 is used.
