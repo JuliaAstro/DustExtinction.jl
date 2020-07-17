@@ -77,7 +77,7 @@ function g03_invum(x::Real, Rv::Real)
 end
 
 """
-    G16(;Rv=3.1)
+    G16(;Rv=3.1, f_A=1.0)
 
 Gordon et al. (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
