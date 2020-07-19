@@ -46,7 +46,7 @@ end
     ref_values = MW_exvebv ./ Rv .+ 1
 
     model = P92()
-    model1 = P92(FUV_b = 4.0)
+    model1 = P92(FUV_b = 4)
 
     # Test out of bounds
     bad_waves = [9, 1e8]
