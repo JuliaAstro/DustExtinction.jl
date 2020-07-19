@@ -546,16 +546,17 @@ function m14_invum(x::Real, Rv::Real)
         error("out of bounds of M14, support is over $(bounds(M14)) angstrom")
     end
 
-    # Infrared
-    ai = 0.574 * x^1.61
-    bi = -0.527 * x^1.61
-
-    # Optical
-    m14_av = m14_a_spl(x)
-    m14_bv = m14_b_spl(x)
-
-    a = ai * (x < m14_xi1) + m14_av * ((x >= m14_xi1) & (x < m14_xi3))
-    b = bi * (x < m14_xi1) + m14_bv * ((x >= m14_xi1) & (x < m14_xi3))
+    a = zero(x)
+    b = zero(x)
+    if x < m14_xi1
+        # Infrared
+        a = 0.574 * x^1.61
+        b = -0.527 * x^1.61
+    elseif x < m14_xi3
+        # Optical
+        a = m14_a_spl(x)
+        b = m14_b_spl(x)
+    end
 
     return a + b / Rv
 end
