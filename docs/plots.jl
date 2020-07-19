@@ -153,7 +153,8 @@ plot!(1 ./w, m7, label = "BKG+FIR only")
 xlabel!(L"x\ \left[\mu m\right]")
 ylabel!(L"A(X)/A(V)")
 savefig(joinpath(dir, "P92_plot.svg"))
-=======
+
+#--------------------------------------------------------------------------------
 # F99
 
 w = range(0.3, 10.0, length=1000)
