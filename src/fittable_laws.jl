@@ -84,7 +84,7 @@ end
         SIL1_lambda=9.7, SIL1_b=-1.95, SIL1_n=2.0, SIL2_amp=0.0026493506493506496, SIL2_lambda=18.0, SIL2_b= -1.8, SIL2_n=2.0,
         FIR_amp=0.015896103896103898, FIR_lambda=25.0, FIR_b=0.0, FIR_n=2.0)
 
-Pei (1992) generative model applicable from the extreme UV to far-IR.
+Pei (1992) generative extinction model applicable from the extreme UV to far-IR.
 
 ## Parameters
 
