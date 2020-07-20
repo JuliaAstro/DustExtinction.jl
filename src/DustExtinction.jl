@@ -15,6 +15,7 @@ export redden,
        VCG04,
        F99,
        F04,
+       F19,
        # Fittable laws
        FM90,
        # Dust maps
@@ -146,7 +147,7 @@ include("fittable_laws.jl")
 # at which point adding `(l::ExtinctionLaw)(wave::Quantity)` is possible, until then
 # using this code-gen does the trick but requires manually editing
 # instead of providing support for all <: ExtinctionLaw
-for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, F99, F04]
+for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, F99, F04, F19]
     (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 end
 
@@ -163,6 +164,13 @@ function __init__()
     "https://sncosmo.github.io/data/dust/SFD_dust_4096_sgp.fits"],
     ["50b6aaad0b880762d0fd081177802dcc17c39d7044a410dd5649e2dfd0503e97",
     "84891a59054adab44a7be54051e4dcf0e66e3f13eee0d845ce3739242f553b83"]))
+    register(DataDep("F19",
+    """
+    Tabulated data from Fitzpatrick et al (2019) extinction model calculation
+    Paper: https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F
+    """,
+    ["https://raw.githubusercontent.com/karllark/dust_extinction/master/dust_extinction/data/F19_tabulated.dat"],
+    ["34011693065bba25396085823ab1df43c058336a95da7d4fdb567f03103b35bc"]))
 end
 
 end # module
