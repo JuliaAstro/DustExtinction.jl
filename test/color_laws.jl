@@ -8,7 +8,8 @@ using DustExtinction: ccm89_invum,
                       ccm89_cb,
                       f99_invum,
                       f04_invum,
-                      f19_invum
+                      f19_invum,
+                      m14_invum
 
 @testset "helper" begin
     @test aa_to_invum(10000) ≈ 1
@@ -349,6 +350,43 @@ end
         @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
         @test_throws ErrorException f19_invum(aa_to_invum(bad_waves[1]), rv)
         @test_throws ErrorException f19_invum(aa_to_invum(bad_waves[2]), rv)
+
+        # uncertainties
+        noise = rand(length(wave)) .* 0.01
+        wave_unc = wave .± noise
+        reddening = map(w -> @uncertain(law(w)), wave_unc)
+        @test Measurements.value.(reddening) ≈ ref_values[rv] rtol = 1e-3
+
+        # Unitful
+        wave_u = wave * u"angstrom"
+        reddening = @inferred map(law, wave_u)
+        @test eltype(reddening) <: Gain
+        @test ustrip.(reddening) ≈ ref_values[rv] rtol = 0.016
+    end
+end
+
+@testset "M14" begin
+    # using R5495 = 3.1
+
+    x_inv_microns = [0.5, 2.0]
+    wave = 1e4 ./ x_inv_microns
+
+    ref_values = Dict(
+        3.1 => [0.1323, 1.141]
+    )
+
+    # test defaults
+    @test M14().(wave) ≈ ref_values[3.1] rtol = 0.016
+
+    for rv in keys(ref_values)
+        law = M14(Rv = rv)
+        output = @inferred map(law, wave)
+        @test output ≈ ref_values[rv] rtol = 0.016
+
+        bad_waves = [100, 4e4]
+        @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
+        @test_throws ErrorException m14_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws ErrorException m14_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = rand(length(wave)) .* 0.01
