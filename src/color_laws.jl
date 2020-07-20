@@ -1,4 +1,4 @@
-using Dierckx
+using Dierckx, DelimitedFiles
 
 # Convenience function for wavelength conversion
 @inline aa_to_invum(wave::Real) = 10000 / wave
@@ -451,4 +451,64 @@ function f04_invum(x::Real, Rv::Real)
             f04_optnir_axav_x,
             optnir_axebv_y,
         )
+end
+
+"""
+    F19(;Rv=3.1)
+
+Fitzpatrick (2019) dust law.
+
+Returns E(B-V) in magnitudes at the given wavelength relative to the
+extinction. This model applies to the UV and optical to NIR spectral range.
+The default support is [1149, 33333] Å. Outside of that range this will return
+0. Rv is the selective extinction and is valid over [2, 6]. A typical value for
+the Milky Way is 3.1.
+
+Fitzpatrick, Massa, Gordon et al. (2019, ApJ, 886, 108) model. Based on a
+sample of stars observed spectroscopically in the optical with HST/STIS.
+
+# References
+[Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F/)
+"""
+@with_kw struct F19 <: ExtinctionLaw
+    Rv::Float64 = 3.1
+end
+
+function (law::F19)(wave::T) where T
+    checkbounds(law, wave) || return zero(float(T))
+    x = aa_to_invum(wave)
+    return f19_invum(x, law.Rv)
+end
+
+bounds(::Type{F19}) = (1149.4, 33333.3)
+
+"""
+    DustExtinction.f19_invum(x, Rv)
+
+The algorithm used for the [`F19`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
+"""
+function f19_invum(x::Real, Rv::Real)
+    # read and unpack tabulated data
+    data_x, data_k, data_delta_k, data_sigma_k = let data = readdlm(joinpath(datadep"F19", "F19_tabulated.dat"), skipstart=1)
+        (data[:, i] for i in 1:4)
+    end
+
+    if !(0.3 <= x <= 8.7)
+        error("out of bounds of F19, support is over $(bounds(F19)) angstrom")
+    end
+
+    # compute E(lambda-55)/E(B-55) on the tabulated x points
+    k_rV_tab_x = @. data_k + data_delta_k * (Rv - 3.10) * 0.990
+
+    # setup spline interpolation
+    spl = Spline1D(collect(data_x), collect(k_rV_tab_x), k=3)
+
+    # use spline interpolation to evaluate the curve for the input x values
+    k_rV = spl(x)
+
+    # convert to A(x)/A(55) from E(x-55)/E(44-55)
+    a_rV = k_rV / Rv + 1.0
+
+    return a_rV
 end

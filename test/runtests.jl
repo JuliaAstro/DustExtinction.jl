@@ -11,7 +11,7 @@ include("fittable_laws.jl")
 include("mixture_laws.jl")
 
 @testset "interfaces" begin
-    for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, F99, F04, G16]
+    for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, G16, F99, F04, F19]
         @test bounds(LAW) == bounds(LAW())
         @test checkbounds(LAW, 1000) == checkbounds(LAW(), 1000)
         low, high = bounds(LAW)

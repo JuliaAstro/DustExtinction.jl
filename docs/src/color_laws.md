@@ -135,6 +135,7 @@ and is loosely associated with the size of the dust grains in the interstellar m
 - [`GCC09`](@ref)
 - [`F99`](@ref)
 - [`F04`](@ref)
+- [`F19`](@ref)
 
 ### Clayton, Cardelli and Mathis (1989)
 
@@ -190,6 +191,14 @@ F99
 
 ```@docs
 F04
+```
+
+### Fitzpatrick (2019)
+
+![](assets/F19_plot.svg)
+
+```@docs
+F19
 ```
 
 ## API/Reference

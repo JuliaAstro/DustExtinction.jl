@@ -1,5 +1,5 @@
 using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, FM90, G16
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, f19_invum, FM90, G16
 
 dir = joinpath(@__DIR__, "src", "assets")
 
@@ -81,6 +81,19 @@ ylabel!("E(B-V)")
 savefig(joinpath(dir, "vcg04_plot.svg"))
 
 #--------------------------------------------------------------------------------
+# F99
+
+w = range(0.3, 10.0, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = f99_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "F99_plot.svg"))
+
+#--------------------------------------------------------------------------------
 # F04
 
 w = range(0.3, 10.0, length=1000)
@@ -92,6 +105,19 @@ end
 xlabel!(L"x\ \left[\mu m ^{-1}\right]")
 ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "F04_plot.svg"))
+
+#--------------------------------------------------------------------------------
+# F19
+
+w = range(0.3, 8.7, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = f19_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "F19_plot.svg"))
 
 #--------------------------------------------------------------------------------
 # FM90
@@ -117,19 +143,6 @@ ylabel!(L"E(\lambda - V)/E(B - V)")
 savefig(joinpath(dir, "FM90_plot.svg"))
 
 #--------------------------------------------------------------------------------
-# F99
-
-w = range(0.3, 10.0, length=1000)
-plot()
-for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
-  m = f99_invum.(w, rv)
-  plot!(w, m, label="Rv=$rv")
-end
-xlabel!(L"x\ \left[\mu m ^{-1}\right]")
-ylabel!(L"A(x)/A(V)")
-savefig(joinpath(dir, "F99_plot.svg"))
-
-#--------------------------------------------------------------------------------
 # G16
 
 # Fixed f_A = 1.0, variable Rv
@@ -153,3 +166,5 @@ end
 xlabel!(L"x\ \left[\mu m ^{-1}\right]")
 ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "G16_fixed_Rv_plot.svg"))
+
+
