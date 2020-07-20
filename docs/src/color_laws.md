@@ -201,6 +201,14 @@ F04
 F19
 ```
 
+### Maiz Apellaniz et al. (2014)
+
+![](assets/m14_plot.svg)
+
+```@docs
+M14
+```
+
 ## API/Reference
 
 ```@docs

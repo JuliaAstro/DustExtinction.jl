@@ -1,5 +1,5 @@
 using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, f19_invum, FM90
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, f19_invum, m14_invum, FM90
 
 dir = joinpath(@__DIR__, "src", "assets")
 
@@ -141,3 +141,16 @@ plot!(w, m4, label = "FUV rise term")
 xlabel!(L"\mu m ^{-1}")
 ylabel!(L"E(\lambda - V)/E(B - V)")
 savefig(joinpath(dir, "FM90_plot.svg"))
+
+#--------------------------------------------------------------------------------
+# M14
+
+w = range(0.3, 3.3, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = m14_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "M14_plot.svg"))
