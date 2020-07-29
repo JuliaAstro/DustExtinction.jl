@@ -38,6 +38,7 @@ There are various citations relevant to this work. Please be considerate when us
 |  [`VCG04`](@ref)   | [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V)    | [download](assets/vcg04.bib) |
 |  [`GCC09`](@ref)   | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)   | [download](assets/gcc09.bib) |
 |  [`FM90`](@ref)   | [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)   | [download](assets/fm90.bib) |
+| [`G16`](@ref) | [Gordon et al (2016) ](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G) | [download](assets/g16.bib) |
 | [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
 | [`F99`](@ref) | [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F) | [download](assets/f99.bib) |
 | [`F04`](@ref) | [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F) | [download](assets/f04.bib) |

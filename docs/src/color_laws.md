@@ -227,3 +227,14 @@ DustExtinction.bounds
 ```@docs
 FM90
 ```
+
+### Mixture Extinction Laws
+
+#### Gordon et al. (2016)
+
+![](assets/G16_fixed_f_A_plot.svg)
+![](assets/G16_fixed_Rv_plot.svg)
+
+```@docs
+G16
+```
