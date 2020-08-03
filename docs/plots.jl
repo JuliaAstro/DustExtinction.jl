@@ -1,6 +1,6 @@
 using Plots, LaTeXStrings
 
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, FM90, P92
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00_invum, ccm89_invum, vcg04_invum, gcc09_invum, f99_invum, f04_invum, f19_invum, m14_invum, FM90, G16, P92
 
 dir = joinpath(@__DIR__, "src", "assets")
 
@@ -82,6 +82,19 @@ ylabel!("E(B-V)")
 savefig(joinpath(dir, "vcg04_plot.svg"))
 
 #--------------------------------------------------------------------------------
+# F99
+
+w = range(0.3, 10.0, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = f99_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "F99_plot.svg"))
+
+#--------------------------------------------------------------------------------
 # F04
 
 w = range(0.3, 10.0, length=1000)
@@ -93,6 +106,32 @@ end
 xlabel!(L"x\ \left[\mu m ^{-1}\right]")
 ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "F04_plot.svg"))
+
+#--------------------------------------------------------------------------------
+# F19
+
+w = range(0.3, 8.7, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = f19_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "F19_plot.svg"))
+
+#--------------------------------------------------------------------------------
+# M14
+
+w = range(0.3, 3.3, length=1000)
+plot()
+for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
+  m = m14_invum.(w, rv)
+  plot!(w, m, label="Rv=$rv")
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "M14_plot.svg"))
 
 #--------------------------------------------------------------------------------
 # FM90
@@ -155,14 +194,26 @@ ylabel!(L"A(X)/A(V)")
 savefig(joinpath(dir, "P92_plot.svg"))
 
 #--------------------------------------------------------------------------------
-# F99
+# G16
 
+# Fixed f_A = 1.0, variable Rv
 w = range(0.3, 10.0, length=1000)
+x = 1e4 ./ w
 plot()
 for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
-  m = f99_invum.(w, rv)
-  plot!(w, m, label="Rv=$rv")
+  m = G16(Rv=rv, f_A=1.0).(x)
+  plot!(w, m, label="Rv=$rv", legendtitle="f_A = 1.0", legend=:topleft)
 end
 xlabel!(L"x\ \left[\mu m ^{-1}\right]")
 ylabel!(L"A(x)/A(V)")
-savefig(joinpath(dir, "F99_plot.svg"))
+savefig(joinpath(dir, "G16_fixed_f_A_plot.svg"))
+
+# Fixed Rv = 3.1, variable f_A
+plot()
+for f_A in [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+  m = G16(Rv=3.1, f_A=f_A).(x)
+  plot!(w, m, label="f_A=$f_A", legendtitle="Rv = 3.1", legend=:topleft)
+end
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
+savefig(joinpath(dir, "G16_fixed_Rv_plot.svg"))

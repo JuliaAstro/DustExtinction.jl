@@ -135,6 +135,7 @@ and is loosely associated with the size of the dust grains in the interstellar m
 - [`GCC09`](@ref)
 - [`F99`](@ref)
 - [`F04`](@ref)
+- [`F19`](@ref)
 
 ### Clayton, Cardelli and Mathis (1989)
 
@@ -192,6 +193,22 @@ F99
 F04
 ```
 
+### Fitzpatrick (2019)
+
+![](assets/F19_plot.svg)
+
+```@docs
+F19
+```
+
+### Maiz Apellaniz et al. (2014)
+
+![](assets/m14_plot.svg)
+
+```@docs
+M14
+```
+
 ## API/Reference
 
 ```@docs
@@ -217,4 +234,15 @@ FM90
 
 ```@docs
 P92
+```
+
+### Mixture Extinction Laws
+
+#### Gordon et al. (2016)
+
+![](assets/G16_fixed_f_A_plot.svg)
+![](assets/G16_fixed_Rv_plot.svg)
+
+```@docs
+G16
 ```
