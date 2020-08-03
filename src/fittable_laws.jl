@@ -79,10 +79,30 @@ end
 
 
 """
-    P92(BKG_amp=218.57142857142858, BKG_lambda=0.047, BKG_b=90.0, BKG_n=2.0, FUV_amp=18.545454545454547, FUV_lambda=0.07,
-        FUV_b=4.0, FUV_n=6.5, NUV_amp=0.05961038961038961, NUV_lambda=0.22, NUV_b= -1.95, NUV_n=2.0, SIL1_amp=0.0026493506493506496,
-        SIL1_lambda=9.7, SIL1_b=-1.95, SIL1_n=2.0, SIL2_amp=0.0026493506493506496, SIL2_lambda=18.0, SIL2_b= -1.8, SIL2_n=2.0,
-        FIR_amp=0.015896103896103898, FIR_lambda=25.0, FIR_b=0.0, FIR_n=2.0)
+    P92(BKG_amp=218.57,
+        BKG_lambda=0.047,
+        BKG_b=90.0,
+        BKG_n=2.0,
+        FUV_amp=18.54,
+        FUV_lambda=0.07,
+        FUV_b=4.0,
+        FUV_n=6.5,
+        NUV_amp=0.0596,
+        NUV_lambda=0.22,
+        NUV_b=-1.95,
+        NUV_n=2.0,
+        SIL1_amp=0.0026,
+        SIL1_lambda=9.7,
+        SIL1_b=-1.95,
+        SIL1_n=2.0,
+        SIL2_amp=0.0026,
+        SIL2_lambda=18.0,
+        SIL2_b=-1.8,
+        SIL2_n=2.0,
+        FIR_amp=0.0159,
+        FIR_lambda=25.0,
+        FIR_b=0.0,
+        FIR_n=2.0)
 
 Pei (1992) generative extinction model applicable from the extreme UV to far-IR.
 

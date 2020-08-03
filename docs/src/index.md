@@ -41,6 +41,7 @@ There are various citations relevant to this work. Please be considerate when us
 | [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
 | [`F99`](@ref) | [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F) | [download](assets/f99.bib) |
 | [`F04`](@ref) | [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F) | [download](assets/f04.bib) |
+| [`P92`](@ref) | [Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P) | [download](assets/P92.bib) |
 
 ## Index
 
