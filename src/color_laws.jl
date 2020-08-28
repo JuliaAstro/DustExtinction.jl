@@ -577,7 +577,7 @@ function (law::M14)(wave::T) where T
     return m14_invum(x, law.Rv)
 end
 
-bounds(::Type{M14}) = (3030.3, 33333.3)
+bounds(::Type{M14}) = (3030.3030303030305, 33333.333333333336)
 
 """
     DustExtinction.m14_invum(x, Rv)
