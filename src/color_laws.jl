@@ -120,28 +120,15 @@ end
 function (law::CAL00)(wave::T) where T
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
-    return cal00_invum(x, law.Rv)
+    if wave < 6300
+        k = @evalpoly x -2.156 1.509 -0.198 0.011
+    else
+        k = @evalpoly x -1.857 1.040
+    end
+    return 1.0 + 2.659 * k / law.Rv
 end
 
 bounds(::Type{CAL00}) = (1200, 22000)
-
-"""
-    DustExtinction.cal00_invum(x, Rv)
-
-The algorithm used for the [`CAL00`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
-"""
-function cal00_invum(x::Real, Rv::Real)
-    if x > 1 / 0.12
-        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
-    elseif x > 1 / 0.63
-        k = @evalpoly x -2.156 1.509 -0.198 0.011
-    elseif x > 1 / 2.2
-        k = @evalpoly x -1.857 1.040
-    else
-        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
-    end
-    return 1.0 + 2.659 * k / Rv
-end
 
 """
     VCG04(;Rv=3.1)
