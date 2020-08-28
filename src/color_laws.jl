@@ -467,7 +467,7 @@ function (law::F19)(wave::T) where T
     return f19_invum(x, law.Rv)
 end
 
-bounds(::Type{F19}) = (1149.4, 33333.3)
+bounds(::Type{F19}) = (1149.4252873563219, 33333.333333333336)
 
 """
     DustExtinction.f19_invum(x, Rv)
