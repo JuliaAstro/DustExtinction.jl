@@ -208,7 +208,7 @@ function (law::GCC09)(wave::T) where T
     return gcc09_invum(x, law.Rv)
 end
 
-bounds(::Type{GCC09}) = (909.09, 3030.3)
+bounds(::Type{GCC09}) = (909.0909090909091, 3030.3030303030305)
 
 """
     DustExtinction.gcc09_invum(x, Rv)
