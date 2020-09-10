@@ -1,6 +1,5 @@
 using Measurements
 using DustExtinction: ccm89_invum,
-                      cal00_invum,
                       vcg04_invum,
                       gcc09_invum,
                       aa_to_invum,
@@ -156,8 +155,6 @@ end
 
         bad_waves = [1e2, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException cal00_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException cal00_invum(aa_to_invum(bad_waves[2]), rv)
 
         # Uncertainties
         noise = randn(length(refwave)) .* 10

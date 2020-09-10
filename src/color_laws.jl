@@ -120,28 +120,15 @@ end
 function (law::CAL00)(wave::T) where T
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
-    return cal00_invum(x, law.Rv)
+    if wave < 6300
+        k = @evalpoly x -2.156 1.509 -0.198 0.011
+    else
+        k = @evalpoly x -1.857 1.040
+    end
+    return 1.0 + 2.659 * k / law.Rv
 end
 
 bounds(::Type{CAL00}) = (1200, 22000)
-
-"""
-    DustExtinction.cal00_invum(x, Rv)
-
-The algorithm used for the [`CAL00`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
-"""
-function cal00_invum(x::Real, Rv::Real)
-    if x > 1 / 0.12
-        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
-    elseif x > 1 / 0.63
-        k = @evalpoly x -2.156 1.509 -0.198 0.011
-    elseif x > 1 / 2.2
-        k = @evalpoly x -1.857 1.040
-    else
-        error("out of bounds of CAL00, support is over $(bounds(CAL00)) angstrom")
-    end
-    return 1.0 + 2.659 * k / Rv
-end
 
 """
     VCG04(;Rv=3.1)
@@ -208,7 +195,7 @@ function (law::GCC09)(wave::T) where T
     return gcc09_invum(x, law.Rv)
 end
 
-bounds(::Type{GCC09}) = (909.09, 3030.3)
+bounds(::Type{GCC09}) = (909.0909090909091, 3030.3030303030305)
 
 """
     DustExtinction.gcc09_invum(x, Rv)
@@ -480,7 +467,7 @@ function (law::F19)(wave::T) where T
     return f19_invum(x, law.Rv)
 end
 
-bounds(::Type{F19}) = (1149.4, 33333.3)
+bounds(::Type{F19}) = (1149.4252873563219, 33333.333333333336)
 
 """
     DustExtinction.f19_invum(x, Rv)
@@ -590,7 +577,7 @@ function (law::M14)(wave::T) where T
     return m14_invum(x, law.Rv)
 end
 
-bounds(::Type{M14}) = (3030.3, 33333.3)
+bounds(::Type{M14}) = (3030.3030303030305, 33333.333333333336)
 
 """
     DustExtinction.m14_invum(x, Rv)

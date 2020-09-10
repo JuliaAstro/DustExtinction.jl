@@ -16,6 +16,7 @@ include("mixture_laws.jl")
         @test checkbounds(LAW, 1000) == checkbounds(LAW(), 1000)
         low, high = bounds(LAW)
         @test all(checkbounds.(LAW, rand(low:high, 1000)))
+        @test all(isfinite.(LAW().(bounds(LAW))))
     end
     @test bounds(DustExtinction.ExtinctionLaw) == (0, Inf)
 end
