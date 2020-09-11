@@ -228,6 +228,14 @@ DustExtinction.bounds
 FM90
 ```
 
+#### Pei (1992)
+
+![](assets/P92_plot.svg)
+
+```@docs
+P92
+```
+
 ### Mixture Extinction Laws
 
 #### Gordon et al. (2016)
