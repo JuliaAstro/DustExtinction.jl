@@ -1,5 +1,13 @@
 # DustExtinction.jl
 
+
+
+[![GitHub](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/juliaastro/DustExtinction.jl)
+[![Build Status](https://github.com/juliaastro/DustExtinction.jl/workflows/CI/badge.svg?branch=master)](https://github.com/juliaastro/DustExtinction.jl/actions)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DustExtinction.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![Coverage](https://codecov.io/gh/juliaastro/DustExtinction.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/juliaastro/DustExtinction.jl)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This package implements different empirical dust measurements for use in astronomy. This package is written in pure Julia and is built with first-class support with [Unitful.jl](https://github.com/painterqubits/unitful.jl) and [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
 
 ## About
