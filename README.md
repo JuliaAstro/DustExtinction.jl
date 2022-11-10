@@ -1,9 +1,13 @@
 # DustExtinction.jl
 
-[![Build Status](https://img.shields.io/travis/JuliaAstro/DustExtinction.jl.svg)](https://travis-ci.org/JuliaAstro/DustExtinction.jl)
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaAstro.github.io/DustExtinction.jl/stable)
-[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaAstro.github.io/DustExtinction.jl/dev)
-[![codecov](https://codecov.io/gh/JuliaAstro/DustExtinction.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/DustExtinction.jl)
+
+[![Build Status](https://github.com/juliaastro/DustExtinction.jl/workflows/CI/badge.svg?branch=master)](https://github.com/juliaastro/DustExtinction.jl/actions)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DustExtinction.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![Coverage](https://codecov.io/gh/juliaastro/DustExtinction.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/juliaastro/DustExtinction.jl)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/DustExtinction.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/DustExtinction.jl/dev)
 
 
 
