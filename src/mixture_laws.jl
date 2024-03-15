@@ -45,7 +45,7 @@ const g03_optnir_axav_x = 1.0 ./ (
     2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37
 )
 
-
+# Data for 0.81 and 0.65 are not reported in Gordon et al. (2003)
 const g03lmc_optnir_axav_x = 1.0 ./ (
     2.198, 1.65, 1.25, 0.55, 0.44, 0.37
 )
