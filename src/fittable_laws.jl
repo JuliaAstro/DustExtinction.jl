@@ -1,10 +1,10 @@
 
-
 """
     FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)
     FM90(coeffs, x0=4.60, gamma=0.9)
 
-Fitzpatrick & Massa (1990) generative model for ultraviolet dust extinction. The default values are the published values for the Milky Way average.
+Fitzpatrick & Massa (1990) generative model for ultraviolet dust extinction. The
+default values are the published values for the Milky Way average.
 
 ## Parameters
 * `c1` - y-intercept of linear term
@@ -28,7 +28,7 @@ julia> FM90()(1500)
 5.152125845280013
 
 julia> FM90(c1=0.2, c2=0.7, c3=3.23, c4=0.41, x0=4.6, gamma=0.99).([1000, 1200, 1800])
-3-element Array{Float64,1}:
+3-element Vector{Float64}:
  12.562237969522851
   7.769215017329513
   4.890128210972148
@@ -36,15 +36,17 @@ julia> FM90(c1=0.2, c2=0.7, c3=3.23, c4=0.41, x0=4.6, gamma=0.99).([1000, 1200, 
 ```
 # Extended Help
 
-The model has form ``c_1 + c_2x + c_3D(x; \\gamma, x_0) + c_4 F(x)`` where ``x`` is the wavenumber in inverse microns, ``D(x)``
-is a Drude profile (modified Lorentzian) used to model the 2175 Å bump with the scale-free parameters ``x_0`` (central wavenumber)
-and ``\\gamma`` (damping coefficient), and ``F(x)``, a piecewise function for the far-UV. Note that the coefficients will change
-the overall normalization, possibly changing the expected behavior of reddening via the parameter ``A_V``.
+The model has form ``c_1 + c_2x + c_3D(x; γ, x_0) + c_4 F(x)`` where ``x`` is
+the wavenumber in inverse microns, ``D(x)`` is a Drude profile (modified Lorentzian)
+used to model the 2175 Å bump with the scale-free parameters ``x_0`` (central wavenumber)
+and ``γ`` (damping coefficient), and ``F(x)``, a piecewise function for the far-UV.
+Note that the coefficients will change the overall normalization, possibly
+changing the expected behavior of reddening via the parameter ``A_V``.
 
 ## References
 [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
-@with_kw struct FM90{T<:Number}  <: ExtinctionLaw @deftype T    
+@with_kw struct FM90{T<:Number} <: ExtinctionLaw @deftype T
     c1 = 0.10
     c2 = 0.70
     c3 = 3.23
@@ -76,4 +78,3 @@ function (law::FM90)(wave::T) where T
 
     return exvebv
 end
-

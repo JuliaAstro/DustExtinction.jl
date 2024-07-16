@@ -58,7 +58,7 @@ end
 
 function g03_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G03_SMCBar, support is over $(bounds(G03_SMCBar)) angstrom")
+        throw(DomainError(x, "out of bounds of G03_SMCBar, support is over $(bounds(G03_SMCBar)) angstrom"))
     end
 
     # return A(x)/A(V)
@@ -83,9 +83,10 @@ Gordon et al. (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the
 extinction. This is mixture model between the F99 R(V) dependent model
-(component A) and the [`G03_SMCBar`](@ref) model (component B) The default support is
-[1000, 33333] Å. Outside of that range this will return 0. Rv is the selective
-extinction and is valid over [2, 6]. A typical value for the Milky Way is 3.1.
+(component A) and the [`G03_SMCBar`](@ref) model (component B).
+The default support is [1000, 33333] Å. Outside of that range this will return 0.
+Rv is the selective extinction and is valid over [2, 6].
+A typical value for the Milky Way is 3.1.
 
 # References
 [Gordon et al. (2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G/)
@@ -108,12 +109,13 @@ end
 
 """
     DustExtinction.g16_invum(x, Rv)
+
 The algorithm used for the [`G16`](@ref) extinction law, given inverse microns
 and Rv. For more information, seek the original paper.
 """
 function g16_invum(x::Real, Rv::Real, f_A::Number)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G16, support is over $(bounds(G16)) angstrom")
+        throw(DomainError(x, "out of bounds of G16, support is over $(bounds(G16)) angstrom"))
     end
 
     # get the A component extinction model

@@ -1,9 +1,5 @@
 using Measurements
-using DustExtinction: aa_to_invum,
-                      g03_invum,
-                      g16_invum,
-                      G03_SMCBar,
-                      G16
+using DustExtinction: aa_to_invum, g03_invum, g16_invum, G03_SMCBar, G16
 
 @testset "G16" begin
 
@@ -33,8 +29,8 @@ using DustExtinction: aa_to_invum,
     model = G16(Rv=3.1, f_A=1.0)
     bad_waves = [100, 4e4]
     @test model.(bad_waves) == zeros(length(bad_waves))
-    @test_throws ErrorException g16_invum(aa_to_invum(bad_waves[1]), 3.1, 1.0)
-    @test_throws ErrorException g16_invum(aa_to_invum(bad_waves[2]), 3.1, 1.0)
+    @test_throws DomainError g16_invum(aa_to_invum(bad_waves[1]), 3.1, 1.0)
+    @test_throws DomainError g16_invum(aa_to_invum(bad_waves[2]), 3.1, 1.0)
 
     # uncertainties
     x_invum, ref_values = get_fA_1_ref()
@@ -68,8 +64,8 @@ end
     model = G03_SMCBar(Rv=2.74)
     bad_waves = [100, 4e4]
     @test model.(bad_waves) == zeros(length(bad_waves))
-    @test_throws ErrorException g03_invum(aa_to_invum(bad_waves[1]), 3.1)
-    @test_throws ErrorException g03_invum(aa_to_invum(bad_waves[2]), 3.1)
+    @test_throws DomainError g03_invum(aa_to_invum(bad_waves[1]), 3.1)
+    @test_throws DomainError g03_invum(aa_to_invum(bad_waves[2]), 3.1)
 
     # uncertainties
     model = G03_SMCBar(Rv=2.74)
