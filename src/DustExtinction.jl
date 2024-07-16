@@ -27,7 +27,7 @@ export redden,
        ebv_galactic
 
 """
-    DustExtinction.ExtinctionLaw
+    abstract type DustExtinction.ExtinctionLaw
 
 The abstract supertype for dust extinction laws. See the extended help
 (`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
