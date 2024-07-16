@@ -202,7 +202,7 @@ F19
 
 ### Maiz Apellaniz et al. (2014)
 
-![](assets/m14_plot.svg)
+![](assets/M14_plot.svg)
 
 ```@docs
 M14
