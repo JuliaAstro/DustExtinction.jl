@@ -8,3 +8,8 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
 Documenter = "1"
+LaTeXStrings = "1"
+Measurements = "2"
+Plots = "1"
+Unitful = "1"
+UnitfulAstro = "1"
