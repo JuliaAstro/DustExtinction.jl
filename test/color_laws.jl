@@ -67,8 +67,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException ccm89_invum(aa_to_invum(bad_waves[1]), rv, ccm89_ca, ccm89_cb)
-        @test_throws ErrorException ccm89_invum(aa_to_invum(bad_waves[2]), rv, ccm89_ca, ccm89_cb)
+        @test_throws DomainError ccm89_invum(aa_to_invum(bad_waves[1]), rv, ccm89_ca, ccm89_cb)
+        @test_throws DomainError ccm89_invum(aa_to_invum(bad_waves[2]), rv, ccm89_ca, ccm89_cb)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
@@ -217,8 +217,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException vcg04_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException vcg04_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError vcg04_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError vcg04_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
@@ -259,8 +259,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(broadcast(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException gcc09_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException gcc09_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError gcc09_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError gcc09_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = randn(length(wave)) .* 0.01
@@ -296,8 +296,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException f99_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException f99_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError f99_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError f99_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = rand(length(wave)) .* 0.01
@@ -333,8 +333,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException f04_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException f04_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError f04_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError f04_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = rand(length(wave)) .* 0.01
@@ -371,8 +371,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException f19_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException f19_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError f19_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError f19_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = rand(length(wave)) .* 0.01
@@ -408,8 +408,8 @@ end
 
         bad_waves = [100, 4e4]
         @test @inferred(map(law, bad_waves)) == zeros(length(bad_waves))
-        @test_throws ErrorException m14_invum(aa_to_invum(bad_waves[1]), rv)
-        @test_throws ErrorException m14_invum(aa_to_invum(bad_waves[2]), rv)
+        @test_throws DomainError m14_invum(aa_to_invum(bad_waves[1]), rv)
+        @test_throws DomainError m14_invum(aa_to_invum(bad_waves[2]), rv)
 
         # uncertainties
         noise = rand(length(wave)) .* 0.01
