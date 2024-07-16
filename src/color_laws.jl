@@ -2,7 +2,7 @@ using Dierckx
 using DelimitedFiles
 
 # Convenience function for wavelength conversion
-@inline aa_to_invum(wave::Real) = 10000 / wave
+@inline aa_to_invum(wave::Real) = 10_000 / wave
 
 # --------------------------------------------------------------------------------
 
@@ -241,10 +241,9 @@ function _curve_F99_method(
     )
 
     # add in required spline points, otherwise just spline points
+    xuv = collect(f99_x_splineval_uv)
     if x >= f99_x_cutval_uv
-        xuv = (f99_x_splineval_uv..., x)
-    else
-        xuv = f99_x_splineval_uv
+        push!(xuv, x)
     end
 
     # FM90 model and values
