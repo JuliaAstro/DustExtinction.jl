@@ -56,5 +56,5 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v2
       - uses: julia-actions/julia-buildpkg@v1
-      - run: julia -e 'using Pkg; Pkg.add("Aqua")'
-      - run: julia --project=@. -e 'using Aqua, DustExtinction; Aqua.test_all(DustExtinction, ambiguities=false)'
+      - run: julia --color=yes -e 'using Pkg; Pkg.add("Aqua")'
+      - run: julia --color=yes --project=@. -e 'using Aqua, DustExtinction; Aqua.test_all(DustExtinction, ambiguities=false)'
