@@ -73,9 +73,10 @@ Rv, and a set of coefficients for use in the optical (only difference between
 ccm89 and od94). For more information, seek the original paper.
 """
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
-    if x < 0.3
+    if x < 0.3 || x > 10.0
         throw(DomainError(x, "out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom"))
-    elseif x < 1.1  # Near IR
+    end
+    if x < 1.1      # Near IR
         y = x^1.61
         a = 0.574y
         b = -0.527y
@@ -92,12 +93,10 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real}
             a += @evalpoly y 0.0 0.0 -0.04473 -0.009779
             b += @evalpoly y 0.0 0.0 0.213 0.1207
         end
-    elseif x ≤ 10.0 # FUV
+    else            # FUV
         y = x - 8.0
         a = @evalpoly y -1.073 -0.628 0.137 -0.07
         b = @evalpoly y 13.67 4.257 -0.42 0.374
-    else
-        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
     end
     return a + b / Rv
 end
@@ -165,13 +164,14 @@ The algorithm used for the [`VCG04`](@ref) extinction law, given inverse microns
 and Rv. For more information, seek the original paper.
 """
 function vcg04_invum(x::Real, Rv::Real)
-    if 3.3 ≤ x ≤ 8.0  # NUV
-        a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
-        b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
-    else
+    if x < 3.3 || x > 8.0
         throw(DomainError(x, "out of bounds of VCG04, support is over $(bounds(VCG04)) angstrom"))
     end
-    if 5.9 ≤ x ≤ 8.0  # far-NUV
+
+    # NUV
+    a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
+    b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
+    if 5.9 ≤ x ≤ 8.0    # far-NUV
         y = x - 5.9
         a += @evalpoly y 0.0 0.0 -0.0077 -0.0030
         b += @evalpoly y 0.0 0.0 0.2060 0.0550
@@ -210,13 +210,13 @@ The algorithm used for the [`GCC09`](@ref) extinction law, given inverse microns
 and Rv. For more information, seek the original paper.
 """
 function gcc09_invum(x::Real, Rv::Real)
-    if 3.3 ≤ x ≤ 11.0  # NUV
-        a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
-        b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
-    else # out of bounds
+    if x < 3.3 || x > 11.0 # out of bounds
         throw(DomainError(x, "out of bounds of GCC09, support is over $(bounds(GCC09)) angstrom"))
     end
-    if 5.9 ≤ x ≤ 11.0  # far-NUV
+    # NUV
+    a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
+    b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
+    if 5.9 ≤ x ≤ 11.0   # far-NUV
         y = x - 5.9
         a += @evalpoly y 0.0 0.0 -0.110 -0.0100
         b += @evalpoly y 0.0 0.0 0.531 0.0544
