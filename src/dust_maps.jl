@@ -23,13 +23,13 @@ end
 
 Schlegel, Finkbeiner and Davis (1998) dust map. 
 
-The first time this is constructed, the data files required will be downloaded 
-and stored in a directory following the semantics of 
+The first time this is constructed, the data files required will be downloaded
+and stored in a directory following the semantics of
 [DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked to
- download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to 
- `true`. You can also provide the directory of the two requisite files manually 
- instead of relying on DataDeps.jl. Internally, this type keeps the FITS files 
- defining the map open, speeding up repeated queries for E(B-V) values.
+download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to
+`true`. You can also provide the directory of the two requisite files manually
+instead of relying on DataDeps.jl. Internally, this type keeps the FITS files
+defining the map open, speeding up repeated queries for E(B-V) values.
 
 # References
 [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract)

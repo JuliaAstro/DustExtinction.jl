@@ -18,7 +18,9 @@ const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.34
 Clayton, Cardelli and Mathis (1989) dust law.
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the extinction
-at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this will return 0. `Rv` is the selective extinction and is valid over [2, 6]. A typical value for the Milky Way is 3.1.
+at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this
+will return 0. `Rv` is the selective extinction and is valid over [2, 6].
+A typical value for the Milky Way is 3.1.
 
 # References
 [Clayton,Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)
@@ -65,7 +67,9 @@ bounds(::Type{OD94}) = (1000, 33333)
 """
     DustExtinction.ccm89_invum(x, Rv, c_a, c_b)
 
-The algorithm used for the [`CCM89`](@ref) extinction law, given inverse microns, Rv, and a set of coefficients for use in the optical (only difference between ccm89 and od94). For more information, seek the original paper.
+The algorithm used for the [`CCM89`](@ref) extinction law, given inverse microns,
+Rv, and a set of coefficients for use in the optical (only difference between
+ccm89 and od94). For more information, seek the original paper.
 """
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
@@ -156,7 +160,8 @@ bounds(::Type{VCG04}) = (1250, 3030.3)
 """
     DustExtinction.vcg04_invum(x, Rv)
 
-The algorithm used for the [`VCG04`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+The algorithm used for the [`VCG04`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
 """
 function vcg04_invum(x::Real, Rv::Real)
     if 3.3 ≤ x ≤ 8.0  # NUV
@@ -200,7 +205,8 @@ bounds(::Type{GCC09}) = (909.0909090909091, 3030.3030303030305)
 """
     DustExtinction.gcc09_invum(x, Rv)
 
-The algorithm used for the [`GCC09`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+The algorithm used for the [`GCC09`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
 """
 function gcc09_invum(x::Real, Rv::Real)
     if 3.3 ≤ x ≤ 11.0  # NUV
@@ -288,9 +294,9 @@ const f99_gamma = 0.99
 Fitzpatrick (1999) dust law.
 Returns E(B-V) in magnitudes at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
-The default support is [1000, 33333] Å. Outside of that range this will return
-0. Rv is the selective extinction and is valid over [2, 6]. A typical value for
-the Milky Way is 3.1.
+The default support is [1000, 33333] Å. Outside of that range this will
+return 0. Rv is the selective extinction and is valid over [2, 6].
+A typical value for the Milky Way is 3.1.
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
@@ -308,7 +314,9 @@ bounds(::Type{F99}) = (1000.0, 33333.3)
 
 """
     DustExtinction.f99_invum(x, Rv)
-The algorithm used for the [`F99`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+
+The algorithm used for the [`F99`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
 """
 function f99_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
@@ -369,14 +377,19 @@ const f04_gamma = 0.922
 
 """
     F04(;Rv=3.1)
+
 Fitzpatrick (2004) dust law.
-Returns E(B-V) in magnitudes at the given wavelength relative to the
-extinction. This model applies to the UV and optical to NIR spectral range.
-The default support is [1000, 33333] Å. Outside of that range this will return
-0. Rv is the selective extinction and is valid over [2, 6]. A typical value for
+
+Returns E(B-V) in magnitudes at the given wavelength relative to the extinction.
+This model applies to the UV and optical to NIR spectral range.
+The default support is [1000, 33333] Å. Outside of that range this will return 0.
+Rv is the selective extinction and is valid over [2, 6]. A typical value for
 the Milky Way is 3.1.
+
 Equivalent to the F99 model with an updated NIR Rv dependence
+
 See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
+
 # References
 [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F/)
 """
@@ -394,7 +407,9 @@ bounds(::Type{F04}) = (1000.0, 33333.3)
 
 """
     DustExtinction.f04_invum(x, Rv)
-The algorithm used for the [`F04`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+
+The algorithm used for the [`F04`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
 """
 function f04_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
@@ -447,9 +462,9 @@ Fitzpatrick (2019) dust law.
 
 Returns E(B-V) in magnitudes at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
-The default support is [1149, 33333] Å. Outside of that range this will return
-0. Rv is the selective extinction and is valid over [2, 6]. A typical value for
-the Milky Way is 3.1.
+The default support is [1149, 33333] Å. Outside of that range this will
+return 0. Rv is the selective extinction and is valid over [2, 6].
+A typical value for the Milky Way is 3.1.
 
 Fitzpatrick, Massa, Gordon et al. (2019, ApJ, 886, 108) model. Based on a
 sample of stars observed spectroscopically in the optical with HST/STIS.
@@ -582,7 +597,8 @@ bounds(::Type{M14}) = (3030.3030303030305, 33333.333333333336)
 """
     DustExtinction.m14_invum(x, Rv)
 
-The algorithm used for the [`M14`](@ref) extinction law, given inverse microns and Rv. For more information, seek the original paper.
+The algorithm used for the [`M14`](@ref) extinction law, given inverse microns
+and Rv. For more information, seek the original paper.
 """
 function m14_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 3.3)

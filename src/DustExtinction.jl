@@ -29,29 +29,38 @@ export redden,
 """
     DustExtinction.ExtinctionLaw
 
-The abstract super-type for dust extinction laws. See the extended help (`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
+The abstract supertype for dust extinction laws. See the extended help
+(`??DustExtinction.ExtinctionLaw` from the REPL) for more information about the interface.
 
 # Extended Help
 
 ## Interface
 
 Here's how to make a new extinction law, called `MyLaw`
-* Create your struct. We strongly recommend using `Parameters.jl` to facilitate creating keyword argument constructors if your model is parameterized, which allows convenient usage with [`redden`](@ref) and [`deredden`](@ref). 
-```julia
-struct MyLaw <: DustExtinction.ExtinctionLaw end
-```
-* (Optional) Define the limits. This will default to `(0, Inf)`. Currently, this is used within the [`DustExtinction.checkbounds`](@ref) function and in the future will be used for plotting recipes.
-```julia
-DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
-```
-* Define the law. You only need to provide one function which takes wavelength as angstrom. If your law is naturally written for inverse-micron, there is a helper function `aa_to_invum`.
-```julia
-(::MyLaw)(wavelength::Real)
-```
-* (Optional) enable `Unitful.jl` support by adding this function. If you are building a new law within `DustExtinction.jl` you can add your law to the code-gen list inside `DustExtinction.jl/src/DustExtinction.jl`.
-```julia
-(l::MyLaw)(wavelength::Unitful.Quantity) = l(ustrip(u"angstrom", wavelength)) * u"mag"
-```
+* Create your struct. We strongly recommend using `Parameters.jl` to facilitate
+  creating keyword argument constructors if your model is parameterized, which
+  allows convenient usage with [`redden`](@ref) and [`deredden`](@ref).
+  ```julia
+  struct MyLaw <: DustExtinction.ExtinctionLaw end
+  ```
+* (Optional) Define the limits. This will default to `(0, Inf)`. Currently, this
+  is used within the [`DustExtinction.checkbounds`](@ref) function and in the
+  future will be used for plotting recipes.
+  ```julia
+  DustExtinction.bounds(::Type{<:MyLaw}) = (min, max)
+  ```
+* Define the law. You only need to provide one function which takes wavelength
+  as angstrom. If your law is naturally written for inverse-micron, there is a
+  helper function `aa_to_invum`.
+  ```julia
+  (::MyLaw)(wavelength::Real)
+  ```
+* (Optional) enable `Unitful.jl` support by adding this function. If you are
+  building a new law within `DustExtinction.jl` you can add your law to the
+  code-gen list inside `DustExtinction.jl/src/DustExtinction.jl`.
+  ```julia
+  (l::MyLaw)(wavelength::Unitful.Quantity) = l(ustrip(u"angstrom", wavelength)) * u"mag"
+  ```
 """
 abstract type ExtinctionLaw end
 
@@ -70,7 +79,8 @@ bounds(::Type{<:ExtinctionLaw}) = (0, Inf)
     DustExtinction.checkbounds(::ExtinctionLaw, wavelength)::Bool
     DustExtinction.checkbounds(::Type{<:ExtinctionLaw, wavelength}::Bool
 
-Helper function that uses [`DustExtinction.bounds`](@ref) to return whether the given wavelength is in the support for the law.
+Helper function that uses [`DustExtinction.bounds`](@ref) to return whether the
+given wavelength is in the support for the law.
 """
 checkbounds(::E, wave) where {E <: ExtinctionLaw} = checkbounds(E, wave)
 function checkbounds(E::Type{<:ExtinctionLaw}, wave)
@@ -85,7 +95,10 @@ end
 
 Redden the given `flux` using the given extinction law at the given wavelength.
 
-If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed struct or a `Type`. If it is a `Type`, `law_kwargs` will be passed to the constructor.
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is
+`<:Unitful.Quantity` it will be automatically converted. `Av` is the total
+extinction value. The extinction law can be a constructed struct or a `Type`.
+If it is a `Type`, `law_kwargs` will be passed to the constructor.
 
 # Examples
 
@@ -113,7 +126,10 @@ redden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux * (Av 
 
 Deredden the given `flux` using the given extinction law at the given wavelength.
 
-If `wave` is `<:Real` then it is expected to be in angstrom and if it is `<:Unitful.Quantity` it will be automatically converted. `Av` is the total extinction value. The extinction law can be a constructed struct or a `Type`. If it is a `Type`, `law_kwargs` will be passed to the constructor.
+If `wave` is `<:Real` then it is expected to be in angstrom and if it is
+`<:Unitful.Quantity` it will be automatically converted. `Av` is the total
+extinction value. The extinction law can be a constructed struct or a `Type`.
+If it is a `Type`, `law_kwargs` will be passed to the constructor.
 
 # Examples
 

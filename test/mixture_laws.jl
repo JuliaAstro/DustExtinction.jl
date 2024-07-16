@@ -1,9 +1,5 @@
 using Measurements
-using DustExtinction: aa_to_invum,
-                      g03_invum,
-                      g16_invum,
-                      G03_SMCBar,
-                      G16
+using DustExtinction: aa_to_invum, g03_invum, g16_invum, G03_SMCBar, G16
 
 @testset "G16" begin
 
