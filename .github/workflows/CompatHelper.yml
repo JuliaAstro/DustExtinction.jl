@@ -3,6 +3,7 @@ name: CompatHelper
 on:
   schedule:
     - cron: '05 20 * * *'
+  workflow_dispatch:
 
 jobs:
   CompatHelper:
