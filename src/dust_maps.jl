@@ -21,7 +21,7 @@ end
 """
     SFD98Map([mapdir])
 
-Schlegel, Finkbeiner and Davis (1998) dust map. 
+Schlegel, Finkbeiner and Davis (1998) dust map.
 
 The first time this is constructed, the data files required will be downloaded
 and stored in a directory following the semantics of
@@ -46,13 +46,14 @@ function SFD98Map(mapdir::String)
         sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
         sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
         sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
-        SFD98Map(mapdir,
+        SFD98Map(
+            mapdir,
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
             sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
     catch
         error("Could not open dust map FITS files in directory $mapdir")
     end
-    
+
 end
 
 SFD98Map() = SFD98Map(datadep"sfd98_map")
@@ -72,10 +73,10 @@ end
     (dustmap::SFD98Map)(l::Real, b::Real)
     (dustmap::SFD98Map)(l::Quantity, b::Quantity)
 
-Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`), 
-given in radians. Uses bilinear interpolation between pixel values. If `l` and 
-`b` are `Unitful.Quantity` they will be converted to radians and the output 
-will be given as `UnitfulAstro.mag`. 
+Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`),
+given in radians. Uses bilinear interpolation between pixel values. If `l` and
+`b` are `Unitful.Quantity` they will be converted to radians and the output
+will be given as `UnitfulAstro.mag`.
 
 # Example
 

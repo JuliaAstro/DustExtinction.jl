@@ -1,5 +1,4 @@
 
-
 """
     FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)
     FM90(coeffs, x0=4.60, gamma=0.9)
@@ -47,7 +46,7 @@ changing the expected behavior of reddening via the parameter ``A_V``.
 ## References
 [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
-@with_kw struct FM90{T<:Number}  <: ExtinctionLaw @deftype T    
+@with_kw struct FM90{T<:Number} <: ExtinctionLaw @deftype T
     c1 = 0.10
     c2 = 0.70
     c3 = 3.23
@@ -79,4 +78,3 @@ function (law::FM90)(wave::T) where T
 
     return exvebv
 end
-

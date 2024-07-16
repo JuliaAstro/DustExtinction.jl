@@ -101,7 +101,7 @@ function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real}
     return a + b / Rv
 end
 
-# --------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
     CAL00(;Rv=4.05)
@@ -109,11 +109,11 @@ end
 Calzetti et al. (2000) Dust Law.
 
 Returns E(B-V) in magnitudes at the given wavelength. `λ` is the wavelength in Å
- and has support over [1200, 22000]. Outside of that range this will return 0.
+and has support over [1200, 22000]. Outside of that range this will return 0.
 
 Calzetti et al. (2000) developed a recipe for dereddening the spectra of
 galaxies where massive stars dominate the radiation output. They found the best
- fit value for such galaxies was 4.05±0.80.
+fit value for such galaxies was 4.05±0.80.
 
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
@@ -231,16 +231,12 @@ const f99_x_splineval_uv = aa_to_invum.((2700, 2600))
 
 # Shape models used by F99 and F04
 function _curve_F99_method(
-    x,
-    Rv,
-    c1,
-    c2,
-    c3,
-    c4,
-    x0,
-    gamma,
-    optnir_axav_x,
-    optnir_axav_y,
+        x,
+        Rv,
+        c1, c2, c3, c4,
+        x0,
+        gamma,
+        optnir_axav_x, optnir_axav_y,
     )
 
     # add in required spline points, otherwise just spline points
@@ -291,12 +287,15 @@ const f99_gamma = 0.99
 
 """
     F99(;Rv=3.1)
+
 Fitzpatrick (1999) dust law.
+
 Returns E(B-V) in magnitudes at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
 The default support is [1000, 33333] Å. Outside of that range this will
 return 0. Rv is the selective extinction and is valid over [2, 6].
 A typical value for the Milky Way is 3.1.
+
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
