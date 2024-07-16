@@ -215,6 +215,7 @@ redden
 deredden
 DustExtinction.ExtinctionLaw
 DustExtinction.bounds
+DustExtinction.checkbounds
 ```
 
 ### Fittable Extinction Laws
