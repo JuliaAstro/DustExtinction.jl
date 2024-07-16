@@ -229,6 +229,12 @@ FM90
 
 ### Mixture Extinction Laws
 
+#### Gordon et al. (2003)
+
+```@docs
+G03_SMCBar
+```
+
 #### Gordon et al. (2016)
 
 ![](assets/G16_fixed_f_A_plot.svg)
