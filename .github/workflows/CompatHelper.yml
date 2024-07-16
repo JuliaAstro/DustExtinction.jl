@@ -5,6 +5,10 @@ on:
     - cron: '05 20 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   CompatHelper:
     runs-on: ubuntu-latest
