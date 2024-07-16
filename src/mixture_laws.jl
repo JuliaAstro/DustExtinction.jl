@@ -58,7 +58,7 @@ end
 
 function g03_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G03_SMCBar, support is over $(bounds(G03_SMCBar)) angstrom")
+        throw(DomainError(x, "out of bounds of G03_SMCBar, support is over $(bounds(G03_SMCBar)) angstrom"))
     end
 
     # return A(x)/A(V)
@@ -109,12 +109,13 @@ end
 
 """
     DustExtinction.g16_invum(x, Rv)
+
 The algorithm used for the [`G16`](@ref) extinction law, given inverse microns
 and Rv. For more information, seek the original paper.
 """
 function g16_invum(x::Real, Rv::Real, f_A::Number)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G16, support is over $(bounds(G16)) angstrom")
+        throw(DomainError(x, "out of bounds of G16, support is over $(bounds(G16)) angstrom"))
     end
 
     # get the A component extinction model

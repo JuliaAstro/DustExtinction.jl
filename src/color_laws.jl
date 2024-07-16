@@ -1,4 +1,5 @@
-using Dierckx, DelimitedFiles
+using Dierckx
+using DelimitedFiles
 
 # Convenience function for wavelength conversion
 @inline aa_to_invum(wave::Real) = 10000 / wave
@@ -73,7 +74,7 @@ ccm89 and od94). For more information, seek the original paper.
 """
 function ccm89_invum(x::Real, Rv::Real, c_a::Vector{<:Real}, c_b::Vector{<:Real})
     if x < 0.3
-        error("out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom")
+        throw(DomainError(x, "out of bounds of CCM89, support is over $(bounds(CCM89)) angstrom"))
     elseif x < 1.1  # Near IR
         y = x^1.61
         a = 0.574y
@@ -168,7 +169,7 @@ function vcg04_invum(x::Real, Rv::Real)
         a = 1.808 - 0.215 * x - 0.134 / ((x - 4.558)^2 + 0.566)
         b = -2.350 + 1.403 * x + 1.103 / ((x - 4.587)^2 + 0.263)
     else
-        error("out of bounds of VCG04, support is over $(bounds(VCG04)) angstrom")
+        throw(DomainError(x, "out of bounds of VCG04, support is over $(bounds(VCG04)) angstrom"))
     end
     if 5.9 ≤ x ≤ 8.0  # far-NUV
         y = x - 5.9
@@ -213,7 +214,7 @@ function gcc09_invum(x::Real, Rv::Real)
         a = 1.894 - 0.373 * x - 0.0101 / ((x - 4.57)^2 + 0.0384)
         b = -3.490 + 2.057 * x + 0.706 / ((x - 4.59)^2 + 0.169)
     else # out of bounds
-        error("out of bounds of GCC09, support is over $(bounds(GCC09)) angstrom")
+        throw(DomainError(x, "out of bounds of GCC09, support is over $(bounds(GCC09)) angstrom"))
     end
     if 5.9 ≤ x ≤ 11.0  # far-NUV
         y = x - 5.9
@@ -319,7 +320,7 @@ and Rv. For more information, seek the original paper.
 """
 function f99_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of F99, support is over $(bounds(F99)) angstrom")
+        throw(DomainError(x, "out of bounds of F99, support is over $(bounds(F99)) angstrom"))
     end
 
     # terms depending on Rv
@@ -412,7 +413,7 @@ and Rv. For more information, seek the original paper.
 """
 function f04_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of F04, support is over $(bounds(F04)) angstrom")
+        throw(DomainError(x, "out of bounds of F04, support is over $(bounds(F04)) angstrom"))
     end
 
     # original F99 Rv dependence
@@ -496,7 +497,8 @@ function f19_invum(x::Real, Rv::Real)
     end
 
     if !(0.3 <= x <= 8.7)
-        error("out of bounds of F19, support is over $(bounds(F19)) angstrom")
+        throw(DomainError(
+            x, "out of bounds of F19, support is over $(bounds(F19)) angstrom"))
     end
 
     # compute E(lambda-55)/E(B-55) on the tabulated x points
@@ -601,7 +603,8 @@ and Rv. For more information, seek the original paper.
 """
 function m14_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 3.3)
-        error("out of bounds of M14, support is over $(bounds(M14)) angstrom")
+        throw(DomainError(
+            x, "out of bounds of M14, support is over $(bounds(M14)) angstrom"))
     end
 
     a = zero(x)
