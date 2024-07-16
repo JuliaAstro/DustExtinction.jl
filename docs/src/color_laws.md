@@ -7,6 +7,7 @@ The following empirical laws allow us to model the reddening of light as it trav
 DocTestSetup = quote
     using DustExtinction, Random
     Random.seed!(1)
+    ENV["UNITFUL_FANCY_EXPONENTS"] = false
 end
 ```
 
@@ -17,17 +18,15 @@ Color laws are constructed and then used as a function for passing wavelengths. 
 ```jldoctest
 julia> CCM89(Rv=3.1)(4000)
 1.464555702942584
-
 ```
 
 These laws can be applied across higher dimension arrays using the `.` operator
 
 ```jldoctest
 julia> CCM89(Rv=3.1).([4000, 5000])
-2-element Array{Float64,1}:
+2-element Vector{Float64}:
  1.464555702942584
  1.1222468788993019
-
 ```
 
 these laws return magnitudes, which we can apply directly to flux by mulitplication with a base-2.5 logarithmic system (because astronomers are fun):
@@ -46,8 +45,8 @@ julia> flux = 1e-8 .* wave .+ 1e-2
 0.01004:3.3333333333333333e-6:0.01005
 
 julia> redden.(CCM89, wave, flux; Av=0.3)
-4-element Array{Float64,1}:
- 0.006698646015454752
+4-element Vector{Float64}:
+ 0.00669864601545475
  0.006918253926353551
  0.007154659823737299
  0.007370491272731541
@@ -65,7 +64,7 @@ The color laws also have built-in support for uncertainties using [Measurements.
 julia> using Measurements
 
 julia> CCM89(Rv=3.1).([4000. ± 10.5, 5000. ± 10.2])
-2-element Array{Measurement{Float64},1}:
+2-element Vector{Measurement{Float64}}:
  1.4646 ± 0.0033
  1.1222 ± 0.003
 
@@ -77,8 +76,8 @@ and also support units via [Unitful.jl](https://github.com/painterqubits/unitful
 julia> using Unitful, UnitfulAstro
 
 julia> mags = CCM89(Rv=3.1).([4000u"angstrom", 0.5u"μm"])
-2-element Array{Gain{Unitful.LogInfo{:Magnitude,10,-2.5},:?,Float64},1}:
- 1.4645557029425837 mag
+2-element Vector{Gain{Unitful.LogInfo{:Magnitude, 10, -2.5}, :?, Float64}}:
+  1.464555702942584 mag
  1.1222468788993019 mag
 
 ```
@@ -92,28 +91,28 @@ julia> wave = range(0.3, 1.0, length=5)u"μm"
 (0.3:0.175:1.0) μm
 
 julia> err = randn(length(wave))
-5-element Array{Float64,1}:
-  0.2972879845354616
-  0.3823959677906078
- -0.5976344767282311
- -0.01044524463737564
- -0.839026854388764
+5-element Vector{Float64}:
+ -0.07058313895389791
+  0.5314767537831963
+ -0.806852326006714
+  2.456991333983293
+  1.1648740735275196
 
 julia> flux = @.(300 / ustrip(wave)^4 ± err)*u"Jy"
-5-element Array{Quantity{Measurement{Float64},𝐌*𝐓⁻²,Unitful.FreeUnits{(Jy,),𝐌*𝐓⁻²,nothing}},1}:
-  37037.04 ± 0.3 Jy
-  5893.14 ± 0.38 Jy
-  1680.61 ± -0.6 Jy
- 647.598 ± -0.01 Jy
-   300.0 ± -0.84 Jy
+5-element Vector{Quantity{Measurement{Float64}, 𝐌 𝐓^-2, Unitful.FreeUnits{(Jy,), 𝐌 𝐓^-2, nothing}}}:
+ 37037.037 ± -0.071 Jy
+     5893.14 ± 0.53 Jy
+    1680.61 ± -0.81 Jy
+        647.6 ± 2.5 Jy
+        300.0 ± 1.2 Jy
 
 julia> redden.(CCM89, wave, flux; Av=0.3)
-5-element Array{Quantity{Measurement{Float64},𝐌*𝐓⁻²,Unitful.FreeUnits{(Jy,),𝐌*𝐓⁻²,nothing}},1}:
-    22410.8 ± 0.18 Jy
-    4229.74 ± 0.27 Jy
-    1337.12 ± 0.48 Jy
- 554.3349 ± 0.0089 Jy
-     268.31 ± 0.75 Jy
+5-element Vector{Quantity{Measurement{Float64}, 𝐌 𝐓^-2, Unitful.FreeUnits{(Jy,), 𝐌 𝐓^-2, nothing}}}:
+ 22410.804 ± 0.043 Jy
+    4229.74 ± 0.38 Jy
+    1337.12 ± 0.64 Jy
+       554.3 ± 2.1 Jy
+       268.3 ± 1.0 Jy
 
 ```
 
