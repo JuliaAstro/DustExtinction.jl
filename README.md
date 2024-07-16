@@ -17,9 +17,11 @@ Documentation: [DustExtinction](https://JuliaAstro.github.io/DustExtinction.jl/s
 
 ## Installation
 
-From package manager (``` ]``` key)
+From package manager (`]` key)
 
-``` add DustExtinction```
+```julia-repl
+pkg> add DustExtinction
+```
 
 ## Usage
 
