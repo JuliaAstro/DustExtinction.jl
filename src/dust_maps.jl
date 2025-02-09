@@ -21,15 +21,15 @@ end
 """
     SFD98Map([mapdir])
 
-Schlegel, Finkbeiner and Davis (1998) dust map. 
+Schlegel, Finkbeiner and Davis (1998) dust map.
 
-The first time this is constructed, the data files required will be downloaded 
-and stored in a directory following the semantics of 
+The first time this is constructed, the data files required will be downloaded
+and stored in a directory following the semantics of
 [DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked to
- download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to 
- `true`. You can also provide the directory of the two requisite files manually 
- instead of relying on DataDeps.jl. Internally, this type keeps the FITS files 
- defining the map open, speeding up repeated queries for E(B-V) values.
+download the files, set the environment variable `DATADEPS_ALWAYS_ACCEPT` to
+`true`. You can also provide the directory of the two requisite files manually
+instead of relying on DataDeps.jl. Internally, this type keeps the FITS files
+defining the map open, speeding up repeated queries for E(B-V) values.
 
 # References
 [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract)
@@ -46,13 +46,14 @@ function SFD98Map(mapdir::String)
         sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
         sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
         sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
-        SFD98Map(mapdir,
+        SFD98Map(
+            mapdir,
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
             sgp, sgp_size, sgp_crpix1, sgp_crpix2, sgp_lam_scal)
     catch
         error("Could not open dust map FITS files in directory $mapdir")
     end
-    
+
 end
 
 SFD98Map() = SFD98Map(datadep"sfd98_map")
@@ -72,10 +73,10 @@ end
     (dustmap::SFD98Map)(l::Real, b::Real)
     (dustmap::SFD98Map)(l::Quantity, b::Quantity)
 
-Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`), 
-given in radians. Uses bilinear interpolation between pixel values. If `l` and 
-`b` are `Unitful.Quantity` they will be converted to radians and the output 
-will be given as `UnitfulAstro.mag`. 
+Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`),
+given in radians. Uses bilinear interpolation between pixel values. If `l` and
+`b` are `Unitful.Quantity` they will be converted to radians and the output
+will be given as `UnitfulAstro.mag`.
 
 # Example
 
@@ -90,12 +91,12 @@ julia> m(1, 2)
 julia> l = 0:0.5:2; b = 0:0.5:2;
 
 julia> m.(l, b)
-5-element Array{Float64,1}:
- 99.69757461547852    
-  0.10180447359074371 
+5-element Vector{Float64}:
+ 99.69757461547852
+  0.10180447359074371
   0.019595484241066132
   0.010238757633890877
-  0.01862100327420125 
+  0.01862100327420125
 ```
 
 """
