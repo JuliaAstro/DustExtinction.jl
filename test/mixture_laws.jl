@@ -104,8 +104,8 @@ end
     model = G03_LMCAve(Rv=2.74)
     bad_waves = [100, 4e4]
     @test model.(bad_waves) == zeros(length(bad_waves))
-    @test_throws ErrorException g03_invum(aa_to_invum(bad_waves[1]), 3.1)
-    @test_throws ErrorException g03_invum(aa_to_invum(bad_waves[2]), 3.1)
+    @test_throws DomainError g03lmc_invum(aa_to_invum(bad_waves[1]), 3.1)
+    @test_throws DomainError g03lmc_invum(aa_to_invum(bad_waves[2]), 3.1)
 
     # uncertainties
     model = G03_LMCAve(Rv=3.41)

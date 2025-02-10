@@ -137,7 +137,7 @@ end
 
 function g03lmc_invum(x::Real, Rv::Real)
     if !(0.3 <= x <= 10.0)
-        error("out of bounds of G03_LMCAve, support is over $(bounds(G03_LMCAve)) angstrom")
+throw(DomainError(x, "out of bounds of G03_LMCAve, support is over $(bounds(G03_LMCAve)) angstrom"))
     end
 
     # return A(x)/A(V)
