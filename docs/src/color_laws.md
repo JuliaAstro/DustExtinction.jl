@@ -77,7 +77,7 @@ julia> using Unitful, UnitfulAstro
 
 julia> mags = CCM89(Rv=3.1).([4000u"angstrom", 0.5u"μm"])
 2-element Vector{Gain{Unitful.LogInfo{:Magnitude, 10, -2.5}, :?, Float64}}:
-  1.464555702942584 mag
+ 1.464555702942584 mag
  1.1222468788993019 mag
 
 ```
@@ -101,18 +101,18 @@ julia> err = randn(length(wave))
 julia> flux = @.(300 / ustrip(wave)^4 ± err)*u"Jy"
 5-element Vector{Quantity{Measurement{Float64}, 𝐌 𝐓^-2, Unitful.FreeUnits{(Jy,), 𝐌 𝐓^-2, nothing}}}:
  37037.037 ± -0.071 Jy
-     5893.14 ± 0.53 Jy
-    1680.61 ± -0.81 Jy
-        647.6 ± 2.5 Jy
-        300.0 ± 1.2 Jy
+   5893.14 ± 0.53 Jy
+   1680.61 ± -0.81 Jy
+     647.6 ± 2.5 Jy
+     300.0 ± 1.2 Jy
 
 julia> redden.(CCM89, wave, flux; Av=0.3)
 5-element Vector{Quantity{Measurement{Float64}, 𝐌 𝐓^-2, Unitful.FreeUnits{(Jy,), 𝐌 𝐓^-2, nothing}}}:
  22410.804 ± 0.043 Jy
-    4229.74 ± 0.38 Jy
-    1337.12 ± 0.64 Jy
-       554.3 ± 2.1 Jy
-       268.3 ± 1.0 Jy
+   4229.74 ± 0.38 Jy
+   1337.12 ± 0.64 Jy
+     554.3 ± 2.1 Jy
+     268.3 ± 1.0 Jy
 
 ```
 
