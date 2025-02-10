@@ -1,6 +1,7 @@
 using Measurements
 using DustExtinction: aa_to_invum,
                       g03_invum,
+                      g03lmc_invum,
                       g16_invum,
                       G03_SMCBar,
                       G03_LMCAve,
