@@ -234,6 +234,7 @@ FM90
 
 ```@docs
 G03_SMCBar
+G03_LMCAve
 ```
 
 #### Gordon et al. (2016)
