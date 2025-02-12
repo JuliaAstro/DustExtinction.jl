@@ -40,7 +40,7 @@ function _curve_F99_method(
         y_splineval_optir = (0.0, optnir_axav_y...)
         spline_x = (x_splineval_optir..., f99_x_splineval_uv...)
         spline_y = (y_splineval_optir..., y_splineval_uv...)
-        spl = Spline1D(collect(spline_x), collect(spline_y), k=3)
+        spl = interpolate(collect(spline_x), collect(spline_y), BSplineOrder(4))
         axav = spl(x)
     end
 
@@ -262,7 +262,9 @@ and Rv. For more information, seek the original paper.
 """
 function f19_invum(x::Real, Rv::Real)
     # read and unpack tabulated data
-    data_x, data_k, data_delta_k, data_sigma_k = let data = readdlm(joinpath(datadep"F19", "F19_tabulated.dat"), skipstart=1)
+    # using type annotations so `interpolate` can be inferred
+    # TODO: Avoid using readdlm to avoid this issue altogether
+    data_x::Vector{Float64}, data_k::Vector{Float64}, data_delta_k::Vector{Float64}, data_sigma_k::Vector{Float64} = let data = readdlm(joinpath(datadep"F19", "F19_tabulated.dat"), skipstart=1)
         (data[:, i] for i in 1:4)
     end
 
@@ -275,7 +277,7 @@ function f19_invum(x::Real, Rv::Real)
     k_rV_tab_x = @. data_k + data_delta_k * (Rv - 3.10) * 0.990
 
     # setup spline interpolation
-    spl = Spline1D(collect(data_x), collect(k_rV_tab_x), k=3)
+    spl = interpolate(collect(data_x), collect(k_rV_tab_x), BSplineOrder(4))
 
     # use spline interpolation to evaluate the curve for the input x values
     k_rV = spl(x)

@@ -43,8 +43,8 @@ const m14_b3v = @. (
 const m14_xn = collect((m14_x1..., m14_x2..., m14_x3...))
 const m14_anv = collect((m14_a1v..., m14_a2v..., m14_a3v...))
 const m14_bnv = collect((m14_b1v..., m14_b2v..., m14_b3v...))
-const m14_a_spl = Spline1D(m14_xn, m14_anv, bc="nearest")
-const m14_b_spl = Spline1D(m14_xn, m14_bnv, bc="nearest")
+const m14_a_spl = interpolate(m14_xn, m14_anv, BSplineOrder(4), Natural())
+const m14_b_spl = interpolate(m14_xn, m14_bnv, BSplineOrder(4), Natural())
 
 """
     M14(;Rv=3.1)

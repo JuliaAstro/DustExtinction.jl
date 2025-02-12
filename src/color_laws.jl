@@ -1,4 +1,4 @@
-using Dierckx
+using BSplineKit
 using DelimitedFiles
 
 # Convenience function for wavelength conversion

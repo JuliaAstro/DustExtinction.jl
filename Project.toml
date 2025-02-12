@@ -4,9 +4,9 @@ license = "MIT"
 version = "0.11.1"
 
 [deps]
+BSplineKit = "093aae92-e908-43d7-9660-e50ee39d5a0a"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
 FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
@@ -15,7 +15,6 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 [compat]
 DataDeps = "0.7"
 DelimitedFiles = "1"
-Dierckx = "0.4, 0.5"
 FITSIO = "0.13.0, 0.14, 0.15, 0.16.1, 0.17"
 Parameters = "0.12"
 Unitful = "0.17.0, 1"
