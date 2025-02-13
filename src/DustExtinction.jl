@@ -190,17 +190,6 @@ function __init__()
              "84891a59054adab44a7be54051e4dcf0e66e3f13eee0d845ce3739242f553b83"]
         )
     )
-    register(
-        DataDep(
-            "F19",
-            """
-            Tabulated data from Fitzpatrick et al (2019) extinction model calculation
-            Paper: https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F
-            """,
-            ["https://raw.githubusercontent.com/karllark/dust_extinction/master/dust_extinction/data/F19_tabulated.dat"],
-            ["34011693065bba25396085823ab1df43c058336a95da7d4fdb567f03103b35bc"]
-        )
-    )
 end
 
 end # module
