@@ -1,4 +1,4 @@
-using Dierckx
+using BSplineKit: interpolate, BSplineOrder, Natural
 using DelimitedFiles
 
 # Convenience function for wavelength conversion
