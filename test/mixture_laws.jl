@@ -1,5 +1,11 @@
 using Measurements
-using DustExtinction: aa_to_invum, g03_invum, g16_invum, G03_SMCBar, G16
+using DustExtinction: aa_to_invum,
+                      g03_invum,
+                      g03lmc_invum,
+                      g16_invum,
+                      G03_SMCBar,
+                      G03_LMCAve,
+                      G16
 
 @testset "G16" begin
 
@@ -78,6 +84,41 @@ end
 
     # Unitful
     model = G03_SMCBar(Rv=2.74)
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    wave = 1e4 ./ x
+    wave_u = collect(wave) * u"angstrom"
+    reddening = @inferred map(model, wave_u)
+    @test eltype(reddening) <: Gain
+    @test ustrip.(reddening) ≈ collect(y) rtol = tolerance
+end
+
+
+@testset "G03_LMCAve" begin
+
+    # Test output
+    model = G03_LMCAve()
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    w = 1e4 ./ x
+    @test model.(collect(w)) ≈ collect(y) rtol = tolerance
+
+    # Test out of bounds
+    model = G03_LMCAve(Rv=2.74)
+    bad_waves = [100, 4e4]
+    @test model.(bad_waves) == zeros(length(bad_waves))
+    @test_throws DomainError g03lmc_invum(aa_to_invum(bad_waves[1]), 3.1)
+    @test_throws DomainError g03lmc_invum(aa_to_invum(bad_waves[2]), 3.1)
+
+    # uncertainties
+    model = G03_LMCAve(Rv=3.41)
+    x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
+    wave = 1e4 ./ x
+    noise = rand(length(wave)) .* 0.01
+    wave_unc = wave .± noise
+    reddening = map(w -> @uncertain(model(w)), wave_unc)
+    @test Measurements.value.(reddening) ≈ collect(y) rtol = tolerance
+
+    # Unitful
+    model = G03_LMCAve(Rv=3.41)
     x, y, tolerance = model.obsdata_x, model.obsdata_axav, model.obsdata_tolerance
     wave = 1e4 ./ x
     wave_u = collect(wave) * u"angstrom"
