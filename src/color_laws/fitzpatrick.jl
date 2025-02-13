@@ -256,7 +256,7 @@ bounds(::Type{F19}) = (1149.4252873563219, 33333.333333333336)
 
 # read and unpack tabulated data
 # from https://raw.githubusercontent.com/karllark/dust_extinction/refs/heads/master/dust_extinction/data/F19_tabulated.dat
-# TODO: Consider other places to store and track this dataset. See discussion in
+# TODO: Consider other places to store and track this dataset. See discussion in https://github.com/JuliaAstro/DustExtinction.jl/pull/54
 const f99_x, f99_k, f99_delta_k, _ = eachcol([
  0.000  -3.020  -1.000   0.000
  0.455  -2.747  -0.842   0.000
