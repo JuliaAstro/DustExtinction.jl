@@ -31,6 +31,12 @@ julia> [dustmap(l[i], b[j]) for i in 1:length(l), j in 1:length(b)]
 
 ```
 
+```@example
+using DustExtinction, CairoMakie
+
+dplot()
+```
+
 ## Advanced Usage
 
 Our dust maps also have native support for `Unitful.jl` and `Measurements.jl`.
@@ -53,10 +59,6 @@ julia> dustmap(l, b)
 ```
 
 ## API/Reference
-
-### Schlegel, Finkbeiner and Davis (1998)
-
-![](assets/sfd98_plot.svg)
 
 ```@docs
 SFD98Map
