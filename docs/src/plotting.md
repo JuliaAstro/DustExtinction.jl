@@ -42,7 +42,7 @@ using CairoMakie
 dplot()
 ```
 
-See [`Color laws`] or [`Dust Maps`] for more usage examples.
+See [Color laws](@ref laws) and [Dust Maps](@ref maps) for more usage examples.
 
 ## API/Reference
 
