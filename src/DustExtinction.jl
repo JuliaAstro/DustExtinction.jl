@@ -30,11 +30,15 @@ export redden,
        lplot,
        lplot!,
        dplot,
-       dplot!
+       dplot!,
+       mplot,
+       mplot!
 
 # Plot recipe stubs
 function lplot end
 function lplot! end
+function mplot end
+function mplot! end
 function dplot end
 function dplot! end
 

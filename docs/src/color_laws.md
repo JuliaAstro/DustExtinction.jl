@@ -138,7 +138,9 @@ and is loosely associated with the size of the dust grains in the interstellar m
 
 ### Clayton, Cardelli and Mathis (1989)
 
-![](assets/ccm89_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(CCM89)
+```
 
 ```@docs
 CCM89
@@ -146,7 +148,9 @@ CCM89
 
 ### O'Donnell 1994
 
-![](assets/od94_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(OD94)
+```
 
 ```@docs
 OD94
@@ -154,7 +158,9 @@ OD94
 
 ### Calzetti et al. (2000)
 
-![](assets/cal00_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(CAL00)
+```
 
 ```@docs
 CAL00
@@ -162,7 +168,9 @@ CAL00
 
 ### Valencic, Clayton, & Gordon (2004)
 
-![](assets/vcg04_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(VCG04)
+```
 
 ```@docs
 VCG04
@@ -170,7 +178,9 @@ VCG04
 
 ### Gordon, Cartledge, & Clayton (2009)
 
-![](assets/gcc09_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(GCC09)
+```
 
 ```@docs
 GCC09
@@ -178,7 +188,9 @@ GCC09
 
 ### Fitzpatrick (1999)
 
-![](assets/F99_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(F99)
+```
 
 ```@docs
 F99
@@ -186,7 +198,9 @@ F99
 
 ### Fitzpatrick (2004)
 
-![](assets/F04_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(F04)
+```
 
 ```@docs
 F04
@@ -194,7 +208,9 @@ F04
 
 ### Fitzpatrick (2019)
 
-![](assets/F19_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(F19)
+```
 
 ```@docs
 F19
@@ -202,7 +218,9 @@ F19
 
 ### Maiz Apellaniz et al. (2014)
 
-![](assets/M14_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(M14)
+```
 
 ```@docs
 M14
@@ -222,7 +240,9 @@ DustExtinction.checkbounds
 
 #### Fitzpatrick & Massa (1990)
 
-![](assets/FM90_plot.svg)
+```@example
+using DustExtinction, CairoMakie; lplot(FM90)
+```
 
 ```@docs
 FM90
@@ -239,8 +259,12 @@ G03_LMCAve
 
 #### Gordon et al. (2016)
 
-![](assets/G16_fixed_f_A_plot.svg)
-![](assets/G16_fixed_Rv_plot.svg)
+```@example
+using DustExtinction, CairoMakie
+
+mplot(G16, (2.0, 3.1, 4.0, 5.0, 6.0), 1.0)
+mplot(G16, 3.1, 0.0:0.2:1.0)
+```
 
 ```@docs
 G16
