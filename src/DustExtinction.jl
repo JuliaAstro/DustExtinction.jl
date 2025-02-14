@@ -161,19 +161,8 @@ include("dust_maps.jl")
 include("fittable_laws.jl")
 include("mixture_laws.jl")
 
-# --------------------------------------------------------------------------------
-# Here be codegen!
-
-# generate unitful support for the following laws
-# this can be removed when julia support is pinned to 1.3 or higher,
-# at which point adding `(l::ExtinctionLaw)(wave::Quantity)` is possible, until then
-# using this code-gen does the trick but requires manually editing
-# instead of providing support for all <: ExtinctionLaw
-for law in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, G16, G03_SMCBar, G03_LMCAve, F99, F04, F19, M14]
-    (l::law)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
-end
-
-# --------------------------------------------------------------------------------
+# generate unitful support
+(l::ExtinctionLaw)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 
 function __init__()
     # register our data dependencies

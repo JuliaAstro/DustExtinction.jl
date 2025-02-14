@@ -76,7 +76,7 @@ A typical value for the Milky Way is 3.1.
     Rv::Float64 = 3.1
 end
 
-function (law::F99)(wave::T) where T
+function (law::F99)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f99_invum(x, law.Rv)
@@ -169,7 +169,7 @@ See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
     Rv::Float64 = 3.1
 end
 
-function (law::F04)(wave::T) where T
+function (law::F04)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f04_invum(x, law.Rv)
@@ -246,7 +246,7 @@ sample of stars observed spectroscopically in the optical with HST/STIS.
     Rv::Float64 = 3.1
 end
 
-function (law::F19)(wave::T) where T
+function (law::F19)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f19_invum(x, law.Rv)
