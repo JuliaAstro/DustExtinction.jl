@@ -1,9 +1,13 @@
 module DustExtinction
 
-using Unitful
-using UnitfulAstro
-using DataDeps
-using Parameters
+using Unitful: Unitful, @u_str, Quantity, ustrip
+using UnitfulAstro: UnitfulAstro
+using DataDeps: DataDeps, @datadep_str, DataDep, register
+using Parameters: Parameters, @with_kw
+using FITSIO: FITSIO, FITS, ImageHDU, read_key
+import Base: show
+using BSplineKit: interpolate, BSplineOrder, Natural
+using DelimitedFiles: DelimitedFiles
 
 export redden,
        deredden,

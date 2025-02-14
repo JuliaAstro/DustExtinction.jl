@@ -1,5 +1,3 @@
-using DustExtinction: _curve_F99_method
-
 const g03_obsdata_x = (
     0.455, 0.606, 0.800, 1.235, 1.538, 1.818, 2.273, 2.703,
     3.375, 3.625, 3.875, 4.125, 4.375, 4.625, 4.875, 5.125,
@@ -69,7 +67,7 @@ provide smooth interpolation as noted in Gordon et al. (2016, ApJ, 826, 104)
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-@with_kw struct G03_SMCBar <: DustExtinction.ExtinctionLaw
+@with_kw struct G03_SMCBar <: ExtinctionLaw
     Rv::Float64 = 2.74
     obsdata_x = g03_obsdata_x
     obsdata_axav = g03_obsdata_axav
@@ -84,7 +82,7 @@ Gordon et al. (2003) LMCAve Average Extinction Curve.
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-@with_kw struct G03_LMCAve <: DustExtinction.ExtinctionLaw
+@with_kw struct G03_LMCAve <: ExtinctionLaw
     Rv::Float64 = 3.41
     obsdata_x = g03lmc_obsdata_x
     obsdata_axav = g03lmc_obsdata_axav

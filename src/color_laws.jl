@@ -1,6 +1,3 @@
-using BSplineKit: interpolate, BSplineOrder, Natural
-using DelimitedFiles
-
 # Convenience function for wavelength conversion
 @inline aa_to_invum(wave::Real) = 10_000 / wave
 
