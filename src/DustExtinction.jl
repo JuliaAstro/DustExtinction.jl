@@ -25,7 +25,18 @@ export redden,
        G03_LMCAve,
        # Dust maps
        SFD98Map,
-       ebv_galactic
+       ebv_galactic,
+       # Makie.jl recipe extension
+       lplot,
+       lplot!,
+       dplot,
+       dplot!
+
+# Plot recipe stubs
+function lplot end
+function lplot! end
+function dplot end
+function dplot! end
 
 """
     abstract type DustExtinction.ExtinctionLaw
