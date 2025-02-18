@@ -1,3 +1,9 @@
+```@setup plotting
+using DustExtinction, CairoMakie
+using DustExtinction: ExtinctionLaw
+include("./plotting.jl")
+```
+
 # [Dust Maps](@id maps)
 
 ## Usage
@@ -31,10 +37,8 @@ julia> [dustmap(l[i], b[j]) for i in 1:length(l), j in 1:length(b)]
 
 ```
 
-```@example
-using DustExtinction, CairoMakie
-
-dplot()
+```@example plotting
+dplot() # hide
 ```
 
 ## Advanced Usage

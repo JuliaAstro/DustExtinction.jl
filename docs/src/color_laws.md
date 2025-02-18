@@ -1,3 +1,8 @@
+```@setup plotting
+using DustExtinction, CairoMakie
+using DustExtinction: ExtinctionLaw
+include("./plotting.jl")
+```
 
 # [Color laws](@id laws)
 
@@ -138,8 +143,8 @@ and is loosely associated with the size of the dust grains in the interstellar m
 
 ### Clayton, Cardelli and Mathis (1989)
 
-```@example
-using DustExtinction, CairoMakie; lplot(CCM89)
+```@example plotting
+lplot(CCM89) # hide
 ```
 
 ```@docs
@@ -148,8 +153,8 @@ CCM89
 
 ### O'Donnell 1994
 
-```@example
-using DustExtinction, CairoMakie; lplot(OD94)
+```@example plotting
+lplot(OD94) # hide
 ```
 
 ```@docs
@@ -158,8 +163,8 @@ OD94
 
 ### Calzetti et al. (2000)
 
-```@example
-using DustExtinction, CairoMakie; lplot(CAL00)
+```@example plotting
+lplot(CAL00) # hide
 ```
 
 ```@docs
@@ -168,8 +173,8 @@ CAL00
 
 ### Valencic, Clayton, & Gordon (2004)
 
-```@example
-using DustExtinction, CairoMakie; lplot(VCG04)
+```@example plotting
+lplot(VCG04) # hide
 ```
 
 ```@docs
@@ -178,8 +183,8 @@ VCG04
 
 ### Gordon, Cartledge, & Clayton (2009)
 
-```@example
-using DustExtinction, CairoMakie; lplot(GCC09)
+```@example plotting
+lplot(GCC09) # hide
 ```
 
 ```@docs
@@ -188,8 +193,8 @@ GCC09
 
 ### Fitzpatrick (1999)
 
-```@example
-using DustExtinction, CairoMakie; lplot(F99)
+```@example plotting
+lplot(F99) # hide
 ```
 
 ```@docs
@@ -198,8 +203,8 @@ F99
 
 ### Fitzpatrick (2004)
 
-```@example
-using DustExtinction, CairoMakie; lplot(F04)
+```@example plotting
+lplot(F04) # hide
 ```
 
 ```@docs
@@ -208,8 +213,8 @@ F04
 
 ### Fitzpatrick (2019)
 
-```@example
-using DustExtinction, CairoMakie; lplot(F19)
+```@example plotting
+lplot(F19) # hide
 ```
 
 ```@docs
@@ -218,8 +223,8 @@ F19
 
 ### Maiz Apellaniz et al. (2014)
 
-```@example
-using DustExtinction, CairoMakie; lplot(M14)
+```@example plotting
+lplot(M14) # hide
 ```
 
 ```@docs
@@ -240,8 +245,8 @@ DustExtinction.checkbounds
 
 #### Fitzpatrick & Massa (1990)
 
-```@example
-using DustExtinction, CairoMakie; lplot(FM90)
+```@example plotting
+lplot(FM90) # hide
 ```
 
 ```@docs
@@ -259,11 +264,9 @@ G03_LMCAve
 
 #### Gordon et al. (2016)
 
-```@example
-using DustExtinction, CairoMakie
-
-mplot(G16, (2.0, 3.1, 4.0, 5.0, 6.0), 1.0)
-mplot(G16, 3.1, 0.0:0.2:1.0)
+```@example plotting
+mplot(G16, (2.0, 3.1, 4.0, 5.0, 6.0), 1.0) # hide
+mplot(G16, 3.1, 0.0:0.2:1.0) # hide
 ```
 
 ```@docs
