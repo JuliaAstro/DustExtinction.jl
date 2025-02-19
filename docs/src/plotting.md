@@ -75,4 +75,4 @@ fig
 ```
 
 !!! tip
-    See [plotting.jl](https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/plotting.jl) for more plotting examples. The convenience functions defined there are used to generate the other figures shown in this documentation.
+    See [plotting.jl](https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/src/plotting.jl) for more plotting examples. The convenience functions defined there are used to generate the other figures shown in this documentation.
