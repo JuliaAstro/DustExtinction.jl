@@ -23,7 +23,11 @@ BSplineKit = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18"
 DataDeps = "0.7"
 DelimitedFiles = "1"
 FITSIO = "0.13.0, 0.14, 0.15, 0.16.1, 0.17"
+Makie = "0.21.18, 0.22"
 Parameters = "0.12"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
 julia = "1.6"
+
+[extras]
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
