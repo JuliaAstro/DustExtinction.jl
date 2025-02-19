@@ -1,7 +1,90 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Plotting · DustExtinction.jl</title><meta name="title" content="Plotting · DustExtinction.jl"/><meta property="og:title" content="Plotting · DustExtinction.jl"/><meta property="twitter:title" content="Plotting · DustExtinction.jl"/><meta name="description" content="Documentation for DustExtinction.jl."/><meta property="og:description" content="Documentation for DustExtinction.jl."/><meta property="twitter:description" content="Documentation for DustExtinction.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="DustExtinction.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">DustExtinction.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../color_laws/">Color Laws</a></li><li><a class="tocitem" href="../dust_maps/">Dust Maps</a></li><li class="is-active"><a class="tocitem" href>Plotting</a><ul class="internal"><li><a class="tocitem" href="#Line-plots"><span>Line plots</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Plotting</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Plotting</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaAstro/DustExtinction.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaAstro/DustExtinction.jl/blob/master/docs/src/plotting.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="plotting"><a class="docs-heading-anchor" href="#plotting">Plotting</a><a id="plotting-1"></a><a class="docs-heading-anchor-permalink" href="#plotting" title="Permalink"></a></h1><p>DustExtinction.jl provides basic functionality for creating plots with Makie.jl, which can then be composed together to form more complex figures. Below are a few examples using the following primitives from Makie.jl: <a href="https://docs.makie.org/stable/reference/plots/lines"><code>lines</code></a>, <a href="https://docs.makie.org/stable/reference/plots/scatter"><code>scatter</code></a>, and <a href="https://docs.makie.org/stable/reference/plots/heatmap"><code>heatmap</code></a>, along with their mutating equivalents.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>By default, all plots adopt the axis limits defined by <a href="../color_laws/#DustExtinction.checkbounds"><code>DustExtinction.checkbounds</code></a>, but this is easily modified in the Makie figures.</p></div></div><h2 id="Line-plots"><a class="docs-heading-anchor" href="#Line-plots">Line plots</a><a id="Line-plots-1"></a><a class="docs-heading-anchor-permalink" href="#Line-plots" title="Permalink"></a></h2><p>Makie&#39;s line and scatter plots work out-of-the box for all color laws, which can then be used to build up more complex plots.</p><pre><code class="language-julia hljs">using DustExtinction, CairoMakie
-fig, ax1, p1 = lines(CCM89())
-ax2, p2 = scatter(fig[1, 2], F04(); color=:orange, markersize=5)
-linkaxes!(ax1, ax2)
-xlims!(3, 8)
-fig</code></pre><img src="3a121b7a.png" alt="Example block output"/><div class="admonition is-success"><header class="admonition-header">Tip</header><div class="admonition-body"><p>See <a href="https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/plotting.jl">plotting.jl</a> for more plotting examples. These functions are used to generate the other figures shown in this documentation.</p></div></div></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../dust_maps/">« Dust Maps</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.1 on <span class="colophon-date" title="Wednesday 19 February 2025 00:34">Wednesday 19 February 2025</span>. Using Julia version 1.10.8.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+using DustExtinction: aa_to_invum
+using Measurements</code></pre><pre><code class="language-julia hljs">wavs = let
+    x = range(2_000, 3_000; length=1_000)
+    x .± 1e5 * inv.(x)
+end # Å</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">1000-element Vector{Measurements.Measurement{Float64}}:
+ 2000.0 ± 50.0
+ 2001.0 ± 50.0
+ 2002.0 ± 50.0
+ 2003.0 ± 50.0
+ 2004.0 ± 50.0
+ 2005.0 ± 50.0
+ 2006.0 ± 50.0
+ 2007.0 ± 50.0
+ 2008.0 ± 50.0
+ 2009.0 ± 50.0
+        ⋮
+ 2992.0 ± 33.0
+ 2993.0 ± 33.0
+ 2994.0 ± 33.0
+ 2995.0 ± 33.0
+ 2996.0 ± 33.0
+ 2997.0 ± 33.0
+ 2998.0 ± 33.0
+ 2999.0 ± 33.0
+ 3000.0 ± 33.0</code></pre><pre><code class="language-julia hljs">invum = aa_to_invum.(wavs) # μm</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">1000-element Vector{Measurements.Measurement{Float64}}:
+   5.0 ± 0.12
+   5.0 ± 0.12
+   5.0 ± 0.12
+  4.99 ± 0.12
+  4.99 ± 0.12
+  4.99 ± 0.12
+  4.99 ± 0.12
+  4.98 ± 0.12
+  4.98 ± 0.12
+  4.98 ± 0.12
+       ⋮
+ 3.342 ± 0.037
+ 3.341 ± 0.037
+  3.34 ± 0.037
+ 3.339 ± 0.037
+ 3.338 ± 0.037
+ 3.337 ± 0.037
+ 3.336 ± 0.037
+ 3.334 ± 0.037
+ 3.333 ± 0.037</code></pre><pre><code class="language-julia hljs">model = CCM89()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CCM89
+  Rv: Float64 3.1
+</code></pre><pre><code class="language-julia hljs">lines(model)</code></pre><img src="cfa5a21a.png" alt="Example block output"/><pre><code class="language-julia hljs">lines(model; axis=(; limits=(3, 6, 0, 5)))</code></pre><img src="fe29ed39.png" alt="Example block output"/><pre><code class="language-julia hljs">extinction = model.(wavs) # mag</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">1000-element Vector{Measurements.Measurement{Float64}}:
+  2.84 ± 0.15
+  2.85 ± 0.15
+  2.85 ± 0.15
+  2.85 ± 0.15
+  2.85 ± 0.15
+  2.86 ± 0.15
+  2.86 ± 0.15
+  2.86 ± 0.15
+  2.87 ± 0.15
+  2.87 ± 0.15
+       ⋮
+ 1.822 ± 0.018
+ 1.822 ± 0.018
+ 1.821 ± 0.018
+ 1.821 ± 0.018
+  1.82 ± 0.018
+  1.82 ± 0.018
+ 1.819 ± 0.018
+ 1.819 ± 0.018
+ 1.818 ± 0.018</code></pre><pre><code class="language-julia hljs">lines(wavs, extinction)</code></pre><img src="2bd62493.png" alt="Example block output"/><pre><code class="language-julia hljs">wavs_sampled, extinction_sampled = let
+    N_samples = 7
+    wavs[range(begin, step=end ÷ N_samples; length=N_samples)],
+    extinction[range(begin, step=end ÷ N_samples; length=N_samples)]
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(Measurements.Measurement{Float64}[2000.0 ± 50.0, 2142.0 ± 47.0, 2284.0 ± 44.0, 2426.0 ± 41.0, 2569.0 ± 39.0, 2711.0 ± 37.0, 2853.0 ± 35.0], Measurements.Measurement{Float64}[2.84 ± 0.15, 3.19 ± 0.027, 2.91 ± 0.15, 2.48 ± 0.1, 2.199 ± 0.059, 2.026 ± 0.036, 1.908 ± 0.025])</code></pre><pre><code class="language-julia hljs">fig, ax, p = band(wavs, extinction; alpha=0.5, label=&quot;model uncertainty&quot;)
+
+lines!(ax, wavs, extinction; label=&quot;model: CCM89&quot;)
+
+scatter!(ax, wavs_sampled, extinction_sampled; color=:orange, label=&quot;observations&quot;)
+
+# Currently ambiguous for both x and y being Measurements
+errorbars!(ax, Measurements.value.(wavs_sampled), extinction_sampled;
+    whiskerwidth = 10,
+    color = :orange,
+    label = &quot;obs. uncertainty&quot;,
+)
+
+axislegend()
+ax.xlabel = &quot;Wavelength [Å]&quot;
+ax.ylabel = &quot;A(x) / A(V) [mag]&quot;
+
+fig</code></pre><img src="9eba8d80.png" alt="Example block output"/><div class="admonition is-success"><header class="admonition-header">Tip</header><div class="admonition-body"><p>See <a href="https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/plotting.jl">plotting.jl</a> for more plotting examples. The convenience functions defined there are used to generate the other figures shown in this documentation.</p></div></div></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../dust_maps/">« Dust Maps</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.1 on <span class="colophon-date" title="Wednesday 19 February 2025 02:21">Wednesday 19 February 2025</span>. Using Julia version 1.10.8.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
