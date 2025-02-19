@@ -3,9 +3,9 @@
 DustExtinction.jl provides basic functionality for creating plots with Makie.jl, which can then be composed together to form more complex figures. Below are a few examples using the following primitives from Makie.jl: [`lines`](https://docs.makie.org/stable/reference/plots/lines), [`scatter`](https://docs.makie.org/stable/reference/plots/scatter), and [`heatmap`](https://docs.makie.org/stable/reference/plots/heatmap), along with their mutating equivalents.
 
 !!! note
-    By default, all plots adopt the axis limits defined by [`DustExtinction.checkbounds`](@ref), but this is easily modified in the Makie figures.
+    By default, all plots adopt the axis limits defined by [`DustExtinction.bounds`](@ref), but this is easily modified in the Makie figures.
 
-## Line plots
+## Model plot example
 Makie's line and scatter plots work out-of-the box for all color laws, which can then be used to build up more complex plots.
 
 ```@example a
@@ -72,6 +72,16 @@ ax.xlabel = "Wavelength [Å]"
 ax.ylabel = "A(x) / A(V) [mag]"
 
 fig
+```
+
+## Dust map example
+```@example
+# Example here
+
+
+
+
+2 + 2
 ```
 
 !!! tip
