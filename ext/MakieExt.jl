@@ -18,4 +18,6 @@ module MakieExt
         Makie.convert_arguments(P, x, m)
     end
     Makie.plottype(x, ::ExtinctionLaw) = Makie.Lines
+
+    # TODO: Add `ImageLike` recipe
 end

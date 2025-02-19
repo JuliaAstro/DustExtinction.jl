@@ -18,7 +18,7 @@ model = CCM89()
 
 ```@example a
 # Automatic limits defined by model
-lines(model)
+lines(model) # Or plot(model)
 ```
 
 ```@example a
@@ -99,6 +99,9 @@ Colorbar(fig[1, 2], p; label="E(B - V)")
 
 fig
 ```
+
+!!! todo
+    Add `ImageLike` recipe
 
 !!! tip
     See [plotting.jl](https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/src/plotting.jl) for more plotting examples. The convenience functions defined there are used to generate the other figures shown in this documentation.
