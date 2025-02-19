@@ -61,7 +61,7 @@ true
 
 ```
 
-## Advanced Usage
+## [Advanced Usage](@id color_laws_advanced_usage)
 
 The color laws also have built-in support for uncertainties using [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
 
