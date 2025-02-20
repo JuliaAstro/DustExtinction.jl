@@ -18,7 +18,7 @@ model = CCM89()
 
 ```@example a
 # Automatic limits defined by model
-lines(model) # Or plot(model)
+lines(model; linewidth=3, color=:cornflowerblue) # Or plot(model; [plot options])
 ```
 
 ```@example a
@@ -81,27 +81,31 @@ fig
 ```
 
 ## Dust map example
-ImageLike plots like [`heatmap`](https://docs.makie.org/stable/reference/plots/heatmap#heatmap) and [`image`](https://docs.makie.org/stable/reference/plots/heatmap#heatmap) also work automatically:
+A [`heatmap`](https://docs.makie.org/stable/reference/plots/heatmap#heatmap) plot also works automatically for [`DustExtinction.SFD98Map`](@ref):
 
 ```@example a
 dustmap = SFD98Map()
 
-l = range(-3, 3; length=400)
-b = range(-1, 1; length=300)
-m = [dustmap(li, bj) for li in l, bj in b]
+heatmap(dustmap; colorrange=(0, 3), colormap=:cividis) # Or plot(dustmap; [plot kwargs])
+```
 
-fig, ax, p = heatmap(l, b, m; colorrange=(0, 3), colormap=:cividis)
+Similarly to the extinction law plots, we can create our own custom dust map plots:
 
-ax.xlabel = "l (°)"
-ax.ylabel = "b (°)"
+```@example a
+using Unitful
 
-Colorbar(fig[1, 2], p; label="E(B - V)")
+lrange = range(-1, 1; length=400)u"°"
+brange = range(-0.25, 0.25; length=300)u"°"
+
+fig, ax, p = heatmap(lrange, brange, dustmap; colorrange=(0, 3), colormap=:cividis)
+
+ax.xlabel = "l [°]"
+ax.ylabel = "b [°]"
+
+Colorbar(fig[1, 2], p; label="E(B - V) [mag]")
 
 fig
 ```
-
-!!! todo
-    Add `ImageLike` recipe
 
 !!! tip
     See [plotting.jl](https://github.com/JuliaAstro/DustExtinction.jl/blob/docs-makie/docs/src/plotting.jl) for more plotting examples. The convenience functions defined there are used to generate the other figures shown in this documentation.
