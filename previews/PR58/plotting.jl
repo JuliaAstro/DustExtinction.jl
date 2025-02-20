@@ -114,12 +114,11 @@ Heatmap of the given `dustmap`, with galactic longitude ``(l)`` on the x-axis an
 function dplot(dustmap=SFD98Map(); lrange=(-3, 3), brange=(-1, 1))
     l = range(lrange..., length=400)
     b = range(brange..., length=300)
-    m = [dustmap(li, bj) for li in l, bj in b]
 
-    fig, ax, p = heatmap(l, b, m; colorrange=(0, 3), colormap=:cividis)
+    fig, ax, p = heatmap(l, b, dustmap; colorrange=(0, 3), colormap=:cividis)
     ax.xlabel = "l (°)"
     ax.ylabel = "b (°)"
-    Colorbar(fig[1, 2], p; label="E(B - V)")
+    Colorbar(fig[1, 2], p; label="E(B - V) [mag]")
 
     fig
 end
