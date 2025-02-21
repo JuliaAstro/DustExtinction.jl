@@ -3,7 +3,7 @@
 DustExtinction.jl is designed to work automatically with many of Makie.jl's core plotting functions, which can then be composed together to form more complex figures. Below we show a few practical applications.
 
 !!! note
-    By default, all plots adopt the axis limits defined by [`DustExtinction.bounds`](@ref).
+    By default, all plots adopt the wavelength limits (in units of 1/μm) defined by [`DustExtinction.bounds`](@ref).
 
 ## Model plot example
 For a given [`DustExtinction.ExtinctionLaw`](@ref), Makie's usual PointBased plotting functions (e.g., [lines](https://docs.makie.org/stable/reference/plots/lines), [scatter](https://docs.makie.org/stable/reference/plots/scatter), [stairs](https://docs.makie.org/stable/reference/plots/stairs), etc.) should work right out-of-the-box:
