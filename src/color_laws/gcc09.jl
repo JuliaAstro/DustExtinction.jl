@@ -9,7 +9,7 @@ This model was not derived for the optical or NIR.
 # References
 [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G/)
 """
-@with_kw struct GCC09 <: ExtinctionLaw
+Base.@kwdef struct GCC09 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 

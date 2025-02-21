@@ -46,18 +46,31 @@ changing the expected behavior of reddening via the parameter ``A_V``.
 ## References
 [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
-@with_kw struct FM90{T<:Number} <: ExtinctionLaw @deftype T
-    c1 = 0.10
-    c2 = 0.70
-    c3 = 3.23
-    c4 = 0.41
-    x0 = 4.60
-    gamma = 0.99
-    @assert x0 ≥ 0 "`x0` must be ≥ 0, got $x0"
-    @assert gamma ≥ 0 "`gamma` must be ≥ 0, got $gamma"
-end
+#Base.@kwdef struct FM90{T<:Number} <: ExtinctionLaw
+#    c1::T = 0.10
+#    c2::T = 0.70
+#    c3::T = 3.23
+#    c4::T = 0.41
+#    x0::T = 4.60
+#    gamma::T = 0.99
+#    @assert x0 ≥ 0 "`x0` must be ≥ 0, got $x0"
+#    @assert gamma ≥ 0 "`gamma` must be ≥ 0, got $gamma"
+#end
 
-FM90(c1, c2, c3, c4, x0, gamma) = FM90(promote(c1, c2, c3, c4, x0, gamma)...)
+struct FM90{T<:Number} <: ExtinctionLaw
+    c1::T
+    c2::T
+    c3::T
+    c4::T
+    x0::T
+    gamma::T
+    function FM90(; c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.99)
+        x0 < 0 && error("`x0` must be ≥ 0, got ", x0)
+        gamma < 0 && error("`gamma` must be ≥ 0, got ", gamma)
+        new{typeof(c1)}(c1, c2, c3, c4, x0, gamma)
+    end
+    FM90(c1, c2, c3, c4, x0, gamma) = new{typeof(x0)}(promote(c1, c2, c3, c4, x0, gamma)...)
+end
 FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
 bounds(::Type{<:FM90}) = (912, 3200)
