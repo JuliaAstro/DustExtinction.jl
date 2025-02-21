@@ -18,7 +18,7 @@ A typical value for the Milky Way is 3.1.
 # References
 [Clayton,Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)
 """
-@with_kw struct CCM89 <: ExtinctionLaw
+Base.@kwdef struct CCM89 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 

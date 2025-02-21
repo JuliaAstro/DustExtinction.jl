@@ -65,7 +65,7 @@ equivalent to photometric R(V).
 # References
 [Maiz Apellaniz et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M/)
 """
-@with_kw struct M14 <: ExtinctionLaw
+Base.@kwdef struct M14 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
