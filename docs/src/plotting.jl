@@ -116,8 +116,8 @@ function dplot(dustmap=SFD98Map(); lrange=(-3, 3), brange=(-1, 1))
     b = range(brange..., length=300)
 
     fig, ax, p = heatmap(l, b, dustmap; colorrange=(0, 3), colormap=:cividis)
-    ax.xlabel = "l (°)"
-    ax.ylabel = "b (°)"
+    ax.xlabel = "l [°]"
+    ax.ylabel = "b [°]"
     Colorbar(fig[1, 2], p; label="E(B - V) [mag]")
 
     fig
