@@ -40,7 +40,7 @@ function _curve_F99_method(
         y_splineval_optir = (0.0, optnir_axav_y...)
         spline_x = (x_splineval_optir..., f99_x_splineval_uv...)
         spline_y = (y_splineval_optir..., y_splineval_uv...)
-        spl = interpolate(collect(spline_x), collect(spline_y), BSplineOrder(4))
+        spl = BSK.interpolate(collect(spline_x), collect(spline_y), BSK.BSplineOrder(4))
         axav = spl(x)
     end
 
@@ -72,7 +72,7 @@ A typical value for the Milky Way is 3.1.
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
-@with_kw struct F99 <: ExtinctionLaw
+Parameters.@with_kw struct F99 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -165,7 +165,7 @@ See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 # References
 [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F/)
 """
-@with_kw struct F04 <: ExtinctionLaw
+Parameters.@with_kw struct F04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -242,7 +242,7 @@ sample of stars observed spectroscopically in the optical with HST/STIS.
 # References
 [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F/)
 """
-@with_kw struct F19 <: ExtinctionLaw
+Parameters.@with_kw struct F19 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -378,7 +378,7 @@ function f19_invum(x::Real, Rv::Real)
     k_rV_tab_x = @. f99_k + f99_delta_k * (Rv - 3.10) * 0.990
 
     # setup spline interpolation
-    spl = interpolate(f99_x, k_rV_tab_x, BSplineOrder(4))
+    spl = BSK.interpolate(f99_x, k_rV_tab_x, BSK.BSplineOrder(4))
 
     # use spline interpolation to evaluate the curve for the input x values
     k_rV = spl(x)
