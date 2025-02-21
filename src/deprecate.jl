@@ -6,10 +6,10 @@
 
 # deprecations from 0.7 on
 @deprecate redden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = CCM89) redden(law, λ, f; Av = Av, Rv = 3.1)
-@deprecate redden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = CCM89) redden(law, λ, f; Av = Av, Rv = 3.1)
+@deprecate redden(f::U.Quantity, λ::U.Quantity, Av::Real; Rv = 3.1, law = CCM89) redden(law, λ, f; Av = Av, Rv = 3.1)
 
 @deprecate deredden(f::Real, λ::Real, Av::Real; Rv = 3.1, law = CCM89) deredden(law, λ, f; Av = Av, Rv = 3.1)
-@deprecate deredden(f::Quantity, λ::Quantity, Av::Real; Rv = 3.1, law = CCM89) deredden(law, λ, f; Av = Av, Rv = 3.1)
+@deprecate deredden(f::U.Quantity, λ::U.Quantity, Av::Real; Rv = 3.1, law = CCM89) deredden(law, λ, f; Av = Av, Rv = 3.1)
 
 @deprecate ccm89(wave, Rv = 3.1) CCM89(Rv = Rv)(wave)
 @deprecate od94(wave, Rv = 3.1) OD94(Rv = Rv)(wave)

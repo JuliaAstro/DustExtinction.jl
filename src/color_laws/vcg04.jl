@@ -9,7 +9,7 @@ This model was not derived for the optical or NIR.
 # References
 [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V/)
 """
-@with_kw struct VCG04 <: ExtinctionLaw
+Parameters.@with_kw struct VCG04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 

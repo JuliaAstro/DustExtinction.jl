@@ -46,7 +46,7 @@ changing the expected behavior of reddening via the parameter ``A_V``.
 ## References
 [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)
 """
-@with_kw struct FM90{T<:Number} <: ExtinctionLaw @deftype T
+Parameters.@with_kw struct FM90{T<:Number} <: ExtinctionLaw @deftype T
     c1 = 0.10
     c2 = 0.70
     c3 = 3.23
