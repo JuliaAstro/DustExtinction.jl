@@ -38,14 +38,16 @@ Our dust maps also have native support for `Unitful.jl` and `Measurements.jl`.
 ```jldoctest
 julia> using Measurements, Unitful
 
-julia> l = 45u"°"; b=0u"°";
+julia> using Unitful: °
+
+julia> l = 45°; b = 0°;
 
 julia> dustmap = SFD98Map();
 
 julia> dustmap(l, b)
 6.4290331211742355 mag
 
-julia> l = l ± 0.1u"°"; b = b ± 0.3u"°";
+julia> l = l ± 0.1°; b = b ± 0.3°;
 
 julia> dustmap(l, b)
 6.4 ± 5.7 mag
