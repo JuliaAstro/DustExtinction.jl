@@ -3,7 +3,6 @@ module DustExtinction
 using Unitful
 using UnitfulAstro
 using DataDeps
-using Parameters
 
 export redden,
        deredden,
@@ -38,8 +37,7 @@ The abstract supertype for dust extinction laws. See the extended help
 ## Interface
 
 Here's how to make a new extinction law, called `MyLaw`
-* Create your struct. We strongly recommend using `Parameters.jl` to facilitate
-  creating keyword argument constructors if your model is parameterized, which
+* Create your struct. We strongly recommend using keyword arguments if your model is parameterized, which
   allows convenient usage with [`redden`](@ref) and [`deredden`](@ref).
   ```julia
   struct MyLaw <: DustExtinction.ExtinctionLaw end
