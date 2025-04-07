@@ -53,12 +53,12 @@ Base.@kwdef struct FM90{T<:Number} <: ExtinctionLaw
     c4::T = 0.41
     x0::T = 4.60
     gamma::T = 0.99
-end
-
-function FM90(c1, c2, c3, c4, x0, gamma)
-    x0 < 0 && error("`x0` must be ≥ 0, got ", x0)
-    gamma < 0 && error("`gamma` must be ≥ 0, got ", gamma)
-    return FM90(promote(c1, c2, c3, c4, x0, gamma)...)
+    function FM90(c1, c2, c3, c4, x0, gamma)
+        x0 < 0 && error("`x0` must be ≥ 0, got ", x0)
+        gamma < 0 && error("`gamma` must be ≥ 0, got ", gamma)
+        params = promote(c1, c2, c3, c4, x0, gamma)
+        return new{eltype(params)}(params...)
+    end
 end
 FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
