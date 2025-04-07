@@ -13,3 +13,6 @@ LaTeXStrings = "1"
 Measurements = "2"
 Unitful = "1"
 UnitfulAstro = "1"
+
+[sources.DustExtinction]
+path = ".."
