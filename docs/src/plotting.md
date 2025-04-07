@@ -35,22 +35,16 @@ linkyaxes!(ax1, ax2)
 fig
 ```
 
-A predefined vector of wavelengths can also be passed to these plotting functions directly:
+A predefined vector of wavelengths can also be passed to these plotting functions directly. Let's combine this with Makie's integration with Measurements.jl to visualize the underlying uncertainty in our data:
 
 ```@example a
-using Measurements
+using Measurements, Unitful, UnitfulAstro
 
 wavs = let
     x = range(2_000, 3_000; length=1_000)
-    x .± 1e5 * inv.(x)
-end # Å
+    x = x .± 1e5 * inv.(ustrip.(x)) # "Å"
+end
 
-lines(wavs, model)
-```
-
-With Makie's integration with Measurements.jl, we can also visualize the underlying uncertainty in our data:
-
-```@example a
 extinction = model.(wavs) # mag
 
 wavs_sampled, extinction_sampled = let
@@ -89,7 +83,7 @@ dustmap = SFD98Map()
 heatmap(dustmap; colorrange=(0, 3), colormap=:cividis) # Or plot(dustmap; [plot kwargs])
 ```
 
-Similarly to the extinction law plots, we can create our own custom dust map plots:
+Similarly to the extinction law plots, we can create our own custom dust map plots. Here is an example using [Unitful.jl](https://painterqubits.github.io/Unitful.jl/stable/)'s integration:
 
 ```@example a
 using Unitful
