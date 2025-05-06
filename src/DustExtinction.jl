@@ -1,9 +1,11 @@
 module DustExtinction
 
-using Unitful
-using UnitfulAstro
-using DataDeps
-using Parameters
+import Unitful as U
+using UnitfulAstro: UnitfulAstro
+import DataDeps
+import Parameters
+import FITSIO as FITS
+import BSplineKit as BSK
 
 export redden,
        deredden,
@@ -118,8 +120,8 @@ julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 """
 redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av = Av)
 redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
-redden(law::ExtinctionLaw, wave::Quantity, flux::Real; Av = 1) = redden(law, ustrip(u"Å", wave), flux; Av = Av)
-redden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux * (Av * law(wave))
+redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
+redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
 
 """
     deredden(::ExtinctionLaw, wave, flux; Av=1)
@@ -149,8 +151,8 @@ julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
 """
 deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av = Av)
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
-deredden(law::ExtinctionLaw, wave::Quantity, flux::Real; Av = 1) = deredden(law, ustrip(u"Å", wave), flux; Av = Av)
-deredden(law::ExtinctionLaw, wave::Quantity, flux::Quantity; Av = 1) = flux / (Av * law(wave))
+deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
+deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux / (Av * law(wave))
 
 # --------------------------------------------------------------------------------
 # bring in the support
@@ -164,10 +166,11 @@ include("mixture_laws.jl")
 # generate unitful support
 (l::ExtinctionLaw)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
 
+
 function __init__()
     # register our data dependencies
-    register(
-        DataDep(
+    DataDeps.register(
+        DataDeps.DataDep(
             "sfd98_map",
             """
             SFD98 Galactic Dust Maps
