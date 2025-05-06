@@ -43,8 +43,8 @@ const m14_b3v = @. (
 const m14_xn = collect((m14_x1..., m14_x2..., m14_x3...))
 const m14_anv = collect((m14_a1v..., m14_a2v..., m14_a3v...))
 const m14_bnv = collect((m14_b1v..., m14_b2v..., m14_b3v...))
-const m14_a_spl = interpolate(m14_xn, m14_anv, BSplineOrder(4), Natural())
-const m14_b_spl = interpolate(m14_xn, m14_bnv, BSplineOrder(4), Natural())
+const m14_a_spl = BSK.interpolate(m14_xn, m14_anv, BSK.BSplineOrder(4), BSK.Natural())
+const m14_b_spl = BSK.interpolate(m14_xn, m14_bnv, BSK.BSplineOrder(4), BSK.Natural())
 
 """
     M14(;Rv=3.1)
@@ -65,7 +65,7 @@ equivalent to photometric R(V).
 # References
 [Maiz Apellaniz et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M/)
 """
-@with_kw struct M14 <: ExtinctionLaw
+Parameters.@with_kw struct M14 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
