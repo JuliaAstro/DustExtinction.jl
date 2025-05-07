@@ -1,17 +1,13 @@
-using FITSIO
-
-import Base: show
-
 # SFD98 Dust Maps
 
 mutable struct SFD98Map
     mapdir::String
-    ngp::ImageHDU
+    ngp::FITS.ImageHDU
     ngp_size::Tuple{Int,Int}
     ngp_crpix1::Float64
     ngp_crpix2::Float64
     ngp_lam_scal::Float64
-    sgp::ImageHDU
+    sgp::FITS.ImageHDU
     sgp_size::Tuple{Int,Int}
     sgp_crpix1::Float64
     sgp_crpix2::Float64
@@ -36,16 +32,16 @@ defining the map open, speeding up repeated queries for E(B-V) values.
 """
 function SFD98Map(mapdir::String)
     try
-        ngp = FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
+        ngp = FITS.FITS(joinpath(mapdir, "SFD_dust_4096_ngp.fits"))[1]
         ngp_size = size(ngp)
-        ngp_crpix1 = read_key(ngp, "CRPIX1")[1]
-        ngp_crpix2 = read_key(ngp, "CRPIX2")[1]
-        ngp_lam_scal = read_key(ngp, "LAM_SCAL")[1]
-        sgp = FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
+        ngp_crpix1 = FITS.read_key(ngp, "CRPIX1")[1]
+        ngp_crpix2 = FITS.read_key(ngp, "CRPIX2")[1]
+        ngp_lam_scal = FITS.read_key(ngp, "LAM_SCAL")[1]
+        sgp = FITS.FITS(joinpath(mapdir, "SFD_dust_4096_sgp.fits"))[1]
         sgp_size = size(sgp)
-        sgp_crpix1 = read_key(sgp, "CRPIX1")[1]
-        sgp_crpix2 = read_key(sgp, "CRPIX2")[1]
-        sgp_lam_scal = read_key(sgp, "LAM_SCAL")[1]
+        sgp_crpix1 = FITS.read_key(sgp, "CRPIX1")[1]
+        sgp_crpix2 = FITS.read_key(sgp, "CRPIX2")[1]
+        sgp_lam_scal = FITS.read_key(sgp, "LAM_SCAL")[1]
         SFD98Map(
             mapdir,
             ngp, ngp_size, ngp_crpix1, ngp_crpix2, ngp_lam_scal,
@@ -56,9 +52,9 @@ function SFD98Map(mapdir::String)
 
 end
 
-SFD98Map() = SFD98Map(datadep"sfd98_map")
+SFD98Map() = SFD98Map(DataDeps.datadep"sfd98_map")
 
-show(io::IO, map::SFD98Map) = print(io, "SFD98Map($(map.mapdir))")
+Base.show(io::IO, map::SFD98Map) = print(io, "SFD98Map($(map.mapdir))")
 
 # Convert from galactic longitude/latitude to lambert pixels.
 # See SFD 98 Appendix C. For the 4096x4096 maps, lam_scal = 2048,
@@ -152,10 +148,10 @@ function (dustmap::SFD98Map)(l::Real, b::Real)
     return val
 end
 
-function (dustmap::SFD98Map)(l::Quantity, b::Quantity)
-    l_ = ustrip(u"rad", l)
-    b_ = ustrip(u"rad", b)
-    return dustmap(l_, b_) * u"mag"
+function (dustmap::SFD98Map)(l::U.Quantity, b::U.Quantity)
+    l_ = U.ustrip(U.u"rad", l)
+    b_ = U.ustrip(U.u"rad", b)
+    return dustmap(l_, b_) * U.u"mag"
 end
 
 # Deprecations
