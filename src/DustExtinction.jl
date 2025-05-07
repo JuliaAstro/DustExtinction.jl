@@ -3,7 +3,6 @@ module DustExtinction
 import Unitful as U
 using UnitfulAstro: UnitfulAstro
 import DataDeps
-import Parameters
 import FITSIO as FITS
 import BSplineKit as BSK
 
