@@ -164,7 +164,7 @@ include("fittable_laws.jl")
 include("mixture_laws.jl")
 
 # generate unitful support
-(l::ExtinctionLaw)(wavelength::Quantity) = l(ustrip(u"Å", wavelength)) * u"mag"
+(l::ExtinctionLaw)(wavelength::U.Quantity) = l(U.ustrip(U.u"Å", wavelength)) * U.u"mag"
 
 
 function __init__()
