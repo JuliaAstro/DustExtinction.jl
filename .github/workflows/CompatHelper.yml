@@ -2,7 +2,7 @@ name: CompatHelper
 
 on:
   schedule:
-    - cron: '05 20 * * *'
+    - cron: '05 20 */5 * *'
   workflow_dispatch:
 
 permissions:
