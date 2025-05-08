@@ -72,7 +72,7 @@ A typical value for the Milky Way is 3.1.
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
-Parameters.@with_kw struct F99 <: ExtinctionLaw
+Base.@kwdef struct F99 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -165,7 +165,7 @@ See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 # References
 [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F/)
 """
-Parameters.@with_kw struct F04 <: ExtinctionLaw
+Base.@kwdef struct F04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -242,7 +242,7 @@ sample of stars observed spectroscopically in the optical with HST/STIS.
 # References
 [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F/)
 """
-Parameters.@with_kw struct F19 <: ExtinctionLaw
+Base.@kwdef struct F19 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 

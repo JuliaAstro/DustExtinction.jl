@@ -18,7 +18,7 @@ for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 # See Also
 [`CCM89`](@ref)
 """
-Parameters.@with_kw struct OD94 <: ExtinctionLaw
+Base.@kwdef struct OD94 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
@@ -47,7 +47,7 @@ fit value for such galaxies was 4.05±0.80.
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
-Parameters.@with_kw struct CAL00 <: ExtinctionLaw
+Base.@kwdef struct CAL00 <: ExtinctionLaw
     Rv::Float64 = 4.05
 end
 function (law::CAL00)(wave::T) where T

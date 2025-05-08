@@ -67,7 +67,7 @@ provide smooth interpolation as noted in Gordon et al. (2016, ApJ, 826, 104)
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-Parameters.@with_kw struct G03_SMCBar <: ExtinctionLaw
+Base.@kwdef struct G03_SMCBar <: DustExtinction.ExtinctionLaw
     Rv::Float64 = 2.74
     obsdata_x = g03_obsdata_x
     obsdata_axav = g03_obsdata_axav
@@ -82,7 +82,7 @@ Gordon et al. (2003) LMCAve Average Extinction Curve.
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-Parameters.@with_kw struct G03_LMCAve <: ExtinctionLaw
+Base.@kwdef struct G03_LMCAve <: DustExtinction.ExtinctionLaw
     Rv::Float64 = 3.41
     obsdata_x = g03lmc_obsdata_x
     obsdata_axav = g03lmc_obsdata_axav
@@ -170,9 +170,9 @@ A typical value for the Milky Way is 3.1.
 # References
 [Gordon et al. (2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G/)
 """
-Parameters.@with_kw struct G16{T<:Number} <: ExtinctionLaw @deftype T
+Base.@kwdef struct G16{T<:Number} <: ExtinctionLaw
     Rv::Float64 = 3.1
-    f_A = 1.0
+    f_A::T = 1.0
 end
 
 #G16(Rv, f_A) = G16(promote(Rv, f_A)...)
