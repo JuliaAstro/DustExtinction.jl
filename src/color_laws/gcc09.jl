@@ -13,7 +13,7 @@ Base.@kwdef struct GCC09 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::GCC09)(wave::T) where T
+function (law::GCC09)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return gcc09_invum(x, law.Rv)

@@ -13,7 +13,7 @@ Base.@kwdef struct VCG04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::VCG04)(wave::T) where T
+function (law::VCG04)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return vcg04_invum(x, law.Rv)

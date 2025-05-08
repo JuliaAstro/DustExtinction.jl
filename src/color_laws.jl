@@ -22,7 +22,7 @@ Base.@kwdef struct OD94 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::OD94)(wave::T) where T
+function (law::OD94)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return ccm89_invum(x, law.Rv, od94_ca, od94_cb)
@@ -50,7 +50,7 @@ fit value for such galaxies was 4.05±0.80.
 Base.@kwdef struct CAL00 <: ExtinctionLaw
     Rv::Float64 = 4.05
 end
-function (law::CAL00)(wave::T) where T
+function (law::CAL00)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     if wave < 6300

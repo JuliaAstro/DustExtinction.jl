@@ -69,7 +69,7 @@ Base.@kwdef struct M14 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::M14)(wave::T) where T
+function (law::M14)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return m14_invum(x, law.Rv)

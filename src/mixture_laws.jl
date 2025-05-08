@@ -99,13 +99,13 @@ bounds(::Type{<:G03_SMCBar}) = (1000.0, 33333.3)
 bounds(::Type{<:G03_LMCAve}) = (1000.0, 33333.3)
 
 
-function (law::G03_SMCBar)(wave::T) where T
+function (law::G03_SMCBar)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g03_invum(x, law.Rv)
 end
 
-function (law::G03_LMCAve)(wave::T) where T
+function (law::G03_LMCAve)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g03lmc_invum(x, law.Rv)
@@ -180,7 +180,7 @@ end
 
 bounds(::Type{<:G16}) = (1000.0, 33333.3)
 
-function (law::G16)(wave::T) where T
+function (law::G16)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g16_invum(x, law.Rv, law.f_A)

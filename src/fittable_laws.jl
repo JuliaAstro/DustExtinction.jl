@@ -64,7 +64,7 @@ FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
 bounds(::Type{<:FM90}) = (912, 3200)
 
-function (law::FM90)(wave::T) where T
+function (law::FM90)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
 
     x = aa_to_invum(wave)

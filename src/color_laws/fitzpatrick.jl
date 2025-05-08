@@ -76,7 +76,7 @@ Base.@kwdef struct F99 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F99)(wave::T) where T
+function (law::F99)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f99_invum(x, law.Rv)
@@ -169,7 +169,7 @@ Base.@kwdef struct F04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F04)(wave::T) where T
+function (law::F04)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f04_invum(x, law.Rv)
@@ -246,7 +246,7 @@ Base.@kwdef struct F19 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F19)(wave::T) where T
+function (law::F19)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f19_invum(x, law.Rv)
