@@ -10,7 +10,7 @@ const od94_cb = [0.0, 1.952, 2.908, -3.989, -7.985, 11.102, 5.491, -10.805, 3.34
 
 Clayton, Cardelli and Mathis (1989) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the extinction
+Returns A(λ)/A(V) at the given wavelength relative to the extinction
 at 5494.5 Å. The default support is [1000, 33333]. Outside of that range this
 will return 0. `Rv` is the selective extinction and is valid over [2, 6].
 A typical value for the Milky Way is 3.1.
