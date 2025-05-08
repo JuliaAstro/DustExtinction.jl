@@ -37,7 +37,7 @@ bounds(::Type{OD94}) = (1000, 33333)
 
 Calzetti et al. (2000) Dust Law.
 
-Returns E(B-V) in magnitudes at the given wavelength. `λ` is the wavelength in Å
+Returns A(λ)/A(V) at the given wavelength. `λ` is the wavelength in Å
 and has support over [1200, 22000]. Outside of that range this will return 0.
 
 Calzetti et al. (2000) developed a recipe for dereddening the spectra of

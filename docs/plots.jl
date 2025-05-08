@@ -1,7 +1,11 @@
 using Plots, LaTeXStrings
-import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb, cal00, ccm89_invum,
-                       vcg04_invum, gcc09_invum, f99_invum, f04_invum, f19_invum,
-                       m14_invum, FM90, G16, SFD98Map
+import DustExtinction: ccm89_ca, ccm89_cb, od94_ca, od94_cb,
+                       # TODO: replace deprecated invum functions
+                       ccm89_invum, vcg04_invum, gcc09_invum, m14_invum,
+                       f99_invum, f04_invum, f19_invum,
+                       CAL00, FM90, G16, SFD98Map,
+                       # Kludge until Makie PR merged
+                       aa_to_invum
 
 dir = joinpath(@__DIR__, "src", "assets")
 
@@ -14,8 +18,8 @@ for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
   m = ccm89_invum.(w, rv, Ref(ccm89_ca), Ref(ccm89_cb))
   plot!(w, m, label="Rv=$rv")
 end
-xlabel!(L"\mu m ^{-1}")
-ylabel!("E(B-V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "ccm89_plot.svg"))
 
 #--------------------------------------------------------------------------------
@@ -27,8 +31,8 @@ for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
   m = ccm89_invum.(w, rv, Ref(od94_ca), Ref(od94_cb))
   plot!(w, m, label="Rv=$rv")
 end
-xlabel!(L"\mu m ^{-1}")
-ylabel!("E(B-V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "od94_plot.svg"))
 
 #--------------------------------------------------------------------------------
@@ -37,11 +41,11 @@ savefig(joinpath(dir, "od94_plot.svg"))
 w = range(0.46, 8.3, length=1000)
 plot(legend=:topleft)
 for rv in [2.0, 3.0, 4.05, 5.0, 6.0]
-  m = cal00.(w, rv)
+  m = CAL00(Rv=rv).(aa_to_invum.(w)) # kludge until Makie
   plot!(w, m, label="Rv=$rv")
 end
-xlabel!(L"\mu m ^{-1}")
-ylabel!("E(B-V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "cal00_plot.svg"))
 
 #--------------------------------------------------------------------------------
@@ -65,8 +69,8 @@ for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
   m = gcc09_invum.(w, rv)
   plot!(w, m, label="Rv=$rv")
 end
-xlabel!(L"\mu m ^{-1}")
-ylabel!("E(B-V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "gcc09_plot.svg"))
 
 #--------------------------------------------------------------------------------
@@ -78,8 +82,8 @@ for rv in [2.0, 3.1, 4.0, 5.0, 6.0]
   m = vcg04_invum.(w, rv)
   plot!(w, m, label="Rv=$rv")
 end
-xlabel!(L"\mu m ^{-1}")
-ylabel!("E(B-V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"A(x)/A(V)")
 savefig(joinpath(dir, "vcg04_plot.svg"))
 
 #--------------------------------------------------------------------------------
@@ -153,8 +157,8 @@ plot!(w, m3, label = "bump term")
 m4 = FM90(c1=0.0, c2=0.0, c3=0.0).(x)
 plot!(w, m4, label = "FUV rise term")
 
-xlabel!(L"\mu m ^{-1}")
-ylabel!(L"E(\lambda - V)/E(B - V)")
+xlabel!(L"x\ \left[\mu m ^{-1}\right]")
+ylabel!(L"E(x - V)/E(B - V)")
 savefig(joinpath(dir, "FM90_plot.svg"))
 
 #--------------------------------------------------------------------------------

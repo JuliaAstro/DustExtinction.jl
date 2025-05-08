@@ -63,7 +63,7 @@ const f99_gamma = 0.99
 
 Fitzpatrick (1999) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
 The default support is [1000, 33333] Å. Outside of that range this will
 return 0. Rv is the selective extinction and is valid over [2, 6].
@@ -152,7 +152,7 @@ const f04_gamma = 0.922
 
 Fitzpatrick (2004) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the extinction.
+Returns A(λ)/A(V) at the given wavelength relative to the extinction.
 This model applies to the UV and optical to NIR spectral range.
 The default support is [1000, 33333] Å. Outside of that range this will return 0.
 Rv is the selective extinction and is valid over [2, 6]. A typical value for
@@ -230,7 +230,7 @@ end
 
 Fitzpatrick (2019) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
 The default support is [1149, 33333] Å. Outside of that range this will
 return 0. Rv is the selective extinction and is valid over [2, 6].
