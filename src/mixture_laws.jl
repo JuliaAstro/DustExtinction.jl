@@ -160,7 +160,7 @@ end
 
 Gordon et al. (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This is mixture model between the F99 R(V) dependent model
 (component A) and the [`G03_SMCBar`](@ref) model (component B).
 The default support is [1000, 33333] Å. Outside of that range this will return 0.

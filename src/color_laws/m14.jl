@@ -51,7 +51,7 @@ const m14_b_spl = BSK.interpolate(m14_xn, m14_bnv, BSK.BSplineOrder(4), BSK.Natu
 
 Maiz Apellaniz et al (2014) Milky Way & LMC R(V) dependent model.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. The published UV extinction curve is identical to Clayton,
 Cardelli, and Mathis (1989, CCM). Forcing the optical section to match smoothly
 with CCM introduces a non-physical feature at high values of R5495 around 3.9
