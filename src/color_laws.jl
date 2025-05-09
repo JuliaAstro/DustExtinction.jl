@@ -18,11 +18,11 @@ for different coefficients used in the optical (3030.3 Å to 9090.9 Å).
 # See Also
 [`CCM89`](@ref)
 """
-Parameters.@with_kw struct OD94 <: ExtinctionLaw
+Base.@kwdef struct OD94 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::OD94)(wave::T) where T
+function (law::OD94)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return ccm89_invum(x, law.Rv, od94_ca, od94_cb)
@@ -37,7 +37,7 @@ bounds(::Type{OD94}) = (1000, 33333)
 
 Calzetti et al. (2000) Dust Law.
 
-Returns E(B-V) in magnitudes at the given wavelength. `λ` is the wavelength in Å
+Returns A(λ)/A(V) at the given wavelength. `λ` is the wavelength in Å
 and has support over [1200, 22000]. Outside of that range this will return 0.
 
 Calzetti et al. (2000) developed a recipe for dereddening the spectra of
@@ -47,10 +47,10 @@ fit value for such galaxies was 4.05±0.80.
 # References
 [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)
 """
-Parameters.@with_kw struct CAL00 <: ExtinctionLaw
+Base.@kwdef struct CAL00 <: ExtinctionLaw
     Rv::Float64 = 4.05
 end
-function (law::CAL00)(wave::T) where T
+function (law::CAL00)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     if wave < 6300

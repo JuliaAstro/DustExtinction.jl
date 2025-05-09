@@ -63,7 +63,7 @@ const f99_gamma = 0.99
 
 Fitzpatrick (1999) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
 The default support is [1000, 33333] Å. Outside of that range this will
 return 0. Rv is the selective extinction and is valid over [2, 6].
@@ -72,11 +72,11 @@ A typical value for the Milky Way is 3.1.
 # References
 [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F/)
 """
-Parameters.@with_kw struct F99 <: ExtinctionLaw
+Base.@kwdef struct F99 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F99)(wave::T) where T
+function (law::F99)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f99_invum(x, law.Rv)
@@ -152,7 +152,7 @@ const f04_gamma = 0.922
 
 Fitzpatrick (2004) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the extinction.
+Returns A(λ)/A(V) at the given wavelength relative to the extinction.
 This model applies to the UV and optical to NIR spectral range.
 The default support is [1000, 33333] Å. Outside of that range this will return 0.
 Rv is the selective extinction and is valid over [2, 6]. A typical value for
@@ -165,11 +165,11 @@ See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 # References
 [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F/)
 """
-Parameters.@with_kw struct F04 <: ExtinctionLaw
+Base.@kwdef struct F04 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F04)(wave::T) where T
+function (law::F04)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f04_invum(x, law.Rv)
@@ -230,7 +230,7 @@ end
 
 Fitzpatrick (2019) dust law.
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This model applies to the UV and optical to NIR spectral range.
 The default support is [1149, 33333] Å. Outside of that range this will
 return 0. Rv is the selective extinction and is valid over [2, 6].
@@ -242,11 +242,11 @@ sample of stars observed spectroscopically in the optical with HST/STIS.
 # References
 [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F/)
 """
-Parameters.@with_kw struct F19 <: ExtinctionLaw
+Base.@kwdef struct F19 <: ExtinctionLaw
     Rv::Float64 = 3.1
 end
 
-function (law::F19)(wave::T) where T
+function (law::F19)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return f19_invum(x, law.Rv)

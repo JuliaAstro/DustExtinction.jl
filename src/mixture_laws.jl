@@ -67,7 +67,7 @@ provide smooth interpolation as noted in Gordon et al. (2016, ApJ, 826, 104)
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-Parameters.@with_kw struct G03_SMCBar <: ExtinctionLaw
+Base.@kwdef struct G03_SMCBar <: DustExtinction.ExtinctionLaw
     Rv::Float64 = 2.74
     obsdata_x = g03_obsdata_x
     obsdata_axav = g03_obsdata_axav
@@ -82,7 +82,7 @@ Gordon et al. (2003) LMCAve Average Extinction Curve.
 # Reference
 [Gordon et al. (2003)](https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G/)
 """
-Parameters.@with_kw struct G03_LMCAve <: ExtinctionLaw
+Base.@kwdef struct G03_LMCAve <: DustExtinction.ExtinctionLaw
     Rv::Float64 = 3.41
     obsdata_x = g03lmc_obsdata_x
     obsdata_axav = g03lmc_obsdata_axav
@@ -99,13 +99,13 @@ bounds(::Type{<:G03_SMCBar}) = (1000.0, 33333.3)
 bounds(::Type{<:G03_LMCAve}) = (1000.0, 33333.3)
 
 
-function (law::G03_SMCBar)(wave::T) where T
+function (law::G03_SMCBar)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g03_invum(x, law.Rv)
 end
 
-function (law::G03_LMCAve)(wave::T) where T
+function (law::G03_LMCAve)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g03lmc_invum(x, law.Rv)
@@ -160,7 +160,7 @@ end
 
 Gordon et al. (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
-Returns E(B-V) in magnitudes at the given wavelength relative to the
+Returns A(λ)/A(V) at the given wavelength relative to the
 extinction. This is mixture model between the F99 R(V) dependent model
 (component A) and the [`G03_SMCBar`](@ref) model (component B).
 The default support is [1000, 33333] Å. Outside of that range this will return 0.
@@ -170,9 +170,9 @@ A typical value for the Milky Way is 3.1.
 # References
 [Gordon et al. (2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G/)
 """
-Parameters.@with_kw struct G16{T<:Number} <: ExtinctionLaw @deftype T
+Base.@kwdef struct G16{T<:Number} <: ExtinctionLaw
     Rv::Float64 = 3.1
-    f_A = 1.0
+    f_A::T = 1.0
 end
 
 #G16(Rv, f_A) = G16(promote(Rv, f_A)...)
@@ -180,7 +180,7 @@ end
 
 bounds(::Type{<:G16}) = (1000.0, 33333.3)
 
-function (law::G16)(wave::T) where T
+function (law::G16)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
     x = aa_to_invum(wave)
     return g16_invum(x, law.Rv, law.f_A)
