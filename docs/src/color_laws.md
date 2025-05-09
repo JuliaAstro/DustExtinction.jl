@@ -231,19 +231,9 @@ lplot(M14) # hide
 M14
 ```
 
-## API/Reference
+## Fittable Extinction Laws
 
-```@docs
-redden
-deredden
-DustExtinction.ExtinctionLaw
-DustExtinction.bounds
-DustExtinction.checkbounds
-```
-
-### Fittable Extinction Laws
-
-#### Fitzpatrick & Massa (1990)
+### Fitzpatrick & Massa (1990)
 
 ```@example plotting
 lplot(FM90) # hide
@@ -253,16 +243,16 @@ lplot(FM90) # hide
 FM90
 ```
 
-### Mixture Extinction Laws
+## Mixture Extinction Laws
 
-#### Gordon et al. (2003)
+### Gordon et al. (2003)
 
 ```@docs
 G03_SMCBar
 G03_LMCAve
 ```
 
-#### Gordon et al. (2016)
+### Gordon et al. (2016)
 
 ```@example plotting
 mplot(G16, (2.0, 3.1, 4.0, 5.0, 6.0), 1.0) # hide
@@ -274,4 +264,14 @@ mplot(G16, 3.1, 0.0:0.2:1.0) # hide
 
 ```@docs
 G16
+```
+
+## API/Reference
+
+```@docs
+redden
+deredden
+DustExtinction.ExtinctionLaw
+DustExtinction.bounds
+DustExtinction.checkbounds
 ```
