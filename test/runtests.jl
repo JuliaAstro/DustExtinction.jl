@@ -10,6 +10,7 @@ using Test, Measurements, Unitful, UnitfulAstro, Random
     include("dust_maps.jl")
     include("fittable_laws.jl")
     include("mixture_laws.jl")
+    VERSION ≥ v"1.9" && include("makie_recipes.jl")
 
     @testset "interfaces" begin
         for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, G16, F99, F04, F19, M14]
