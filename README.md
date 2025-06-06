@@ -1,15 +1,12 @@
 # DustExtinction.jl
 
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/DustExtinction/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/DustExtinction.jl/dev/)
 
-[![Build Status](https://github.com/juliaastro/DustExtinction.jl/workflows/CI/badge.svg?branch=master)](https://github.com/juliaastro/DustExtinction.jl/actions)
+[![CI](https://github.com/JuliaAstro/DustExtinction.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/JuliaAstro/DustExtinction.jl/actions/workflows/ci.yml)
 [![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DustExtinction.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
-[![Coverage](https://codecov.io/gh/juliaastro/DustExtinction.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/juliaastro/DustExtinction.jl)
+[![codecov](https://codecov.io/gh/juliaastro/DustExtinction.jl/graph/badge.svg?token=lOk3jmHlDF)](https://codecov.io/gh/juliaastro/DustExtinction.jl)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/DustExtinction.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/DustExtinction.jl/dev)
-
-
 
 Tools for interstellar dust extinction in astronomy
 
