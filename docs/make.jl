@@ -17,6 +17,7 @@ makedocs(;
         assets = [
             "assets/favicon.ico",
         ],
+        canonical = "https://JuliaAstro.org/DustExtinction/stable/",
     ),
     authors = "Kyle Barbary, Mosé Giordano, Miles Lucas",
     pages,
@@ -28,4 +29,5 @@ deploydocs(;
     push_preview = true,
     branch = "gh-pages",
     devbranch = "master",
+    versions = ["stable" => "v^", "v#.#"], # Restrict to minor releases
 )
