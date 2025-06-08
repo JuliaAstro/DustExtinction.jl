@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Dust Maps · DustExtinction.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../"><img class="logo" src="../assets/logo.svg" alt="DustExtinction.jl logo"/></a><h1>DustExtinction.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../color_laws/">Color Laws</a></li><li class="current"><a class="toctext" href>Dust Maps</a><ul class="internal"><li><a class="toctext" href="#Usage-1">Usage</a></li><li><a class="toctext" href="#Advanced-Usage-1">Advanced Usage</a></li><li><a class="toctext" href="#API/Reference-1">API/Reference</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Dust Maps</a></li></ul><a class="edit-page" href="https://github.com/JuliaAstro/DustExtinction.jl/blob/master/docs/src/dust_maps.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Dust Maps</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="maps-1" href="#maps-1">Dust Maps</a></h1><h2><a class="nav-anchor" id="Usage-1" href="#Usage-1">Usage</a></h2><pre><code class="language-julia-repl">julia&gt; dustmap = SFD98Map();
+
+julia&gt; dustmap(0, 2)
+0.020303287464050277
+
+julia&gt; l = range(-π, π, length=5)
+-3.141592653589793:1.5707963267948966:3.141592653589793
+
+julia&gt; b = range(-π/2, π/2, length=5)
+-1.5707963267948966:0.7853981633974483:1.5707963267948966
+
+julia&gt; [dustmap(l[i], b[j]) for i in 1:length(l), j in 1:length(b)]
+5×5 Array{Float64,2}:
+ 0.0159853  0.105782    1.40486  0.0158918  0.0119615
+ 0.0159853  0.0268289   3.47788  0.0654852  0.0119615
+ 0.0159853  0.0343457  99.6976   0.103875   0.0119615
+ 0.0159853  0.0432165   2.60569  0.0178195  0.0119615
+ 0.0159853  0.105782    1.40486  0.0158918  0.0119615
+</code></pre><h2><a class="nav-anchor" id="Advanced-Usage-1" href="#Advanced-Usage-1">Advanced Usage</a></h2><p>Our dust maps also have native support for <code>Unitful.jl</code> and <code>Measurements.jl</code>.</p><pre><code class="language-julia-repl">julia&gt; using Measurements, Unitful
+
+julia&gt; l = 45u&quot;°&quot;; b=0u&quot;°&quot;;
+
+julia&gt; dustmap = SFD98Map();
+
+julia&gt; dustmap(l, b)
+6.4290331211742355 mag
+
+julia&gt; l = l ± 0.1u&quot;°&quot;; b = b ± 0.3u&quot;°&quot;;
+
+julia&gt; dustmap(l, b)
+6.4 ± 5.7 mag
+</code></pre><h2><a class="nav-anchor" id="API/Reference-1" href="#API/Reference-1">API/Reference</a></h2><h3><a class="nav-anchor" id="Schlegel,-Finkbeiner-and-Davis-(1998)-1" href="#Schlegel,-Finkbeiner-and-Davis-(1998)-1">Schlegel, Finkbeiner and Davis (1998)</a></h3><p><img src="../assets/sfd98_plot.svg" alt/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="DustExtinction.SFD98Map" href="#DustExtinction.SFD98Map"><code>DustExtinction.SFD98Map</code></a> — <span class="docstring-category">Type</span>.</div><div><div><pre><code class="language-julia">SFD98Map([mapdir])</code></pre><p>Schlegel, Finkbeiner and Davis (1998) dust map. </p><p>The first time this is constructed, the data files required will be downloaded  and stored in a directory following the semantics of  <a href="https://github.com/oxinabox/datadeps.jl">DataDeps.jl</a>. To avoid being asked to  download the files, set the environment variable <code>DATADEPS_ALWAYS_ACCEPT</code> to   <code>true</code>. You can also provide the directory of the two requisite files manually   instead of relying on DataDeps.jl. Internally, this type keeps the FITS files   defining the map open, speeding up repeated queries for E(B-V) values.</p><p><strong>References</strong></p><p><a href="https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S/abstract">Schlegel, Finkbeiner and Davis (1998)</a></p></div></div><a class="source-link" target="_blank" href="https://github.com/JuliaAstro/DustExtinction.jl/blob/a39125be77a98b8c397724199e3b389cb82e331f/src/dust_maps.jl#L21-L36">source</a><div><div><pre><code class="language-none">(dustmap::SFD98Map)(l::Real, b::Real)
+(dustmap::SFD98Map)(l::Quantity, b::Quantity)</code></pre><p>Get E(B-V) value from a <code>SFD98Map</code> instance at galactic coordinates (<code>l</code>, <code>b</code>),  given in radians. Uses bilinear interpolation between pixel values. If <code>l</code> and  <code>b</code> are <code>Unitful.Quantity</code> they will be converted to radians and the output  will be given as <code>UnitfulAstro.mag</code>. </p><p><strong>Example</strong></p><pre><code class="language-julia-repl">julia&gt; using DustExtinction
+
+julia&gt; m = SFD98Map();
+
+julia&gt; m(1, 2)
+0.013439524544325624
+
+julia&gt; l = 0:0.5:2; b = 0:0.5:2;
+
+julia&gt; m.(l, b)
+5-element Array{Float64,1}:
+ 99.69757461547852    
+  0.10180447359074371 
+  0.019595484241066132
+  0.010238757633890877
+  0.01862100327420125 </code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/JuliaAstro/DustExtinction.jl/blob/a39125be77a98b8c397724199e3b389cb82e331f/src/dust_maps.jl#L71-L101">source</a></section><footer><hr/><a class="previous" href="../color_laws/"><span class="direction">Previous</span><span class="title">Color Laws</span></a></footer></article></body></html>
