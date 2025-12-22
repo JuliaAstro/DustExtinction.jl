@@ -22,7 +22,6 @@ jobs:
       matrix:
         version:
           - 'min'
-          - '1.6'
           - '1.10' # The FITSIO dependency is currently broken on v1.11+: https://github.com/JuliaAstro/FITSIO.jl/issues/194
         os:
           - ubuntu-latest
