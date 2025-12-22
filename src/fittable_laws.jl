@@ -141,11 +141,10 @@ julia> model(1500)
 2.396291891812002
 
 julia> P92(FUV_b = 2.0).([1000, 2000, 3000])
-3-element Array{Float64,1}:
+3-element Vector{Float64}:
  3.8390886792306187
  2.7304534614548697
  1.806181164464396
-
 ```
 
 ## Default Parameter Values
