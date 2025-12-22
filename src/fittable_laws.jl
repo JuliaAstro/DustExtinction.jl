@@ -83,30 +83,12 @@ end
 
 
 """
-    P92(BKG_amp=218.57,
-        BKG_lambda=0.047,
-        BKG_b=90.0,
-        BKG_n=2.0,
-        FUV_amp=18.54,
-        FUV_lambda=0.07,
-        FUV_b=4.0,
-        FUV_n=6.5,
-        NUV_amp=0.0596,
-        NUV_lambda=0.22,
-        NUV_b=-1.95,
-        NUV_n=2.0,
-        SIL1_amp=0.0026,
-        SIL1_lambda=9.7,
-        SIL1_b=-1.95,
-        SIL1_n=2.0,
-        SIL2_amp=0.0026,
-        SIL2_lambda=18.0,
-        SIL2_b=-1.8,
-        SIL2_n=2.0,
-        FIR_amp=0.0159,
-        FIR_lambda=25.0,
-        FIR_b=0.0,
-        FIR_n=2.0)
+    P92(BKG_amp=218.57,  BKG_lambda=0.047, BKG_b=90.0,   BKG_n=2.0,
+        FUV_amp=18.54,   FUV_lambda=0.07,  FUV_b=4.0,    FUV_n=6.5,
+        NUV_amp=0.0596,  NUV_lambda=0.22,  NUV_b=-1.95,  NUV_n=2.0,
+        SIL1_amp=0.0026, SIL1_lambda=9.7,  SIL1_b=-1.95, SIL1_n=2.0,
+        SIL2_amp=0.0026, SIL2_lambda=18.0, SIL2_b=-1.8,  SIL2_n=2.0,
+        FIR_amp=0.0159,  FIR_lambda=25.0,  FIR_b=0.0,    FIR_n=2.0)
 
 Pei (1992) generative extinction model applicable from the extreme UV to far-IR.
 
@@ -148,7 +130,8 @@ Far-Infrared Terms
 * `FIR_b` - b coefficent
 * `FIR_n` - n coefficient
 
-If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the returned value will be `UnitfulAstro.mag`.
+If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
+returned value will be `UnitfulAstro.mag`.
 
 ## Examples
 ```jldoctest
@@ -167,8 +150,8 @@ julia> P92(FUV_b = 2.0).([1000, 2000, 3000])
 
 ## Default Parameter Values
 
-|Term |lambda|A|b|n|
-|:---:|:---:|:---:|:---:|:---:|
+|Term |lambda|A                    |b    |n  |
+|:---:|:----:|:-------------------:|:---:|:-:|
 |BKG  |0.047 |218.57142857142858   |90   |2  |
 |FUV  |0.07  |18.545454545454547   |4.0  |6.5|
 |NUV  |0.22  |0.05961038961038961  |-1.95|2.0|
@@ -180,56 +163,61 @@ julia> P92(FUV_b = 2.0).([1000, 2000, 3000])
 ## References
 [Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P)
 """
-@with_kw struct P92{T<:Number} <: ExtinctionLaw @deftype T
-    BKG_amp = 165.0 * (1 / 3.08 + 1)
-    BKG_lambda = 0.047
-    BKG_b = 90.0
-    BKG_n = 2.0
-    FUV_amp = 14.0 * (1 / 3.08 + 1)
-    FUV_lambda = 0.07
-    FUV_b = 4.0
-    FUV_n = 6.5
-    NUV_amp = 0.045 * (1 / 3.08 + 1)
-    NUV_lambda = 0.22
-    NUV_b = -1.95
-    NUV_n = 2.0
-    SIL1_amp = 0.002 * (1 / 3.08 + 1)
-    SIL1_lambda = 9.7
-    SIL1_b = -1.95
-    SIL1_n = 2.0
-    SIL2_amp = 0.002 * (1 / 3.08 + 1)
-    SIL2_lambda = 18.0
-    SIL2_b = -1.80
-    SIL2_n = 2.0
-    FIR_amp = 0.012 * (1 / 3.08 + 1)
-    FIR_lambda = 25.0
-    FIR_b = 0.00
-    FIR_n = 2.0
-    @assert BKG_amp ≥ 0 "`BKG_amp` must be ≥ 0, got $BKG_amp"
-    @assert FUV_amp ≥ 0 "`FUV_amp` must be ≥ 0, got $FUV_amp"
-    @assert 0.06 ≤ FUV_lambda ≤ 0.08 "`FUV_lambda` must be in between [0.06, 0.08], got $FUV_lambda"
-    @assert NUV_amp ≥ 0 "`NUV_amp` must be ≥ 0, got $NUV_amp"
-    @assert 0.20 ≤ NUV_lambda ≤ 0.24 "`NUV_lambda` must be in between [0.20, 0.24], got $NUV_lambda"
-    @assert SIL1_amp ≥ 0 "`SIL1_amp` must be ≥ 0, got $SIL1_amp"
-    @assert 7 ≤ SIL1_lambda ≤ 13 "`SIL1_lambda` must be in between [7, 13], got $SIL1_lambda"
-    @assert SIL2_amp ≥ 0 "`SIL2_amp` must be ≥ 0, got $SIL2_amp"
-    @assert 15 ≤ SIL2_lambda ≤ 21 "`SIL2_lambda` must be in between [15, 21], got $SIL2_lambda"
-    @assert FIR_amp ≥ 0 "`FIR_amp` must be ≥ 0, got $FIR_amp"
-    @assert 20 ≤ FIR_lambda ≤ 30 "`FIR_lambda` must be in between [20, 30], got $FIR_lambda"
+Base.@kwdef struct P92{T<:Number} <: ExtinctionLaw
+    BKG_amp::T = 165.0 * (1 / 3.08 + 1)
+    BKG_lambda::T = 0.047
+    BKG_b::T = 90.0
+    BKG_n::T = 2.0
+    FUV_amp::T = 14.0 * (1 / 3.08 + 1)
+    FUV_lambda::T = 0.07
+    FUV_b::T = 4.0
+    FUV_n::T = 6.5
+    NUV_amp::T = 0.045 * (1 / 3.08 + 1)
+    NUV_lambda::T = 0.22
+    NUV_b::T = -1.95
+    NUV_n::T = 2.0
+    SIL1_amp::T = 0.002 * (1 / 3.08 + 1)
+    SIL1_lambda::T = 9.7
+    SIL1_b::T = -1.95
+    SIL1_n::T = 2.0
+    SIL2_amp::T = 0.002 * (1 / 3.08 + 1)
+    SIL2_lambda::T = 18.0
+    SIL2_b::T = -1.80
+    SIL2_n::T = 2.0
+    FIR_amp::T = 0.012 * (1 / 3.08 + 1)
+    FIR_lambda::T = 25.0
+    FIR_b::T = 0.00
+    FIR_n::T = 2.0
+    function P92(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
+                 NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n,
+                 SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda, FIR_b, FIR_n)
+
+        BKG_amp ≥ 0 || error("`BKG_amp` must be ≥ 0, got ", BKG_amp)
+        FUV_amp ≥ 0 || error("`FUV_amp` must be ≥ 0, got ", FUV_amp)
+        0.06 ≤ FUV_lambda ≤ 0.08 || error("`FUV_lambda` must be in between [0.06, 0.08], got ", FUV_lambda)
+        NUV_amp ≥ 0 || error("`NUV_amp` must be ≥ 0, got", NUV_amp)
+        0.20 ≤ NUV_lambda ≤ 0.24 || error("`NUV_lambda` must be in between [0.20, 0.24], got ", NUV_lambda)
+        SIL1_amp ≥ 0 || error("`SIL1_amp` must be ≥ 0, got ", SIL1_amp)
+        7 ≤ SIL1_lambda ≤ 13 || error("`SIL1_lambda` must be in between [7, 13], got ", SIL1_lambda)
+        SIL2_amp ≥ 0 || error("`SIL2_amp` must be ≥ 0, got ", SIL2_amp)
+        15 ≤ SIL2_lambda ≤ 21 || error("`SIL2_lambda` must be in between [15, 21], got ", SIL2_lambda)
+        FIR_amp ≥ 0 || error("`FIR_amp` must be ≥ 0, got ", FIR_amp)
+        20 ≤ FIR_lambda ≤ 30 || error("`FIR_lambda` must be in between [20, 30], got ", FIR_lambda)
+
+        params = promote(BKG_amp, BKG_lambda, BKG_b, BKG_n,
+                         FUV_amp, FUV_lambda, FUV_b, FUV_n,
+                         NUV_amp, NUV_lambda, NUV_b, NUV_n,
+                         SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n,
+                         SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n,
+                         FIR_amp, FIR_lambda, FIR_b, FIR_n)
+
+        return new{eltype(params)}(params...)
+    end
 end
 
-P92(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
-    NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
-    SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
-    FIR_b, FIR_n) =
-    P92(promote(BKG_amp, BKG_lambda, BKG_b, BKG_n, FUV_amp, FUV_lambda, FUV_b, FUV_n,
-                NUV_amp, NUV_lambda, NUV_b, NUV_n, SIL1_amp, SIL1_lambda, SIL1_b,
-                SIL1_n, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n, FIR_amp, FIR_lambda,
-                FIR_b, FIR_n)...)
+bounds(::Type{<:P92}) = (10, 10_000_000)
 
-bounds(::Type{<:P92}) = (10, 10000000)
-
-function (law::P92)(wave::T) where T
+function (law::P92)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
 
     x = aa_to_invum(wave)
