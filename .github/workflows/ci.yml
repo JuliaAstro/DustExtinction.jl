@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.6'
+          - 'min'
           - '1.10' # The FITSIO dependency is currently broken on v1.11+: https://github.com/JuliaAstro/FITSIO.jl/issues/194
         os:
           - ubuntu-latest
