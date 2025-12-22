@@ -1,5 +1,11 @@
 # DustExtinction.jl
 
+[![GitHub](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/juliaastro/DustExtinction.jl)
+[![CI](https://github.com/JuliaAstro/DustExtinction.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/JuliaAstro/DustExtinction.jl/actions/workflows/ci.yml)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DustExtinction.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![codecov](https://codecov.io/gh/juliaastro/DustExtinction.jl/graph/badge.svg?token=lOk3jmHlDF)](https://codecov.io/gh/juliaastro/DustExtinction.jl)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This package implements different empirical dust measurements for use in astronomy. This package is written in pure Julia and is built with first-class support with [Unitful.jl](https://github.com/painterqubits/unitful.jl) and [Measurements.jl](https://github.com/juliaphysics/measurements.jl).
 
 ## About
@@ -10,7 +16,7 @@ Extinction describes the effect of dust grains on observations of stars in space
 From the REPL, press `]` to enter Pkg mode
 
 ```julia
-(v 1.4) pkg> add DustExtinction
+pkg> add DustExtinction
 
 julia> using DustExtinction
 ```
@@ -30,21 +36,21 @@ For more examples, view the [Color Laws](@ref laws) and [Dust Maps](@ref maps) s
 
 There are various citations relevant to this work. Please be considerate when using this work or any derivate of it by adding the appropriate citations.
 
-|        Law         | Reference                                                                                      | BibTeX                       |
-| :----------------: | :--------------------------------------------------------------------------------------------- | :--------------------------- |
-|  [`CCM89`](@ref)   | [Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)   | [download](assets/ccm89.bib) |
-|   [`OD94`](@ref)   | [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)                      | [download](assets/od94.bib)  |
-|  [`CAL00`](@ref)   | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)                | [download](assets/cal00.bib) |
-|  [`VCG04`](@ref)   | [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V)    | [download](assets/vcg04.bib) |
-|  [`GCC09`](@ref)   | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)   | [download](assets/gcc09.bib) |
-|  [`FM90`](@ref)   | [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)   | [download](assets/fm90.bib) |
-| [`G16`](@ref) | [Gordon et al (2016) ](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G) | [download](assets/g16.bib) |
-| [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S) | [download](assets/sfd98.bib) |
-| [`F99`](@ref) | [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F) | [download](assets/f99.bib) |
-| [`F04`](@ref) | [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F) | [download](assets/f04.bib) |
-| [`P92`](@ref) | [Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P) | [download](assets/P92.bib) |
-| [`F19`](@ref) | [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F) | [download](assets/f19.bib) |
-| [`M14`](@ref) | [Maiz Apellaniz et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M) | [download](assets/m14.bib) |
+|        Law         | Reference                                                                                       | BibTeX                              |
+| :----------------: | :---------------------------------------------------------------------------------------------- | :---------------------------------- |
+| [`CCM89`](@ref)    | [Clayton, Cardelli and Mathis (1989)](https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C)    | [download](assets/bibtex/ccm89.bib) |
+| [`OD94`](@ref)     | [O'Donnell (1994)](https://ui.adsabs.harvard.edu/abs/1994ApJ...422..158O)                       | [download](assets/bibtex/od94.bib)  |
+| [`CAL00`](@ref)    | [Calzetti et al. (2000)](https://ui.adsabs.harvard.edu/abs/2000ApJ...533..682C)                 | [download](assets/bibtex/cal00.bib) |
+| [`VCG04`](@ref)    | [Valencic, Clayton, & Gordon (2004)](https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V)     | [download](assets/bibtex/vcg04.bib) |
+| [`GCC09`](@ref)    | [Gordon, Cartledge, & Clayton (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G)    | [download](assets/bibtex/gcc09.bib) |
+| [`FM90`](@ref)     | [Fitzpatrick & Massa (1990)](https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F)             | [download](assets/bibtex/fm90.bib)  |
+| [`G16`](@ref)      | [Gordon et al (2016) ](https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G)                   | [download](assets/bibtex/g16.bib)   |
+| [`SFD98Map`](@ref) | [Schlegel, Finkbeiner and Davis (1998)](https://ui.adsabs.harvard.edu/abs/1998ApJ...500..525S)  | [download](assets/bibtex/sfd98.bib) |
+| [`F99`](@ref)      | [Fitzpatrick (1999)](https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F)                     | [download](assets/bibtex/f99.bib)   |
+| [`F04`](@ref)      | [Fitzpatrick (2004)](https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F)                     | [download](assets/bibtex/f04.bib)   |
+| [`P92`](@ref)      | [Pei (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...395..130P)                             | [download](assets/bibtex/P92.bib)   |
+| [`F19`](@ref)      | [Fitzpatrick (2019)](https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F)                     | [download](assets/bibtex/f19.bib)   |
+| [`M14`](@ref)      | [Maiz Apellaniz et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M)         | [download](assets/bibtex/m14.bib)   |
 
 ## Index
 

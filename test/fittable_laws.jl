@@ -3,8 +3,11 @@
     x_inv_microns = [3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 9.0, 10.0]
     wave = 1e4 ./ x_inv_microns
 
+    # Construction
     model = FM90()
     model1 = FM90([0.10 0.70 3.23 0.41])
+    @test_throws ErrorException("`x0` must be ≥ 0, got -2.0") FM90(x0=-2.0)
+    @test_throws ErrorException("`gamma` must be ≥ 0, got -2.0") FM90(gamma=-2.0)
 
     # Test out of bounds
     bad_waves = [100, 4e4]

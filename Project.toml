@@ -1,30 +1,29 @@
 name = "DustExtinction"
 uuid = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
 license = "MIT"
-version = "0.10.1"
+version = "0.11.5"
 
 [deps]
+BSplineKit = "093aae92-e908-43d7-9660-e50ee39d5a0a"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
-DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
 FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
-Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
+[weakdeps]
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+
+[extensions]
+MakieExt = "Makie"
+
 [compat]
+BSplineKit = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19"
 DataDeps = "0.7"
-Dierckx = "0.4"
-FITSIO = "0.13.0, 0.14, 0.15"
-Parameters = "0.12"
+FITSIO = "0.13.0, 0.14, 0.15, 0.16.1, 0.17"
+Makie = "0.21.18, 0.22, 0.23, 0.24"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
-julia = "1.0.0"
+julia = "1.6"
 
 [extras]
-Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
-Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Measurements", "Random", "Test"]
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
