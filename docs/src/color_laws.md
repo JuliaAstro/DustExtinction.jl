@@ -243,6 +243,14 @@ lplot(FM90) # hide
 FM90
 ```
 
+### Pei (1992)
+
+![](assets/P92_plot.svg)
+
+```@docs
+P92
+```
+
 ## Mixture Extinction Laws
 
 ### Gordon et al. (2003)
@@ -274,33 +282,4 @@ deredden
 DustExtinction.ExtinctionLaw
 DustExtinction.bounds
 DustExtinction.checkbounds
-```
-
-### Fittable Extinction Laws
-
-#### Fitzpatrick & Massa (1990)
-
-![](assets/FM90_plot.svg)
-
-```@docs
-FM90
-```
-
-#### Pei (1992)
-
-![](assets/P92_plot.svg)
-
-```@docs
-P92
-```
-
-### Mixture Extinction Laws
-
-#### Gordon et al. (2016)
-
-![](assets/G16_fixed_f_A_plot.svg)
-![](assets/G16_fixed_Rv_plot.svg)
-
-```@docs
-G16
 ```
