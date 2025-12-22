@@ -134,6 +134,7 @@ If `λ` is a `Unitful.Quantity` it will be automatically converted to Å and the
 returned value will be `UnitfulAstro.mag`.
 
 ## Examples
+
 ```jldoctest
 julia> model = P92();
 
