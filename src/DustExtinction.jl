@@ -20,6 +20,7 @@ export redden,
        M14,
        # Fittable laws
        FM90,
+       P92,
        # Mixture laws
        G16,
        G03_SMCBar,

@@ -71,6 +71,36 @@ function lplot(law::Type{<:FM90}; args...)
 end
 
 """
+    lplot(law::P92; args...)
+
+Fittable law series plot with automatic axis labels.
+"""
+function lplot(law::Type{P92}; args...)
+    # m1
+    fig, ax, p = lplot(law(); label="total")
+
+    m2 = P92(FUV_amp=0, NUV_amp=0, SIL1_amp=0, SIL2_amp=0, FIR_amp=0)
+    Makie.lines!(ax, m2; label="BKG only")
+
+    m3 = P92(NUV_amp=0, SIL1_amp=0, SIL2_amp=0, FIR_amp=0)
+    Makie.lines!(ax, m3; label="BKG+FUV only")
+
+    m4 = P92(FUV_amp=0, SIL1_amp=0, SIL2_amp=0, FIR_amp=0)
+    Makie.lines!(ax, m4; label="BKG+NUV only")
+
+    m5 = P92(FUV_amp=0, NUV_amp=0, SIL2_amp=0)
+    Makie.lines!(ax, m5; label="BKG+FIR+SIL1 only")
+
+    m6 = P92(FUV_amp=0, NUV_amp=0, SIL1_amp=0)
+    Makie.lines!(ax, m6; label="BKG+FIR+SIL2 only")
+
+    m7 = P92(FUV_amp=0, NUV_amp=0, SIL1_amp=0, SIL2_amp=0)
+    Makie.lines!(ax, m7; label="BKG+FIR only")
+
+    fig
+end
+
+"""
     mplot(law::Type{G16}, Rvs, f_A::Real; args...)
 
 Mixture law plot with automatic axis labels.

@@ -13,7 +13,7 @@ using Test, Measurements, Unitful, UnitfulAstro, Random
     VERSION ≥ v"1.9" && include("makie_recipes.jl")
 
     @testset "interfaces" begin
-        for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, G16, F99, F04, F19, M14]
+        for LAW in [CCM89, OD94, CAL00, GCC09, VCG04, FM90, G16, F99, F04, F19, M14, P92]
             @test bounds(LAW) == bounds(LAW())
             @test checkbounds(LAW, 1000) == checkbounds(LAW(), 1000)
             low, high = bounds(LAW)
