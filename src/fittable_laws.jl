@@ -169,7 +169,7 @@ Base.@kwdef struct P92{T<:Number} <: ExtinctionLaw
     BKG_b::T = 90.0
     BKG_n::T = 2.0
     FUV_amp::T = 14.0 * (1 / 3.08 + 1)
-    FUV_lambda::T = 0.07
+    FUV_lambda::T = 0.08
     FUV_b::T = 4.0
     FUV_n::T = 6.5
     NUV_amp::T = 0.045 * (1 / 3.08 + 1)
