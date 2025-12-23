@@ -221,7 +221,7 @@ function (law::P92)(wave::T) where T <: Real
     checkbounds(law, wave) || return zero(float(T))
 
     x = aa_to_invum(wave)
-    lam = 1.0 / x # wavelength is in microns
+    lam = 1 / x # wavelength is in microns
 
     axav = _p92_single_term(lam, law.BKG_amp, law.BKG_lambda, law.BKG_b, law.BKG_n)
     axav += _p92_single_term(lam, law.FUV_amp, law.FUV_lambda, law.FUV_b, law.FUV_n)
@@ -236,5 +236,6 @@ end
 # function for calculating a single P92 term
 function _p92_single_term(x::Real, amplitude::Real, cen_wave::Real, b::Real, n::Real)
     l_norm = x / cen_wave
-    return amplitude / (l_norm^n + inv(l_norm^n) + b)
+    l_norm_n = l_norm^n
+    return amplitude / (l_norm_n + inv(l_norm_n) + b)
 end
