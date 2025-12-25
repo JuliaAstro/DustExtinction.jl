@@ -129,7 +129,7 @@ redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * 
 In-place version of [`redden`](@ref).
 """
 function redden!(law::ExtinctionLaw, wave, flux; Av = 1)
-    flux .*= 10 .^ (-0.4 .* Av .* law.(wave))
+    @. flux *= exp10(-4 * Av * law(wave) / 10)
     return flux
 end
 redden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden!(L(values(kwargs)...), wave, flux; Av = Av)
