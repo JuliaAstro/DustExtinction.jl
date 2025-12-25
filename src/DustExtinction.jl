@@ -118,7 +118,7 @@ julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 [`deredden`](@ref)
 """
 redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av = Av)
-redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
+redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = redden!(law, wave, copy(flux); Av = Av)
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
 
