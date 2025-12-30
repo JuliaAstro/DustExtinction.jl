@@ -243,6 +243,16 @@ lplot(FM90) # hide
 FM90
 ```
 
+### Pei (1992)
+
+```@example plotting
+lplot(P92) # hide
+```
+
+```@docs
+P92
+```
+
 ## Mixture Extinction Laws
 
 ### Gordon et al. (2003)
