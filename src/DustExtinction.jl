@@ -126,7 +126,7 @@ redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * 
     redden!(::ExtinctionLaw, wave, flux; Av=1)
     redden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
 
-In-place version of [`redden`](@ref).
+In-place version of [`redden`](@ref). Modifies `flux`.
 """
 function redden!(law::ExtinctionLaw, wave, flux; Av = 1)
     @. flux *= 10^(-0.4 * Av * law(wave))
@@ -169,7 +169,7 @@ deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux 
     deredden!(::ExtinctionLaw, wave, flux; Av=1)
     deredden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
 
-In-place version of [`deredden`](@ref).
+In-place version of [`deredden`](@ref). Modifies `flux`.
 """
 function deredden!(law::ExtinctionLaw, wave, flux; Av = 1)
     @. flux /= 10^(-0.4 * Av * law(wave))
