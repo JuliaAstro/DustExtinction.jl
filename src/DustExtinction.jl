@@ -123,6 +123,18 @@ redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
 
 """
+    redden!(::ExtinctionLaw, wave, flux; Av=1)
+    redden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
+
+In-place version of [`redden`](@ref). Modifies `flux`.
+"""
+function redden!(law::ExtinctionLaw, wave, flux; Av = 1)
+    @. flux *= 10^(-0.4 * Av * law(wave))
+    return flux
+end
+redden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden!(L(values(kwargs)...), wave, flux; Av = Av)
+
+"""
     deredden(::ExtinctionLaw, wave, flux; Av=1)
     deredden(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
 
@@ -152,6 +164,18 @@ deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(v
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
 deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
 deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux / (Av * law(wave))
+
+"""
+    deredden!(::ExtinctionLaw, wave, flux; Av=1)
+    deredden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
+
+In-place version of [`deredden`](@ref). Modifies `flux`.
+"""
+function deredden!(law::ExtinctionLaw, wave, flux; Av = 1)
+    @. flux /= 10^(-0.4 * Av * law(wave))
+    return flux
+end
+deredden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden!(L(values(kwargs)...), wave, flux; Av = Av)
 
 # --------------------------------------------------------------------------------
 # bring in the support
