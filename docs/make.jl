@@ -23,7 +23,6 @@ makedocs(;
     ),
     authors = "Kyle Barbary, Mosé Giordano, Miles Lucas",
     pages,
-    doctest=false,
     warnonly = [:missing_docs],
 )
 
