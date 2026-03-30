@@ -68,22 +68,39 @@ end
 """
     (dustmap::SFD98Map)(l::Real, b::Real)
     (dustmap::SFD98Map)(l::Quantity, b::Quantity)
+    (dustmap::SFD98Map)(s::SkyCoords.AbstractSkyCoords)
 
 Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`),
 given in radians. Uses bilinear interpolation between pixel values. If `l` and
 `b` are `Unitful.Quantity` they will be converted to radians and the output
-will be given as `UnitfulAstro.mag`.
+will be given as `UnitfulAstro.mag`. If a `SkyCoords.AbstractSkyCoords` is passed, 
+it will be converted to galactic coordinates.
 
 # Example
 
-```jldoctest
+```jldoctest sfd98map
 julia> using DustExtinction
 
 julia> m = SFD98Map();
 
 julia> m(1, 2)
 0.013439524544325624
+```
 
+And now we can use a SkyCoords type as input:
+
+```jldoctest sfd98map
+julia> using SkyCoords
+
+julia> s = GalCoords(1, 2);
+
+julia> m(s) == m(1, 2)
+true
+```
+
+Use broadcasting to get E(B-V) values for multiple coordinates:
+
+```jldoctest sfd98map
 julia> l = 0:0.5:2; b = 0:0.5:2;
 
 julia> m.(l, b)
@@ -95,6 +112,19 @@ julia> m.(l, b)
   0.01862100327420125
 ```
 
+And now we can add angle units:
+
+```jldoctest sfd98map
+julia> using Unitful
+
+julia> m.(l * u"rad", b * u"rad")
+5-element Vector{Gain{Unitful.LogInfo{:Magnitude, 10, -2.5}, :?, Float64}}:
+ 99.69757461547852 mag
+  0.10180447359074371 mag
+  0.019595484241066132 mag
+  0.010238757633890877 mag
+  0.01862100327420125 mag
+```
 """
 function (dustmap::SFD98Map)(l::Real, b::Real)
     if b >= 0
