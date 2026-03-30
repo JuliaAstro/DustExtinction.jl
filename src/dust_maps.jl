@@ -74,7 +74,7 @@ Get E(B-V) value from a `SFD98Map` instance at galactic coordinates (`l`, `b`),
 given in radians. Uses bilinear interpolation between pixel values. If `l` and
 `b` are `Unitful.Quantity` they will be converted to radians and the output
 will be given as `UnitfulAstro.mag`. If a `SkyCoords.AbstractSkyCoords` is passed, 
-it will be converted to galactic coordinates.
+it will be converted to galactic coordinates (requires Julia >= v1.9).
 
 # Example
 
