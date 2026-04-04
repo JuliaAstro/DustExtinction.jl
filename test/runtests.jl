@@ -1,6 +1,6 @@
 using DustExtinction
 using DustExtinction: bounds, checkbounds
-using Test, Measurements, Unitful, UnitfulAstro, Random
+using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
 
 @testset "DustExtinction" begin
     Random.seed!(9994445781)

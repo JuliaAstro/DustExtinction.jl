@@ -43,10 +43,12 @@ dplot() # hide
 
 ## Advanced Usage
 
-Our dust maps also have native support for `Unitful.jl` and `Measurements.jl`.
+Our dust maps also have native support for `Unitful.jl`, `Measurements.jl`, and `SkyCoords.jl`.
 
 ```jldoctest
 julia> using Measurements, Unitful
+
+julia> using SkyCoords: GalCoords
 
 julia> using Unitful: °
 
@@ -62,6 +64,8 @@ julia> l = l ± 0.1°; b = b ± 0.3°;
 julia> dustmap(l, b)
 6.4 ± 5.7 mag
 
+julia> dustmap(GalCoords(l, b))
+6.4 ± 5.7
 ```
 
 ## API/Reference

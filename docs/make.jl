@@ -1,15 +1,17 @@
 using Documenter
 using DustExtinction
 using CairoMakie
+using SkyCoords
 
 CairoMakie.activate!(type="png", px_per_unit=3)
 
 DocMeta.setdocmeta!(DustExtinction, :DocTestSetup, :(using DustExtinction); recursive = true)
 MakieExt = Base.get_extension(DustExtinction, :MakieExt)
+SkyCoordsExt = Base.get_extension(DustExtinction, :SkyCoordsExt)
 include("pages.jl")
 
 makedocs(;
-    modules = [DustExtinction, MakieExt],
+    modules = [DustExtinction, MakieExt, SkyCoordsExt],
     sitename = "DustExtinction.jl",
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", nothing) == "true",

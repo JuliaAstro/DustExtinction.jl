@@ -45,6 +45,16 @@ using DataDeps
         @test Measurements.values.(output) ≈ refebv rtol = 0.02
     end
 
+    if VERSION ≥ v"1.9"
+        @testset "SkyCoords" begin
+            for i in eachindex(refebv)
+                @test dustmap(GalCoords(ref_l[i], ref_b[i])) ≈ refebv[i] rtol = 0.02
+                @test dustmap(convert(ICRSCoords, GalCoords(ref_l[i], ref_b[i]))) ≈ refebv[i] rtol = 0.02
+            end
+            @test dustmap.(convert.(Ref(ICRSCoords), GalCoords.(ref_l, ref_b))) ≈ refebv rtol = 0.02
+        end
+    end
+
     @testset "Unitful" begin
         ref_l_u = ref_l * u"rad"
         ref_b_u = ref_b * u"rad"
