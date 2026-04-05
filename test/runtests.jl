@@ -54,9 +54,9 @@ using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
         ]
 
         flux = ones(length(wave))
-        output = @inferred broadcast((l, w, f)->redden(l, w, f; Av = 0.3), CCM89, wave, flux)
+        output = @inferred broadcast((l, w, f) -> redden(l, w, f; Av = 0.3), CCM89, wave, flux)
         @test output ≈ ref_values
-        @test @inferred(broadcast((l, w, f)->deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
+        @test @inferred(broadcast((l, w, f) -> deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
         flux .= redden.(CCM89, wave, flux, Av = 0.3)
         @test flux ≈ ref_values
 
@@ -67,21 +67,32 @@ using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
         @test redden.(CCM89, wave, flux) == redden.(CCM89(), wave, flux)
         @test redden.(CCM89, wave, flux, Rv = 2.8) == redden.(CCM89(Rv = 2.8), wave, flux)
 
+        # in-place reddening/de-reddening
+        flux_mut = copy(flux)
+        redden!(CCM89, wave, flux_mut)
+        @test redden.(CCM89, wave, flux) == flux_mut
+        flux_mut = copy(flux)
+        redden!(CCM89, wave, flux_mut, Rv = 2.8)
+        @test redden.(CCM89(Rv = 2.8), wave, flux) == flux_mut
+        flux_mut = copy(flux)
+        deredden!(CCM89, wave, flux_mut, Rv = 2.8)
+        @test flux_mut == deredden.(CCM89(Rv = 2.8), wave, flux)
+
         # Measurements
         flux = ones(length(wave)) .± 0.1
-        output = @inferred broadcast((l, w, f)->redden(l, w, f; Av = 0.3), CCM89, wave, flux)
+        output = @inferred broadcast((l, w, f) -> redden(l, w, f; Av = 0.3), CCM89, wave, flux)
         @test Measurements.value.(output) ≈ ref_values
-        @test @inferred(broadcast((l, w, f)->deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
+        @test @inferred(broadcast((l, w, f) -> deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
         flux .= redden.(CCM89, wave, flux, Av = 0.3)
         @test flux ≈ ref_values
 
         # Unitful
         flux = ones(length(wave))u"Jy"
         wave = wave * u"angstrom"
-        output = @inferred broadcast((l, w, f)->redden(l, w, f; Av = 0.3), CCM89, wave, flux)
+        output = @inferred broadcast((l, w, f) -> redden(l, w, f; Av = 0.3), CCM89, wave, flux)
         @test redden.(CCM89, wave, ustrip.(u"Jy", flux), Av = 0.3) ≈ ustrip.(u"Jy", output)
         @test ustrip.(output) ≈ ref_values
-        @test @inferred(broadcast((l, w, f)->deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
+        @test @inferred(broadcast((l, w, f) -> deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
         @test deredden.(CCM89, wave, ustrip.(u"Jy", output), Av = 0.3) ≈ ustrip.(u"Jy", flux)
         flux .= redden.(CCM89, wave, flux, Av = 0.3)
         @test flux ≈ output
