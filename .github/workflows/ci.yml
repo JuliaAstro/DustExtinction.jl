@@ -58,6 +58,11 @@ jobs:
       - name: Install Aqua
         shell: julia --color=yes {0}
         run: using Pkg; Pkg.add("Aqua")
+      - name: Instantiate package environment
+        shell: julia --color=yes --project=@. {0}
+        run: |
+          using Pkg
+          Pkg.instantiate()
       - name: Run Aqua tests
         shell: julia --color=yes --project=@. {0}
         run: |
