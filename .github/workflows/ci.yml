@@ -22,7 +22,8 @@ jobs:
       matrix:
         version:
           - 'min'
-          - '1.10' # The FITSIO dependency is currently broken on v1.11+: https://github.com/JuliaAstro/FITSIO.jl/issues/194
+          - '1'
+          - 'lts'
         os:
           - ubuntu-latest
           - macOS-latest
@@ -56,5 +57,11 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-buildpkg@v1
-      - run: julia --color=yes -e 'using Pkg; Pkg.add("Aqua")'
-      - run: julia --color=yes --project=@. -e 'using Aqua, DustExtinction; Aqua.test_all(DustExtinction, ambiguities=false)'
+      - name: Install Aqua
+        shell: julia --color=yes {0}
+        run: using Pkg; Pkg.add("Aqua")
+      - name: Run Aqua tests
+        shell: julia --color=yes --project=@. {0}
+        run: |
+          using Aqua, DustExtinction
+          Aqua.test_all(DustExtinction, ambiguities=false)
