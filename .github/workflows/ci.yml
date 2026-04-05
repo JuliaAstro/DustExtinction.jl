@@ -37,9 +37,6 @@ jobs:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
       - uses: julia-actions/cache@v3
-      - uses: julia-actions/julia-buildpkg@v1
-        with:
-          precompile: yes
       - uses: julia-actions/julia-runtest@v1
         env:
           DATADEPS_ALWAYS_ACCEPT: true
@@ -58,10 +55,14 @@ jobs:
         with:
           version: '1'
       - uses: julia-actions/cache@v3
-      - uses: julia-actions/julia-buildpkg@v1
       - name: Install Aqua
         shell: julia --color=yes {0}
         run: using Pkg; Pkg.add("Aqua")
+      - name: Instantiate package environment
+        shell: julia --color=yes --project=@. {0}
+        run: |
+          using Pkg
+          Pkg.instantiate()
       - name: Run Aqua tests
         shell: julia --color=yes --project=@. {0}
         run: |
