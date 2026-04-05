@@ -280,7 +280,9 @@ G16
 
 ```@docs
 redden
+redden!
 deredden
+deredden!
 DustExtinction.ExtinctionLaw
 DustExtinction.bounds
 DustExtinction.checkbounds

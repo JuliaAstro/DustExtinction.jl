@@ -7,7 +7,9 @@ import FITSIO as FITS
 import BSplineKit as BSK
 
 export redden,
+       redden!,
        deredden,
+       deredden!,
        # Rv laws
        CCM89,
        CAL00,
@@ -117,10 +119,22 @@ julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 # See Also
 [`deredden`](@ref)
 """
-redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av = Av)
+redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av)
 redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
-redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
+redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av)
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
+
+"""
+    redden!(::ExtinctionLaw, wave, flux; Av=1)
+    redden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
+
+In-place version of [`redden`](@ref). Modifies `flux`.
+"""
+function redden!(law::ExtinctionLaw, wave, flux; Av = 1)
+    @. flux *= 10^(-0.4 * Av * law(wave))
+    return flux
+end
+redden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden!(L(values(kwargs)...), wave, flux; Av)
 
 """
     deredden(::ExtinctionLaw, wave, flux; Av=1)
@@ -148,10 +162,22 @@ julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
 # See Also
 [`redden`](@ref)
 """
-deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av = Av)
+deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av)
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
-deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av = Av)
+deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av)
 deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux / (Av * law(wave))
+
+"""
+    deredden!(::ExtinctionLaw, wave, flux; Av=1)
+    deredden!(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
+
+In-place version of [`deredden`](@ref). Modifies `flux`.
+"""
+function deredden!(law::ExtinctionLaw, wave, flux; Av = 1)
+    @. flux /= 10^(-0.4 * Av * law(wave))
+    return flux
+end
+deredden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden!(L(values(kwargs)...), wave, flux; Av)
 
 # --------------------------------------------------------------------------------
 # bring in the support
