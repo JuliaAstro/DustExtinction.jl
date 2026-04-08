@@ -214,10 +214,7 @@ original SFD. The `mask.fits` file may be queried by passing
 
 The first time this is constructed without a `mapdir`, the required data file
 will be downloaded and stored following the semantics of
-[DataDeps.jl](https://github.com/oxinabox/datadeps.jl). To avoid being asked
-to download the file, set the environment variable `DATADEPS_ALWAYS_ACCEPT`
-to `true`. Internally, this type keeps the FITS file open and loads the full
-pixel array into memory for efficient repeated queries.
+[DataDeps.jl](https://github.com/oxinabox/datadeps.jl).
 
 # References
 [Chiang (2023)](https://ui.adsabs.harvard.edu/abs/2023arXiv230603926C/abstract)
