@@ -5,6 +5,7 @@ using UnitfulAstro: UnitfulAstro
 import DataDeps
 import FITSIO as FITS
 import BSplineKit as BSK
+import Healpix
 
 export redden,
        redden!,
@@ -29,6 +30,7 @@ export redden,
        G03_LMCAve,
        # Dust maps
        SFD98Map,
+       CSFDMap,
        ebv_galactic
 
 """
@@ -205,6 +207,21 @@ function __init__()
              "https://sncosmo.github.io/data/dust/SFD_dust_4096_sgp.fits"],
             ["50b6aaad0b880762d0fd081177802dcc17c39d7044a410dd5649e2dfd0503e97",
              "84891a59054adab44a7be54051e4dcf0e66e3f13eee0d845ce3739242f553b83"]
+        )
+    )
+    DataDeps.register(
+        DataDeps.DataDep(
+            "csfd_map",
+            """
+            CSFD Galactic Dust Map (Chiang 2023)
+            Reference: Chiang (2023), ApJ 958, 118
+            DOI: 10.3847/1538-4357/acf4a1
+            Zenodo: https://doi.org/10.5281/zenodo.8207175
+            """,
+            ["https://zenodo.org/record/8207175/files/csfd_ebv.fits",
+             "https://zenodo.org/record/8207175/files/mask.fits"],
+            ["379017a424b6f50e98d03df1eac7417750dc0ceba31a34441c63ea182ce01f6e",
+             "cd5cef870251f60a6d93aab9b16852e20bb09ef3beae3059563dac2e47dd8c1e"]
         )
     )
 end

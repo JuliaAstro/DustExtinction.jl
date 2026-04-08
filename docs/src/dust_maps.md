@@ -68,8 +68,9 @@ julia> dustmap(GalCoords(l, b))
 6.4 ± 5.7
 ```
 
-## API/Reference
+## Available Dust Maps
 
 ```@docs
 SFD98Map
+CSFDMap
 ```

@@ -20,18 +20,18 @@ module MakieExt
     M.plottype(x, ::ExtinctionLaw) = M.Lines
 
     # Ex: heatmap(SFD98Map())
-    function M.convert_arguments(P::M.CellGrid, dustmap::SFD98Map)
+    function M.convert_arguments(P::M.CellGrid, dustmap::Union{SFD98Map, CSFDMap})
         l = range(-3, 3; length=400)
         b = range(-1, 1; length=300)
         m = [dustmap(li, bj) for li in l, bj in b]
         return M.convert_arguments(P, l, b, m)
     end
-    M.plottype(::SFD98Map) = M.Heatmap
+    M.plottype(::Union{SFD98Map, CSFDMap}) = M.Heatmap
 
     # Ex: heatmap(lrange, brange, SFD98Map())
-    function M.convert_arguments(P::M.CellGrid, lrange, brange, dustmap::SFD98Map)
+    function M.convert_arguments(P::M.CellGrid, lrange, brange, dustmap::Union{SFD98Map, CSFDMap})
         m = [dustmap(li, bj) for li in lrange, bj in brange]
         return M.convert_arguments(P, lrange, brange, m)
     end
-    M.plottype(x, y, ::SFD98Map) = M.Heatmap
+    M.plottype(x, y, ::Union{SFD98Map, CSFDMap}) = M.Heatmap
 end
