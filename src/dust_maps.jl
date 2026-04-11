@@ -187,3 +187,153 @@ end
 # Deprecations
 @deprecate ebv_galactic(dustmap::SFD98Map, l::Real, b::Real) dustmap(l, b)
 @deprecate ebv_galactic(dustmap::SFD98Map, l::AbstractVector, b::AbstractVector) dustmap.(l, b)
+
+# ----------------------------------------------------------------------------
+# CSFD Dust Map (Chiang 2023)
+
+"""
+    CSFDMap([mapdir]; dataproduct=:ebv)
+
+Corrected SFD (CSFD) full-sky Galactic dust-reddening map of Chiang (2023).
+CSFD is based on SFD but with the extragalactic large-scale structure (cosmic
+infrared background) contamination removed via a tomographic reconstruction
+and subtraction technique.
+
+The map data are stored as a HEALPix FITS binary table with Nside = 2048 in
+ring ordering and Galactic coordinates. The default data product is
+`csfd_ebv.fits`, which gives E(B-V) reddening on the same scale as the
+original SFD. The `mask.fits` file may be queried by passing
+`dataproduct=:mask`. The bitmask bits are:
+
+- Bit 0 (`LSS_corr`): footprint within which the LSS is reconstructed and
+  CSFD = SFD - LSS (otherwise CSFD = SFD).
+- Bit 1 (`no_IRAS`): area with no IRAS data (DIRBE data filled in SFD); the
+  LSS removal uses a 1° smoothed LSS.
+- Bit 2 (`cosmology`): area where both the LSS and CSFD are most reliable for
+  precision cosmology analyses.
+
+The first time this is constructed without a `mapdir`, the required data file
+will be downloaded and stored following the semantics of
+[DataDeps.jl](https://github.com/oxinabox/datadeps.jl).
+
+# References
+[Chiang (2023)](https://ui.adsabs.harvard.edu/abs/2023arXiv230603926C/abstract)
+
+# Example
+
+```jldoctest csfdmap
+julia> using DustExtinction
+
+julia> m = CSFDMap();  # downloads data on first use
+
+julia> m(1.0, 0.5)    # l=1 rad, b=0.5 rad
+0.04069592f0
+```
+
+And now we can use a SkyCoords type as input:
+
+```jldoctest csfdmap
+julia> using SkyCoords
+
+julia> s = GalCoords(1, 0.5);
+
+julia> m(s) == m(1, 0.5)
+true
+```
+
+Use broadcasting to get E(B-V) values for multiple coordinates:
+
+```jldoctest csfdmap
+julia> l = 0:0.2:1; b = 0:0.2:1;
+
+julia> m.(l, b)
+6-element Vector{Float32}:
+ 0.0
+ 0.5457138
+ 0.20758994
+ 0.06955756
+ 0.04855148
+ 0.019249504
+```
+
+And now we can add angle units:
+
+```jldoctest csfdmap
+julia> using Unitful
+
+julia> m.(l * u"rad", b * u"rad")
+6-element Vector{Gain{Unitful.LogInfo{:Magnitude, 10, -2.5}, :?, Float32}}:
+ 0.0 mag
+ 0.5457138 mag
+ 0.20758994 mag
+ 0.06955756 mag
+ 0.04855148 mag
+ 0.019249504 mag
+```
+"""
+struct CSFDMap{T<:AbstractArray}
+    mapdir::String
+    nside::Int
+    pixdata::T  # flat array of length npix = 12 * nside^2
+end
+
+function CSFDMap(mapdir::String; dataproduct::Symbol=:ebv)
+    dataproduct in (:ebv, :mask) || error("dataproduct must be :ebv or :mask")
+    if dataproduct == :ebv
+        fname = joinpath(mapdir, "csfd_ebv.fits")
+    else
+        fname = joinpath(mapdir, "mask.fits")
+    end
+    try
+        f = FITS.FITS(fname)
+        hdu = f[2]  # BinTableHDU with single column "T"
+        nside = FITS.read_key(hdu, "NSIDE")[1]
+        raw = FITS.read(hdu, "T")  # Matrix: (1024, 49152) for nside=2048
+        # `raw` is column-major (1024 pixels per FITS row × 49152 rows).
+        # The HEALPix pixel ordering is *row-major* in the file: pixel p
+        # (0-indexed) lives at raw[p%1024 + 1, p÷1024 + 1].  A plain
+        # vec() of the (1024×49152) matrix already yields the correct
+        # flat sequence because FITS rows are stored contiguously and
+        # FITSIO reads each row as a column.
+        pixdata = vec(raw)
+        FITS.close(f)
+        CSFDMap(mapdir, Int(nside), pixdata)
+    catch e
+        error("Could not open CSFD FITS file at $fname: $e")
+    end
+end
+
+function CSFDMap(; dataproduct::Symbol=:ebv)
+    CSFDMap(DataDeps.datadep"csfd_map"; dataproduct=dataproduct)
+end
+
+Base.show(io::IO, m::CSFDMap) = print(io, "CSFDMap($(m.mapdir))")
+
+"""
+    (dustmap::CSFDMap)(l::Real, b::Real)
+    (dustmap::CSFDMap)(l::Quantity, b::Quantity)
+    (dustmap::CSFDMap)(s::SkyCoords.AbstractSkyCoords)
+
+Query the `CSFDMap` at Galactic longitude `l` and latitude `b` (both in
+radians). Returns E(B-V) reddening (or the integer bitmask value if the map
+was opened with `dataproduct=:mask`). Uses nearest-pixel (HEALPix ring
+ordering) lookup. If `l` and `b` are `Unitful.Quantity`, they will be
+converted to radians and the output will be given as `UnitfulAstro.mag`
+(for the EBV map). If a `SkyCoords.AbstractSkyCoords` is passed, it will
+be converted to galactic coordinates (requires Julia ≥ v1.9).
+"""
+function (dustmap::CSFDMap)(l::Real, b::Real)
+    res = Healpix.Resolution(dustmap.nside)
+    # HEALPix colatitude θ ∈ [0, π], longitude φ = l ∈ [0, 2π)
+    theta = π / 2 - b
+    phi   = l
+    # ang2pixRing returns a 1-based index
+    pix = Healpix.ang2pixRing(res, theta, phi)
+    return dustmap.pixdata[pix]
+end
+
+function (dustmap::CSFDMap)(l::U.Quantity, b::U.Quantity)
+    l_ = U.ustrip(U.u"rad", l)
+    b_ = U.ustrip(U.u"rad", b)
+    return dustmap(l_, b_) * U.u"mag"
+end
