@@ -1,7 +1,6 @@
 [deps]
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 DustExtinction = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
-Healpix = "9f4e344d-96bc-545a-84a3-ae6b9e1b672b"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
@@ -12,7 +11,6 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
 DataDeps = "0.7"
-Healpix = "4.2.4"
 SkyCoords = "1"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
