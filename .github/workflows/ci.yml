@@ -1,10 +1,10 @@
 name: CI
 on:
   push:
-    branches: [master]
+    branches: [main]
     tags: ["*"]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 concurrency:
   # Skip intermediate builds: always.
@@ -23,13 +23,13 @@ jobs:
         version:
           - 'min'
           - '1'
-          - 'lts'
+          - 'pre'
         os:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
         arch:
-          - x64
+          - default
     steps:
       - uses: actions/checkout@v6
       - uses: julia-actions/setup-julia@v2
