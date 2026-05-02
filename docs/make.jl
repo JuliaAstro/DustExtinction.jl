@@ -13,6 +13,7 @@ makedocs(;
     modules = [DustExtinction, MakieExt, SkyCoordsExt],
     sitename = "DustExtinction.jl",
     format = Documenter.HTML(;
+        prettyurls = get(ENV, "CI", nothing) == "true",
         assets = [
             "assets/favicon.ico",
         ],
