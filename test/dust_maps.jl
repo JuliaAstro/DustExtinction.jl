@@ -45,14 +45,12 @@ using DataDeps
         @test Measurements.values.(output) ≈ refebv rtol = 0.02
     end
 
-    if VERSION ≥ v"1.9"
-        @testset "SkyCoords" begin
-            for i in eachindex(refebv)
-                @test dustmap(GalCoords(ref_l[i], ref_b[i])) ≈ refebv[i] rtol = 0.02
-                @test dustmap(convert(ICRSCoords, GalCoords(ref_l[i], ref_b[i]))) ≈ refebv[i] rtol = 0.02
-            end
-            @test dustmap.(convert.(Ref(ICRSCoords), GalCoords.(ref_l, ref_b))) ≈ refebv rtol = 0.02
+    @testset "SkyCoords" begin
+        for i in eachindex(refebv)
+            @test dustmap(GalCoords(ref_l[i], ref_b[i])) ≈ refebv[i] rtol = 0.02
+            @test dustmap(convert(ICRSCoords, GalCoords(ref_l[i], ref_b[i]))) ≈ refebv[i] rtol = 0.02
         end
+        @test dustmap.(convert.(Ref(ICRSCoords), GalCoords.(ref_l, ref_b))) ≈ refebv rtol = 0.02
     end
 
     @testset "Unitful" begin
@@ -94,12 +92,10 @@ end
         end
     end
 
-    if VERSION ≥ v"1.9"
-        @testset "SkyCoords" begin
-            for i in eachindex(refebv)
-                @test dustmap(GalCoords(ref_l[i], ref_b[i])) ≈ refebv[i] rtol = 1e-5
-                @test dustmap(convert(ICRSCoords, GalCoords(ref_l[i], ref_b[i]))) ≈ refebv[i] rtol = 1e-5
-            end
+    @testset "SkyCoords" begin
+        for i in eachindex(refebv)
+            @test dustmap(GalCoords(ref_l[i], ref_b[i])) ≈ refebv[i] rtol = 1e-5
+            @test dustmap(convert(ICRSCoords, GalCoords(ref_l[i], ref_b[i]))) ≈ refebv[i] rtol = 1e-5
         end
     end
 
