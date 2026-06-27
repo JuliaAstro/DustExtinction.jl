@@ -96,6 +96,30 @@ end
 
 
 """
+    DustExtinction.lawinstance(law; law_kwargs...)
+
+Resolve a `law` specification to a concrete [`ExtinctionLaw`](@ref) instance.
+
+If `law` is already an instance it is returned unchanged and `law_kwargs` are
+ignored. If `law` is an `ExtinctionLaw` `Type`, `law_kwargs` are forwarded
+positionally to its constructor. Constructing the law once with this helper
+avoids rebuilding it for every wavelength when reddening an array
+(see [`redden`](@ref), [`redden!`](@ref)).
+
+# Examples
+
+```jldoctest
+julia> DustExtinction.lawinstance(CCM89; Rv=3.1)
+CCM89(3.1)
+
+julia> DustExtinction.lawinstance(CCM89(Rv=2.8))
+CCM89(2.8)
+```
+"""
+lawinstance(law::ExtinctionLaw; kwargs...) = law
+lawinstance(L::Type{<:ExtinctionLaw}; kwargs...) = L(values(kwargs)...)
+
+"""
     redden(::ExtinctionLaw, wave, flux; Av=1)
     redden(::Type{ExtinctionLaw}, wave, flux; Av=1, law_kwargs...)
 
@@ -121,7 +145,7 @@ julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 # See Also
 [`deredden`](@ref)
 """
-redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(L(values(kwargs)...), wave, flux; Av)
+redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(lawinstance(L; kwargs...), wave, flux; Av)
 redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av)
 redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
@@ -133,10 +157,10 @@ redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * 
 In-place version of [`redden`](@ref). Modifies `flux`.
 """
 function redden!(law::ExtinctionLaw, wave, flux; Av = 1)
-    @. flux *= 10^(-0.4 * Av * law(wave))
+    @. flux = redden(law, wave, flux; Av)
     return flux
 end
-redden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden!(L(values(kwargs)...), wave, flux; Av)
+redden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden!(lawinstance(L; kwargs...), wave, flux; Av)
 
 """
     deredden(::ExtinctionLaw, wave, flux; Av=1)
@@ -164,7 +188,7 @@ julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
 # See Also
 [`redden`](@ref)
 """
-deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(L(values(kwargs)...), wave, flux; Av)
+deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(lawinstance(L; kwargs...), wave, flux; Av)
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
 deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av)
 deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux / (Av * law(wave))
@@ -176,10 +200,10 @@ deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux 
 In-place version of [`deredden`](@ref). Modifies `flux`.
 """
 function deredden!(law::ExtinctionLaw, wave, flux; Av = 1)
-    @. flux /= 10^(-0.4 * Av * law(wave))
+    @. flux = deredden(law, wave, flux; Av)
     return flux
 end
-deredden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden!(L(values(kwargs)...), wave, flux; Av)
+deredden!(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden!(lawinstance(L; kwargs...), wave, flux; Av)
 
 # --------------------------------------------------------------------------------
 # bring in the support
