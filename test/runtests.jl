@@ -1,6 +1,13 @@
 using DustExtinction
-using DustExtinction: bounds, checkbounds
+using DustExtinction: bounds, checkbounds, lawinstance
 using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
+
+# A law whose constructor only accepts `Rv` positionally (no keyword constructor),
+# used to check that `lawinstance` builds laws positionally.
+struct PosOnlyLaw <: DustExtinction.ExtinctionLaw
+    Rv::Float64
+end
+(l::PosOnlyLaw)(wave::Real) = l.Rv
 
 @testset "DustExtinction" begin
     Random.seed!(9994445781)
@@ -94,7 +101,29 @@ using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
         @test ustrip.(output) ≈ ref_values
         @test @inferred(broadcast((l, w, f) -> deredden(l, w, f; Av = 0.3), CCM89, wave, output)) ≈ flux
         @test deredden.(CCM89, wave, ustrip.(u"Jy", output), Av = 0.3) ≈ ustrip.(u"Jy", flux)
+
+        # in-place reddening/de-reddening with Unitful flux (must round-trip)
+        flux_mut = copy(flux)
+        redden!(CCM89, wave, flux_mut; Av = 0.3)
+        @test flux_mut ≈ output
+        deredden!(CCM89, wave, flux_mut; Av = 0.3)
+        @test flux_mut ≈ flux
+
         flux .= redden.(CCM89, wave, flux, Av = 0.3)
         @test flux ≈ output
+    end
+
+    @testset "lawinstance" begin
+        # Type → constructed instance (kwargs forwarded positionally)
+        @test lawinstance(CCM89) === CCM89()
+        @test lawinstance(CCM89; Rv = 2.8) === CCM89(2.8)
+        # instance passed through unchanged; kwargs ignored
+        law = CCM89(2.5)
+        @test lawinstance(law) === law
+        @test lawinstance(law; Rv = 9.9) === law
+        # laws with positional-only constructors are built positionally
+        @test lawinstance(PosOnlyLaw; Rv = 3.3) === PosOnlyLaw(3.3)
+        # inferrable
+        @test @inferred(lawinstance(CCM89; Rv = 3.1)) === CCM89(3.1)
     end
 end
