@@ -1,7 +1,5 @@
 module DustExtinction
 
-import Unitful as U
-using UnitfulAstro: UnitfulAstro
 import DataDeps
 import FITSIO as FITS
 import BSplineKit as BSK
@@ -61,12 +59,11 @@ Here's how to make a new extinction law, called `MyLaw`
   ```julia
   (::MyLaw)(wavelength::Real)
   ```
-* (Optional) enable `Unitful.jl` support by adding this function. If you are
-  building a new law within `DustExtinction.jl` you can add your law to the
-  code-gen list inside `DustExtinction.jl/src/DustExtinction.jl`.
-  ```julia
-  (l::MyLaw)(wavelength::Unitful.Quantity) = l(ustrip(u"angstrom", wavelength)) * u"mag"
-  ```
+* Unit support is provided automatically. Because every law is called through
+  the `(::ExtinctionLaw)(wavelength::Real)` interface, `Unitful.jl` and
+  `DynamicQuantities.jl` quantities are handled generically by the
+  `UnitfulExt`/`DynamicQuantitiesExt` package extensions once the respective
+  package is loaded — you do not need to add anything to your law.
 """
 abstract type ExtinctionLaw end
 
@@ -147,8 +144,6 @@ julia> redden(CCM89(Rv=3.1), wave, flux; Av=2)
 """
 redden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = redden(lawinstance(L; kwargs...), wave, flux; Av)
 redden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux * 10^(-0.4 * Av * law(wave))
-redden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = redden(law, U.ustrip(U.u"Å", wave), flux; Av)
-redden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux * (Av * law(wave))
 
 """
     redden!(::ExtinctionLaw, wave, flux; Av=1)
@@ -190,8 +185,6 @@ julia> deredden(CCM89(Rv=3.1), wave, flux; Av=2)
 """
 deredden(L::Type{<:ExtinctionLaw}, wave, flux; Av = 1, kwargs...) = deredden(lawinstance(L; kwargs...), wave, flux; Av)
 deredden(law::ExtinctionLaw, wave::Real, flux; Av = 1) = flux / 10^(-0.4 * Av * law(wave))
-deredden(law::ExtinctionLaw, wave::U.Quantity, flux::Real; Av = 1) = deredden(law, U.ustrip(U.u"Å", wave), flux; Av)
-deredden(law::ExtinctionLaw, wave::U.Quantity, flux::U.Quantity; Av = 1) = flux / (Av * law(wave))
 
 """
     deredden!(::ExtinctionLaw, wave, flux; Av=1)
@@ -214,9 +207,8 @@ include("dust_maps.jl")
 include("fittable_laws.jl")
 include("mixture_laws.jl")
 
-# generate unitful support
-(l::ExtinctionLaw)(wavelength::U.Quantity) = l(U.ustrip(U.u"Å", wavelength)) * U.u"mag"
-
+# Unitful.jl and DynamicQuantities.jl support are provided as package extensions
+# (see ext/UnitfulExt.jl and ext/DynamicQuantitiesExt.jl).
 
 function __init__()
     # register our data dependencies
