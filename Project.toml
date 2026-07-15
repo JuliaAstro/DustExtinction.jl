@@ -1,7 +1,7 @@
 name = "DustExtinction"
 uuid = "fb44c06c-c62f-5397-83f5-69249e0a3c8e"
 license = "MIT"
-version = "0.11.7"
+version = "0.12.0"
 
 [workspace]
 projects = ["test", "docs"]
@@ -11,20 +11,24 @@ BSplineKit = "093aae92-e908-43d7-9660-e50ee39d5a0a"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 FITSIO = "525bcba6-941b-5504-bd06-fd0dc1a4d2eb"
 Healpix = "9f4e344d-96bc-545a-84a3-ae6b9e1b672b"
+
+[weakdeps]
+DynamicQuantities = "06fc5a27-2a28-4c7c-a15d-362465fb6821"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+SkyCoords = "fc659fc5-75a3-5475-a2ea-3da92c065361"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
-[weakdeps]
-Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
-SkyCoords = "fc659fc5-75a3-5475-a2ea-3da92c065361"
-
 [extensions]
+DynamicQuantitiesExt = "DynamicQuantities"
 MakieExt = "Makie"
 SkyCoordsExt = "SkyCoords"
+UnitfulExt = ["Unitful", "UnitfulAstro"]
 
 [compat]
 BSplineKit = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19"
 DataDeps = "0.7"
+DynamicQuantities = "1"
 FITSIO = "0.13.0, 0.14, 0.15, 0.16.1, 0.17"
 Healpix = "4.2.4"
 Makie = "0.21.18, 0.22, 0.23, 0.24, 0.25"
