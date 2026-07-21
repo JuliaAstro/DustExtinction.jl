@@ -11,6 +11,8 @@ UnitfulAstro = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
 
 [compat]
 DataDeps = "0.7"
+Makie = "0.24.13"
+Measurements = "2.14.1"
 SkyCoords = "1"
 Unitful = "0.17.0, 1"
 UnitfulAstro = "0.3.0, 0.4, 1"
