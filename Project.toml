@@ -27,7 +27,7 @@ UnitfulExt = ["Unitful", "UnitfulAstro"]
 
 [compat]
 BSplineKit = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19"
-DataDeps = "0.7"
+DataDeps = "0.7, 1.0"
 DynamicQuantities = "1"
 FITSIO = "0.13.0, 0.14, 0.15, 0.16.1, 0.17"
 Healpix = "4.2.4"
