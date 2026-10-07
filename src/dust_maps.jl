@@ -178,11 +178,8 @@ function (dustmap::SFD98Map)(l::Real, b::Real)
     return val
 end
 
-function (dustmap::SFD98Map)(l::U.Quantity, b::U.Quantity)
-    l_ = U.ustrip(U.u"rad", l)
-    b_ = U.ustrip(U.u"rad", b)
-    return dustmap(l_, b_) * U.u"mag"
-end
+# Unit-aware calls for `SFD98Map` are provided by the `UnitfulExt` and
+# `DynamicQuantitiesExt` package extensions.
 
 # Deprecations
 @deprecate ebv_galactic(dustmap::SFD98Map, l::Real, b::Real) dustmap(l, b)
@@ -332,8 +329,5 @@ function (dustmap::CSFDMap)(l::Real, b::Real)
     return dustmap.pixdata[pix]
 end
 
-function (dustmap::CSFDMap)(l::U.Quantity, b::U.Quantity)
-    l_ = U.ustrip(U.u"rad", l)
-    b_ = U.ustrip(U.u"rad", b)
-    return dustmap(l_, b_) * U.u"mag"
-end
+# Unit-aware calls for `CSFDMap` are provided by the `UnitfulExt` and
+# `DynamicQuantitiesExt` package extensions.
