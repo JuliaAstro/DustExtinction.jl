@@ -43,7 +43,7 @@ dplot() # hide
 
 ## Advanced Usage
 
-Our dust maps also have native support for `Unitful.jl`, `Measurements.jl`, and `SkyCoords.jl`.
+Our dust maps also have native support for `Unitful.jl`, `DynamicQuantities.jl`, `Measurements.jl`, and `SkyCoords.jl`. Unit support (`Unitful.jl`/`DynamicQuantities.jl`) is loaded automatically as a package extension whenever the corresponding package is available.
 
 ```jldoctest
 julia> using Measurements, Unitful
