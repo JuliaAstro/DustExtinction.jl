@@ -5,12 +5,12 @@
 
     # Construction
     model = FM90()
-    model1 = FM90([0.10 0.70 3.23 0.41])
+    model1 = FM90(0.10, 0.70, 3.23, 0.41, 4.60, 0.99)
     @test_throws ErrorException("`x0` must be ≥ 0, got -2.0") FM90(x0=-2.0)
     @test_throws ErrorException("`gamma` must be ≥ 0, got -2.0") FM90(gamma=-2.0)
-    @test FM90((0.10, 0.70, 3.23, 0.41)) == model
-    @test_throws ArgumentError FM90(0.7, 0.1)
-    @test_throws ArgumentError FM90((0.10, 0.70, 3.23))
+    # Only keywords or all six parameters positionally
+    @test_throws MethodError FM90(0.2)
+    @test_throws MethodError FM90((0.10, 0.70, 3.23, 0.41))
 
     # Test out of bounds
     bad_waves = [100, 4e4]
