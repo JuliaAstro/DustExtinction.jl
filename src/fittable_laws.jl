@@ -1,7 +1,6 @@
 
 """
-    FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.9)
-    FM90(coeffs, x0=4.60, gamma=0.9)
+    FM90(;c1=0.10, c2=0.70, c3=3.23, c4=0.41, x0=4.60, gamma=0.99)
 
 Fitzpatrick & Massa (1990) generative model for ultraviolet dust extinction. The
 default values are the published values for the Milky Way average.
@@ -60,7 +59,6 @@ Base.@kwdef struct FM90{T<:Number} <: ExtinctionLaw
         return new{eltype(params)}(params...)
     end
 end
-FM90(coeffs, x0=4.60, gamma=0.99) = FM90(coeffs..., x0, gamma)
 
 bounds(::Type{<:FM90}) = (912, 3200)
 
