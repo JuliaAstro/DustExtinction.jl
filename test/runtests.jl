@@ -3,7 +3,7 @@ using DustExtinction: bounds, checkbounds, lawinstance
 using Test, Measurements, SkyCoords, Unitful, UnitfulAstro, Random
 
 # A law whose constructor only accepts `Rv` positionally (no keyword constructor),
-# used to check that `lawinstance` builds laws positionally.
+# used to check that `lawinstance` only forwards kwargs as keywords.
 struct PosOnlyLaw <: DustExtinction.ExtinctionLaw
     Rv::Float64
 end
@@ -114,15 +114,20 @@ end
     end
 
     @testset "lawinstance" begin
-        # Type → constructed instance (kwargs forwarded positionally)
+        # Type → constructed instance (kwargs forwarded by name)
         @test lawinstance(CCM89) === CCM89()
         @test lawinstance(CCM89; Rv = 2.8) === CCM89(2.8)
+        @test lawinstance(G16; f_A = 0.5, Rv = 2.8) === G16(Rv = 2.8, f_A = 0.5)
+        @test lawinstance(FM90; c1 = 0.2) === FM90(c1 = 0.2)
+        @test lawinstance(FM90; gamma = 1.1, x0 = 4.5) === FM90(x0 = 4.5, gamma = 1.1)
+        @test redden(FM90, 1500, 1.0; c1 = 0.2) == redden(FM90(c1 = 0.2), 1500, 1.0)
+        @test_throws MethodError lawinstance(CCM89; rv = 2.8)
         # instance passed through unchanged; kwargs ignored
         law = CCM89(2.5)
         @test lawinstance(law) === law
         @test lawinstance(law; Rv = 9.9) === law
-        # laws with positional-only constructors are built positionally
-        @test lawinstance(PosOnlyLaw; Rv = 3.3) === PosOnlyLaw(3.3)
+        # kwargs are never forwarded positionally
+        @test_throws MethodError lawinstance(PosOnlyLaw; Rv = 3.3)
         # inferrable
         @test @inferred(lawinstance(CCM89; Rv = 3.1)) === CCM89(3.1)
     end
