@@ -102,7 +102,7 @@ Resolve a `law` specification to a concrete [`ExtinctionLaw`](@ref) instance.
 
 If `law` is already an instance it is returned unchanged and `law_kwargs` are
 ignored. If `law` is an `ExtinctionLaw` `Type`, `law_kwargs` are forwarded
-positionally to its constructor. Constructing the law once with this helper
+as keywords to its constructor. Constructing the law once with this helper
 avoids rebuilding it for every wavelength when reddening an array
 (see [`redden`](@ref), [`redden!`](@ref)).
 
@@ -117,7 +117,7 @@ CCM89(2.8)
 ```
 """
 lawinstance(law::ExtinctionLaw; kwargs...) = law
-lawinstance(L::Type{<:ExtinctionLaw}; kwargs...) = L(values(kwargs)...)
+lawinstance(L::Type{<:ExtinctionLaw}; kwargs...) = L(; kwargs...)
 
 """
     redden(::ExtinctionLaw, wave, flux; Av=1)
