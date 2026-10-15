@@ -60,7 +60,7 @@ Base.@kwdef struct FM90{T<:Number} <: ExtinctionLaw
         return new{eltype(params)}(params...)
     end
 end
-function FM90(coeffs::Union{Tuple, AbstractArray}, x0=4.60, gamma=0.99)
+function FM90(coeffs, x0=4.60, gamma=0.99)
     length(coeffs) == 4 || throw(ArgumentError(
         "`coeffs` must have 4 elements (c1, c2, c3, c4), got $(length(coeffs))"))
     return FM90(coeffs..., x0, gamma)
